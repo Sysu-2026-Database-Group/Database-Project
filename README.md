@@ -31,7 +31,7 @@ Database-Project/
 ```
 
 目录职责、命名规范与协作约定见
-[`docs/08-project-conventions.md`](docs/08-project-conventions.md)。
+[`docs/project-conventions.md`](docs/project-conventions.md)。
 
 ---
 
@@ -99,10 +99,11 @@ Database-Project/
 | `docs/spec-roles.md` | 角色与职能清单 | ✅ 已敲定 |
 | `docs/spec-businesses.md` | 业务清单与业务规定 | ✅ 已敲定 |
 | `docs/spec-data-boundary.md` | 数据边界清单：什么进库 / 什么不进库（逐条给理由） | ✅ 已敲定 |
-| `docs/task-week-1.md` | 第 1 周任务说明（原文 · 拆解 · 说明 · 验收标准） | ✅ |
-| `docs/ai-usage-log.md` | AI 使用记录（按周留痕：AI 协助了什么、人改了什么） | ✅ |
-| `docs/08-project-conventions.md` | 项目规范：物料结构、目录职责、命名与协作约定 | ✅（命名仍含旧编号，待改） |
-| 数据字典 · 建库脚本 · 测试纲要 | 后续产出 | 未开工 |
+| `docs/spec-data-dictionary.md` | 数据字典：19 张表的字段 · 域 · 主码与候选码 · 外码 + 样例元组 | ✅ 已敲定 |
+| `docs/task-week-N.md` | 第 N 周任务说明：§1 官方原文 · §4 验收标准（§2 拆解 / §3 说明由执行人填） | ✅ 第 1–3 周 |
+| `docs/ai-usage-log.md` | AI 使用记录（按周留痕：AI 协助了什么、人改了什么） | ✅ 第 1–2 周 |
+| `docs/project-conventions.md` | 项目规范：物料结构、目录职责、命名与协作约定 | ✅ |
+| 建库脚本 · 测试纲要 | 后续产出 | 未开工 |
 
 > **文档不再用编号** —— `docs/` 下一律「前缀 + 名字」，前缀如 `task-` / `plan-` / `dev-` / `debug-` 等。
 > 旧稿（原来的 00 / 01 / 07）已移入 `drafts/`，正逐份审查；课程官方材料在 `homework/`。
