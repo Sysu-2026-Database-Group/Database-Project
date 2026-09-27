@@ -1,6 +1,6 @@
 # Week 3 数据库复现说明
 
-> 状态：待实现。当前 `db/` 只有本说明；`schema.sql`、`sample-data.sql`、`crud.sql` 和实际执行结果尚未提交，因此尚未完成从空库复现。
+状态：待实现。当前 `db/` 只有本说明；`schema.sql`、`sample-data.sql`、`crud.sql` 和实际执行结果尚未提交，因此尚未完成从空库复现。
 
 ## 目标环境
 
