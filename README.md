@@ -27,7 +27,7 @@ Database-Project/
 ├─ docs/           正式文档 —— 已被敲定的设计口径
 ├─ drafts/         草稿 —— 讨论稿与中间产物（敲定后才迁入 docs/）
 ├─ homework/       课程官方材料 —— 每周底线任务
-└─ db/             Week 3 建库脚本与复现说明（待实现）
+└─ db/             Week 3 建库、样例、CRUD、校验脚本与执行记录
 ```
 
 目录职责、命名规范与协作约定见
@@ -104,7 +104,7 @@ Database-Project/
 | `docs/task-week-N.md` | 第 N 周任务说明：官方原文、本组任务说明与验收标准 | ✅ 第 1–3 周 |
 | `docs/ai-usage-log.md` | AI 使用记录（按周留痕：AI 协助了什么、人改了什么） | ✅ 第 1–3 周 |
 | `docs/project-conventions.md` | 项目规范：物料结构、目录职责、命名与协作约定 | ✅ |
-| `db/README.md` 及建库脚本 | Week 3 复现说明与 SQL | 待实现 |
+| `db/README.md` 及建库脚本 | Week 3 复现说明与 SQL | 本机两次空库执行通过，待组员独立复现 |
 
 **文档不再用编号** —— `docs/` 下一律「前缀 + 名字」，前缀如 `task-` / `plan-` / `dev-` / `debug-` 等。
 `drafts/` 仅保留两份历史周计划，用于追溯旧方案；当前业务、编号和表结构以 `docs/spec-*.md` 为准。课程原件及第四周 Markdown 转写在 `homework/`。

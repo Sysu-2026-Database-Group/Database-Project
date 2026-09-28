@@ -1,0 +1,5 @@
+﻿已将数据库上下文更改为 "ShiguangBookstoreWeek3Replay"。
+消息 51001，级别 16，状态 1，服务器 DESKTOP-IJTRRN8，第 88 行
+goods 与样例基线不同，停止装载，不覆盖现有数据。
+
+After rejected conflicting seed: original sample-data.sql PASS; existing 77-row baseline unchanged.

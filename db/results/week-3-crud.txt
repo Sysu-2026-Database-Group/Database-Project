@@ -1,0 +1,90 @@
+﻿已将数据库上下文更改为 "ShiguangBookstoreWeek3"。
+step|id|category|name|book_isbn|toy_code|on_shelf|price|stock_total|reserved_qty|created_by|created_at|updated_by|updated_at
+----|--|--------|----|---------|--------|--------|-----|-----------|------------|----------|----------|----------|----------
+goods INSERT / UPDATE 前|8|文创|CRUD 测试书签|NULL|DEMO-W3-CRUD|0|NULL|0|0|13800000002|2026-09-27 22:14:17.8963373|NULL|NULL
+step|id|category|name|book_isbn|toy_code|on_shelf|price|stock_total|reserved_qty|created_by|created_at|updated_by|updated_at
+----|--|--------|----|---------|--------|--------|-----|-----------|------------|----------|----------|----------|----------
+goods UPDATE 后|8|文创|CRUD 测试书签|NULL|DEMO-W3-CRUD|1|10.00|0|0|13800000002|2026-09-27 22:14:17.8963373|13800000001|2026-09-27 22:14:17.8963373
+step|id|no|supplier_id|status|created_by|created_at|submitted_by|submitted_at|approved_by|approved_at|cancelled_by|cancelled_at
+----|--|--|-----------|------|----------|----------|------------|------------|-----------|-----------|------------|------------
+采购草稿 UPDATE 前|5|DEMO-W3-PR|2|草稿|13800000002|2026-09-27 22:14:17.8973369|NULL|NULL|NULL|NULL|NULL|NULL
+step|id|no|supplier_id|status|created_by|created_at|submitted_by|submitted_at|approved_by|approved_at|cancelled_by|cancelled_at
+----|--|--|-----------|------|----------|----------|------------|------------|-----------|-----------|------------|------------
+采购审批 UPDATE 前|5|DEMO-W3-PR|2|已提交|13800000002|2026-09-27 22:14:17.8973369|13800000002|2026-09-27 22:14:17.8996220|NULL|NULL|NULL|NULL
+step|id|goods_id|change_type|quantity|note|changed_by|changed_at|request_id|sale_id|return_item_id
+----|--|--------|-----------|--------|----|----------|----------|----------|-------|--------------
+stock_movement INSERT / UPDATE 前|16|8|购入|5|NULL|13800000002|2026-09-27 22:14:17.9006204|5|NULL|NULL
+step|id|goods_id|change_type|quantity|note|changed_by|changed_at|request_id|sale_id|return_item_id
+----|--|--------|-----------|--------|----|----------|----------|----------|-------|--------------
+stock_movement UPDATE 后|16|8|购入|5|演示采购正常足量入库|13800000002|2026-09-27 22:14:17.9006204|5|NULL|NULL
+step|id|stock_total
+----|--|-----------
+库存计数同步前|8|0
+step|id|stock_total
+----|--|-----------
+库存计数同步后|8|5
+step|id|no|supplier_id|status|created_by|created_at|submitted_by|submitted_at|approved_by|approved_at|cancelled_by|cancelled_at
+----|--|--|-----------|------|----------|----------|------------|------------|-----------|-----------|------------|------------
+采购完成 UPDATE 前|5|DEMO-W3-PR|2|已审批|13800000002|2026-09-27 22:14:17.8973369|13800000002|2026-09-27 22:14:17.8996220|13800000001|2026-09-27 22:14:17.8996220|NULL|NULL
+step|id|stock_total
+----|--|-----------
+销售出库计数 UPDATE 前|8|5
+step|id|no|status|cashier_by|sold_at|card_level|member_phone|reservation_id|subtotal_amount|discount_rate|point_deduction_amount|paid_amount
+----|--|--|------|----------|-------|----------|------------|--------------|---------------|-------------|----------------------|-----------
+sale INSERT / 退货前|7|DEMO-W3-SALE|已付|13800000003|2026-09-27 22:14:17.9016209|NULL|NULL|NULL|10.00|1.00|.00|10.00
+step|id|stock_total
+----|--|-----------
+退货入库计数 UPDATE 前|8|4
+step|id|no|status|cashier_by|sold_at|card_level|member_phone|reservation_id|subtotal_amount|discount_rate|point_deduction_amount|paid_amount
+----|--|--|------|----------|-------|----------|------------|--------------|---------------|-------------|----------------------|-----------
+sale UPDATE 前|7|DEMO-W3-SALE|已付|13800000003|2026-09-27 22:14:17.9016209|NULL|NULL|NULL|10.00|1.00|.00|10.00
+step|id|no|status|cashier_by|sold_at|card_level|member_phone|reservation_id|subtotal_amount|discount_rate|point_deduction_amount|paid_amount
+----|--|--|------|----------|-------|----------|------------|--------------|---------------|-------------|----------------------|-----------
+sale UPDATE 后|7|DEMO-W3-SALE|已全退|13800000003|2026-09-27 22:14:17.9016209|NULL|NULL|NULL|10.00|1.00|.00|10.00
+step|id|amount|direction|reason_type|sale_id|return_id|request_id|member_phone|fund_before|fund_after|recorded_by|recorded_at
+----|--|------|---------|-----------|-------|---------|----------|------------|-----------|----------|-----------|-----------
+fund_flow DELETE 前|17|10.00|付|采购付款|NULL|NULL|5|NULL|1430.30|1420.30|13800000001|2026-09-27 22:14:17.9006204
+fund_flow DELETE 前|18|10.00|收|销售收款|7|NULL|NULL|NULL|1420.30|1430.30|13800000003|2026-09-27 22:14:17.9027934
+fund_flow DELETE 前|19|10.00|付|退货退款|7|4|NULL|NULL|1430.30|1420.30|13800000004|2026-09-27 22:14:17.9041186
+step|id|goods_id|change_type|quantity|note|changed_by|changed_at|request_id|sale_id|return_item_id
+----|--|--------|-----------|--------|----|----------|----------|----------|-------|--------------
+stock_movement DELETE 前|16|8|购入|5|演示采购正常足量入库|13800000002|2026-09-27 22:14:17.9006204|5|NULL|NULL
+stock_movement DELETE 前|17|8|卖出|-1|NULL|13800000003|2026-09-27 22:14:17.9027934|NULL|7|NULL
+stock_movement DELETE 前|18|8|退货|1|NULL|13800000002|2026-09-27 22:14:17.9041186|NULL|NULL|4
+step|remaining
+----|---------
+stock_movement DELETE 后|0
+step|id|stock_total
+----|--|-----------
+清理库存计数 UPDATE 前|8|5
+step|id|return_id|sale_item_id|quantity|refund_amount
+----|--|---------|------------|--------|-------------
+return_item DELETE 前|4|4|6|1|10.00
+step|id|no|sale_id|refund_amount|handled_by|handled_at
+----|--|--|-------|-------------|----------|----------
+return DELETE 前|4|DEMO-W3-RETURN|7|10.00|13800000004|2026-09-27 22:14:17.9027934
+step|id|sale_id|goods_id|quantity|unit_price
+----|--|-------|--------|--------|----------
+sale_item DELETE 前|6|7|8|1|10.00
+step|id|no|status|cashier_by|sold_at|card_level|member_phone|reservation_id|subtotal_amount|discount_rate|point_deduction_amount|paid_amount
+----|--|--|------|----------|-------|----------|------------|--------------|---------------|-------------|----------------------|-----------
+sale DELETE 前|7|DEMO-W3-SALE|已全退|13800000003|2026-09-27 22:14:17.9016209|NULL|NULL|NULL|10.00|1.00|.00|10.00
+step|remaining
+----|---------
+sale DELETE 后|0
+step|id|request_id|goods_id|request_qty|unit_cost
+----|--|----------|--------|-----------|---------
+purchase_item DELETE 前|7|5|8|5|2.00
+step|id|no|supplier_id|status|created_by|created_at|submitted_by|submitted_at|approved_by|approved_at|cancelled_by|cancelled_at
+----|--|--|-----------|------|----------|----------|------------|------------|-----------|-----------|------------|------------
+purchase DELETE 前|5|DEMO-W3-PR|2|已收货|13800000002|2026-09-27 22:14:17.8973369|13800000002|2026-09-27 22:14:17.8996220|13800000001|2026-09-27 22:14:17.8996220|NULL|NULL
+step|id|category|name|book_isbn|toy_code|on_shelf|price|stock_total|reserved_qty|created_by|created_at|updated_by|updated_at
+----|--|--------|----|---------|--------|--------|-----|-----------|------------|----------|----------|----------|----------
+goods DELETE 前|8|文创|CRUD 测试书签|NULL|DEMO-W3-CRUD|1|10.00|0|0|13800000002|2026-09-27 22:14:17.8963373|13800000001|2026-09-27 22:14:17.8963373
+step|remaining
+----|---------
+goods DELETE 后|0
+step|inner_code|spec
+----|----------|----
+toy DELETE 前|DEMO-W3-CRUD|第三周事务演示
+crud.sql PASS: goods / inventory / sale CRUD completed and rolled back.

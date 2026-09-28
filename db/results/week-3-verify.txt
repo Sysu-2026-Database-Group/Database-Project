@@ -1,0 +1,23 @@
+﻿已将数据库上下文更改为 "ShiguangBookstoreWeek3"。
+check_name|tables|foreign_keys|sample_rows|cash_balance|operating_result
+----------|------|------------|-----------|------------|----------------
+baseline|19|47|77|1430.30|-69.70
+case_id|label|actual_error|result
+-------|-----|------------|------
+1|主键重复|2627|PASS
+2|业务唯一键重复|2627|PASS
+3|外键不存在|547|PASS
+4|非空约束|515|PASS
+5|价格必须正数|547|PASS
+6|类别与细节互斥|547|PASS
+7|已订不能超过在架|547|PASS
+8|报损必须原因|547|PASS
+9|预订恰好三天|547|PASS
+10|取消态不得保留审批信息|547|PASS
+11|抵扣超百分之二十|547|PASS
+12|卡费必须大于零|547|PASS
+13|资金前后金额一致|547|PASS
+14|操作人与时刻成对|547|PASS
+15|手机格式|547|PASS
+16|流水来源必填|547|PASS
+verify.sql PASS: metadata, baseline reconciliation, defaults and 16 negative cases.

@@ -69,7 +69,7 @@ Database-Project/
 ### 2.4 `db/` —— 建库脚本
 
 - **按阶段分文件**（第 3 周起）：`README.md`（执行顺序与复现说明）、`schema.sql`（建库 + 建表 + 基础约束 + 注释）、`sample-data.sql`（样例数据）、
-  `crud.sql`（增删改查演示）；第 4 周再加 `query.sql`、`view.sql`、`constraint.sql`、`role.sql`。
+  `crud.sql`（增删改查演示）、`verify.sql`（Week 3 结构、对账与基础约束校验）；第 4 周再加 `query.sql`、`view.sql`、`constraint.sql`、`role.sql`。
   表之间有大量外键（当前设计 19 张表 / 47 条外键），**建表顺序必须按依赖排**。
 - `schema.sql` 从空库建立结构；样例数据和 CRUD 脚本按 `db/README.md` 的顺序执行。重新复现以重新创建的空库为起点；不得对已有经营数据执行破坏性重建。
 - 视图 / 触发器 / 存储过程等增量脚本**暂不拆子目录**，先平铺；数量增长后再分层。
@@ -90,7 +90,7 @@ Database-Project/
 | `docs/project-conventions.md` | 项目规范（本文） | ✅ |
 | `docs/task-week-N.md` | 第 N 周任务说明 | ✅ 第 1–3 周 |
 | `docs/ai-usage-log.md` | AI 使用记录（按周留痕） | ✅ 第 1–3 周 |
-| 建库脚本、测试纲要 | 后续产出 | 未开工 |
+| `db/` 第三周脚本与结果 | 建库、样例、CRUD、校验和原始输出 | 本机两次空库执行通过，待组员独立复现 |
 
 `drafts/` 当前保留两份周计划作过程参考；旧总览、情景和测试稿已清理，不是现行口径。
 
