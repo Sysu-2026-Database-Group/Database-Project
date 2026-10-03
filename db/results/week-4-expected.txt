@@ -1,0 +1,57 @@
+metric|value
+------|-----
+Q1_sale_detail_rows|4
+
+(1 ����Ӱ��)
+metric|value
+------|-----
+Q2_goods_sales_rows|4
+
+(1 ����Ӱ��)
+metric|value
+------|-----
+Q2_goods1_quantity|5
+
+(1 ����Ӱ��)
+metric|value
+------|-----
+Q2_goods1_amount|195.00
+
+(1 ����Ӱ��)
+metric|value
+------|-----
+Q3_inventory_rows|4
+
+(1 ����Ӱ��)
+metric|value
+------|-----
+Q3_goods1_available|0
+
+(1 ����Ӱ��)
+metric|value
+------|-----
+Q4_having_rows|2
+
+(1 ����Ӱ��)
+metric|value
+------|-----
+Q7_return_rows|2
+
+(1 ����Ӱ��)
+metric|value
+------|-----
+V1_sale_detail_rows|4
+
+(1 ����Ӱ��)
+metric|value
+------|-----
+V2_goods_sales_summary_rows|4
+
+(1 ����Ӱ��)
+metric|value
+------|-----
+V3_inventory_status_rows|4
+
+(1 ����Ӱ��)
+
+Q5：结果为空；当前样例只有一个有销售记录的会员，无法高于会员平均消费。

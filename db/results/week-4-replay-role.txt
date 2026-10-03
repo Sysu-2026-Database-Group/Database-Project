@@ -1,0 +1,73 @@
+﻿已将数据库上下文更改为 "ShiguangBookstoreWeek4Replay"。
+ROLE PERMISSION SUMMARY
+principal_name|permission_name|state_desc|schema_name|object_name|class_desc
+--------------|---------------|----------|-----------|-----------|----------
+bookstore_cashier|SELECT|GRANT|dbo|goods|OBJECT_OR_COLUMN
+bookstore_cashier|INSERT|GRANT|dbo|goods_return|OBJECT_OR_COLUMN
+bookstore_cashier|SELECT|GRANT|dbo|goods_return|OBJECT_OR_COLUMN
+bookstore_cashier|INSERT|GRANT|dbo|goods_return_item|OBJECT_OR_COLUMN
+bookstore_cashier|SELECT|GRANT|dbo|goods_return_item|OBJECT_OR_COLUMN
+bookstore_cashier|INSERT|GRANT|dbo|member|OBJECT_OR_COLUMN
+bookstore_cashier|SELECT|GRANT|dbo|member|OBJECT_OR_COLUMN
+bookstore_cashier|INSERT|GRANT|dbo|reservation|OBJECT_OR_COLUMN
+bookstore_cashier|SELECT|GRANT|dbo|reservation|OBJECT_OR_COLUMN
+bookstore_cashier|INSERT|GRANT|dbo|reservation_item|OBJECT_OR_COLUMN
+bookstore_cashier|SELECT|GRANT|dbo|reservation_item|OBJECT_OR_COLUMN
+bookstore_cashier|INSERT|GRANT|dbo|sale|OBJECT_OR_COLUMN
+bookstore_cashier|SELECT|GRANT|dbo|sale|OBJECT_OR_COLUMN
+bookstore_cashier|INSERT|GRANT|dbo|sale_item|OBJECT_OR_COLUMN
+bookstore_cashier|SELECT|GRANT|dbo|sale_item|OBJECT_OR_COLUMN
+bookstore_inventory|SELECT|GRANT|dbo|book|OBJECT_OR_COLUMN
+bookstore_inventory|INSERT|GRANT|dbo|goods|OBJECT_OR_COLUMN
+bookstore_inventory|SELECT|GRANT|dbo|goods|OBJECT_OR_COLUMN
+bookstore_inventory|INSERT|GRANT|dbo|purchase_request|OBJECT_OR_COLUMN
+bookstore_inventory|SELECT|GRANT|dbo|purchase_request|OBJECT_OR_COLUMN
+bookstore_inventory|INSERT|GRANT|dbo|purchase_request_item|OBJECT_OR_COLUMN
+bookstore_inventory|SELECT|GRANT|dbo|purchase_request_item|OBJECT_OR_COLUMN
+bookstore_inventory|INSERT|GRANT|dbo|stock_movement|OBJECT_OR_COLUMN
+bookstore_inventory|SELECT|GRANT|dbo|stock_movement|OBJECT_OR_COLUMN
+bookstore_inventory|SELECT|GRANT|dbo|supplier|OBJECT_OR_COLUMN
+bookstore_inventory|INSERT|GRANT|dbo|supplier_quote|OBJECT_OR_COLUMN
+bookstore_inventory|SELECT|GRANT|dbo|supplier_quote|OBJECT_OR_COLUMN
+bookstore_inventory|SELECT|GRANT|dbo|toy|OBJECT_OR_COLUMN
+bookstore_manager|SELECT|GRANT|dbo|card_type|OBJECT_OR_COLUMN
+bookstore_manager|UPDATE|GRANT|dbo|card_type|OBJECT_OR_COLUMN
+bookstore_manager|UPDATE|GRANT|dbo|card_type|OBJECT_OR_COLUMN
+bookstore_manager|SELECT|GRANT|dbo|employee|OBJECT_OR_COLUMN
+bookstore_manager|SELECT|GRANT|dbo|fund_flow|OBJECT_OR_COLUMN
+bookstore_manager|SELECT|GRANT|dbo|goods|OBJECT_OR_COLUMN
+bookstore_manager|UPDATE|GRANT|dbo|goods|OBJECT_OR_COLUMN
+bookstore_manager|UPDATE|GRANT|dbo|goods|OBJECT_OR_COLUMN
+bookstore_manager|SELECT|GRANT|dbo|member|OBJECT_OR_COLUMN
+bookstore_manager|SELECT|GRANT|dbo|point_movement|OBJECT_OR_COLUMN
+bookstore_manager|SELECT|GRANT|dbo|purchase_request|OBJECT_OR_COLUMN
+bookstore_manager|SELECT|GRANT|dbo|purchase_request_item|OBJECT_OR_COLUMN
+bookstore_manager|SELECT|GRANT|dbo|reservation|OBJECT_OR_COLUMN
+bookstore_manager|SELECT|GRANT|dbo|reservation_item|OBJECT_OR_COLUMN
+bookstore_manager|SELECT|GRANT|dbo|sale|OBJECT_OR_COLUMN
+bookstore_manager|SELECT|GRANT|dbo|sale_item|OBJECT_OR_COLUMN
+bookstore_manager|SELECT|GRANT|dbo|stock_movement|OBJECT_OR_COLUMN
+ROLE TEST: cashier can read goods
+result|visible_goods
+------|-------------
+PASS|4
+ROLE TEST: cashier cannot update price
+result|error_number|error_message
+------|------------|-------------
+PASS|229|拒绝了对对象 'goods' (数据库 'ShiguangBookstoreWeek4Replay'，架构 'dbo')的 UPDATE 权限。
+ROLE TEST: inventory cannot insert a sale
+result|error_number|error_message
+------|------------|-------------
+PASS|229|拒绝了对对象 'sale' (数据库 'ShiguangBookstoreWeek4Replay'，架构 'dbo')的 INSERT 权限。
+ROLE TEST: manager can read funds
+result|visible_fund_rows
+------|-----------------
+PASS|13
+ROLE TEST: manager cannot edit completed sale content
+result|error_number|error_message
+------|------------|-------------
+PASS|229|拒绝了对对象 'sale' (数据库 'ShiguangBookstoreWeek4Replay'，架构 'dbo')的 UPDATE 权限。
+ROLE TEST: inventory can add a supplier quote
+result|detail
+------|------
+PASS|inventory supplier quote insert succeeded and was rolled back

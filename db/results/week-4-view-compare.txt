@@ -1,0 +1,30 @@
+check_name|difference
+----------|----------
+v_sale_detail_row_difference|0
+
+(1 行受影响)
+check_name|difference
+----------|----------
+v_goods_sales_summary_row_difference|0
+
+(1 行受影响)
+check_name|difference
+----------|----------
+v_inventory_status_row_difference|0
+
+(1 行受影响)
+check_name|difference
+----------|----------
+goods1_sales_quantity_difference|0
+
+(1 行受影响)
+check_name|difference
+----------|----------
+goods1_sales_amount_difference|.00
+
+(1 行受影响)
+check_name|difference
+----------|----------
+goods1_available_difference|0
+
+(1 行受影响)
