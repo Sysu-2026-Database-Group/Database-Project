@@ -27,7 +27,7 @@ Database-Project/
 ├─ docs/           正式文档 —— 已被敲定的设计口径
 ├─ drafts/         草稿 —— 讨论稿与中间产物（敲定后才迁入 docs/）
 ├─ homework/       课程官方材料 —— 每周底线任务
-└─ db/             Week 3 建库、样例、CRUD、校验脚本与执行记录
+└─ db/             Week 3–4 的 SQL 脚本、复现说明与执行记录
 ```
 
 目录职责、命名规范与协作约定见
@@ -51,6 +51,9 @@ Database-Project/
 | 上下游主体 | 上游供应商提供商品与报价；下游顾客选购、预订、取货、退货；两者均非店内岗位 |
 | 会员体系 | 购买会员卡入会（卡一年有效）；**分银卡 / 金卡两档**；不做储值 |
 | 资金口径 | 收付实现制；**店内资金总额**与**经营盈亏**分列两个指标 |
+
+> **用词说明**：「**库管**」与 `docs/spec-roles.md` 中的「**库存管理员**」**指同一岗位** ——
+> 角色文档用后者，数据字典里的岗位枚举用前者；不是两个岗位。
 
 ### 3.2 项目目标
 
@@ -80,7 +83,7 @@ Database-Project/
 
 | 层 | 选型 | 说明 |
 |---|---|---|
-| 数据库引擎 | SQL Server Express 2022 | 主战场 |
+| 数据库引擎 | SQL Server Express | 主战场（**版本以本地为准** —— 不同机器可能是 2022 / 2025 等；本 README 不写死版本，脚本只用通用 T-SQL） |
 | 数据库工具 | SSMS | 建库、调试、执行计划 |
 | 应用层 | Python 3 + Flask | 刻意保持薄，无 ORM 抽象 |
 | 数据库驱动 | pyodbc + ODBC Driver 18 | 直接执行 T-SQL |
@@ -102,9 +105,12 @@ Database-Project/
 | `docs/spec-data-boundary.md` | 数据边界清单：什么进库 / 什么不进库（逐条给理由） | ✅ 已敲定 |
 | `docs/spec-data-dictionary.md` | 数据字典：19 张表的字段、域、码与样例元组 | 设计口径 |
 | `docs/task-week-N.md` | 第 N 周任务说明：官方原文、本组任务说明与验收标准 | ✅ 第 1–4 周 |
-| `docs/ai-usage-log.md` | AI 使用记录（按周留痕：AI 协助了什么、人改了什么） | ✅ 第 1–3 周 |
+| `docs/task-v0.1.md` | 第一阶段作业（可运行的数据库原型 v0.1）任务说明与验收标准 | 当前口径 |
+| `docs/ai-usage-log.md` | AI 使用记录（按周留痕：AI 协助了什么、人改了什么） | ✅ 第 1–4 周 |
 | `docs/project-conventions.md` | 项目规范：物料结构、目录职责、命名与协作约定 | ✅ |
-| `db/README.md` 及建库脚本 | Week 3 与 Week 4 的 SQL 执行、复现和验收说明 | 当前执行者已完成，待非作者组员独立复现 |
+| `db/README.md` 及脚本 | Week 3–4 的 SQL 执行、复现和验收说明（结果与记录见 `db/results/`） | ✅ 已由非作者组员在本机独立复现（2026-10-05，记录见 `db/results/week-4.md`）；**现场讲解待完成** |
 
 **文档不再用编号** —— `docs/` 下一律「前缀 + 名字」，前缀如 `task-` / `plan-` / `dev-` / `debug-` 等。
-`drafts/` 仅保留两份历史周计划，用于追溯旧方案；当前业务、编号和表结构以 `docs/spec-*.md` 为准。课程原件及第四周 Markdown 转写在 `homework/`。
+`drafts/` 仅保留几份历史周计划与草稿索引（`plan-week-*.md` / `README.md`），用于追溯旧方案；当前业务、编号和表结构以 `docs/spec-*.md` 为准。课程原件及第四周 Markdown 转写在 `homework/`。
+
+本轮的**复现证据**（SQLCMD 九步的原始输出 `db/results/week-4-verify2-*.txt`）与**复查证据**（SSMS 截图 `db/results/week-4-verify2-ssms-*.png`）都在 `db/results/`，结论与核对方式见 `db/results/week-4.md` 与 `db/README.md` §7。
