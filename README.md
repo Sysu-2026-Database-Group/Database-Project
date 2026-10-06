@@ -112,6 +112,7 @@ Database-Project/
 | `docs/task-week-N.md` | 第 N 周任务说明：官方原文、本组任务说明与验收标准 | ✅ 第 1–4 周 |
 | `docs/task-v0.1.md` | 第一阶段作业（可运行的数据库原型 v0.1）任务说明与验收标准 | 当前口径 |
 | `docs/report-v0.1.md` | v0.1 阶段总结：场景、边界、表设计、约束权限、过程与问题修正 | ✅ 已整理 |
+| [`docs/review-week-1.md`](docs/review-week-1.md) – [`docs/review-week-4.md`](docs/review-week-4.md) | 第一至第四周组内验收记录 | ✅ 已整理 |
 | `docs/team-division-v0.1.md` | v0.1 组内分工与复核责任 | ✅ 已整理 |
 | `docs/evidence-v0.1.md` | v0.1 八类验收证据索引（脚本、文本结果、SSMS 截图及对应语句） | ✅ 八类齐备（2026-10-06） |
 | `docs/ai-usage-log.md` | AI 使用记录（按周留痕：AI 协助了什么、人改了什么） | ✅ 第 1–4 周 |
