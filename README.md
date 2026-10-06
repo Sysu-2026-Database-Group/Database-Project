@@ -55,6 +55,11 @@ Database-Project/
 > **用词说明**：「**库管**」与 `docs/spec-roles.md` 中的「**库存管理员**」**指同一岗位** ——
 > 角色文档用后者，数据字典里的岗位枚举用前者；不是两个岗位。
 
+> **业务流程在哪**：15 条业务的「**一串动作（谁做什么）**」见 `docs/spec-businesses.md` §1
+> （按**货线（库存管理员）· 钱与顾客线（收银员）· 决策线（店长）**分组）；
+> 角色能做什么 / 不能做什么见 `docs/spec-roles.md`。
+> 本文**只作索引、不复述** —— 业务口径与理由一律以 `docs/` 为准（单一出处）。
+
 ### 3.2 项目目标
 
 本项目是一次**数据库设计练习**，不是 Web 工程练习。做得好不好，只看两条：
@@ -101,19 +106,22 @@ Database-Project/
 |---|---|---|
 | `docs/spec-scenario.md` | 场景说明：拾光书店 | ✅ 已敲定 |
 | `docs/spec-roles.md` | 角色与职能清单 | ✅ 已敲定 |
-| `docs/spec-businesses.md` | 业务清单与业务规定 | ✅ 已敲定 |
+| `docs/spec-businesses.md` | 业务清单与**业务流程**（15 条动作链）+ R 系列规定 | ✅ 已敲定 |
 | `docs/spec-data-boundary.md` | 数据边界清单：什么进库 / 什么不进库（逐条给理由） | ✅ 已敲定 |
 | `docs/spec-data-dictionary.md` | 数据字典：19 张表的字段、域、码与样例元组 | 设计口径 |
 | `docs/task-week-N.md` | 第 N 周任务说明：官方原文、本组任务说明与验收标准 | ✅ 第 1–4 周 |
 | `docs/task-v0.1.md` | 第一阶段作业（可运行的数据库原型 v0.1）任务说明与验收标准 | 当前口径 |
 | `docs/report-v0.1.md` | v0.1 阶段总结：场景、边界、表设计、约束权限、过程与问题修正 | ✅ 已整理 |
 | `docs/team-division-v0.1.md` | v0.1 组内分工与复核责任 | ✅ 已整理 |
-| `docs/evidence-v0.1.md` | v0.1 八类验收证据索引（脚本、文本结果、SSMS 截图） | ✅ 已整理 |
+| `docs/evidence-v0.1.md` | v0.1 八类验收证据索引（脚本、文本结果、SSMS 截图及对应语句） | ✅ 八类齐备（2026-10-06） |
 | `docs/ai-usage-log.md` | AI 使用记录（按周留痕：AI 协助了什么、人改了什么） | ✅ 第 1–4 周 |
 | `docs/project-conventions.md` | 项目规范：物料结构、目录职责、命名与协作约定 | ✅ |
-| `db/README.md` 及脚本 | Week 3–4 的 SQL 执行、复现和验收说明（结果与记录见 `db/results/`） | ✅ 已由非作者组员在本机独立复现（2026-10-05，记录见 `db/results/week-4.md`）；**现场讲解待完成** |
+| `db/README.md` 及脚本 | Week 3–4 的 SQL 执行、复现和验收说明（结果与记录见 `db/results/`） | ✅ 已由非作者组员在本机独立复现（2026-10-05，记录见 `db/results/week-4.md`） |
 
 **文档不再用编号** —— `docs/` 下一律「前缀 + 名字」，前缀如 `task-` / `plan-` / `dev-` / `debug-` 等。
 `drafts/` 仅保留几份历史周计划与草稿索引（`plan-week-*.md` / `README.md`），用于追溯旧方案；当前业务、编号和表结构以 `docs/spec-*.md` 为准。课程原件及第四周 Markdown 转写在 `homework/`。
 
-本轮的**复现证据**（SQLCMD 九步的原始输出 `db/results/week-4-verify2-*.txt`）与**复查证据**（SSMS 截图 `db/results/week-4-verify2-ssms-*.png`）都在 `db/results/`，结论与核对方式见 `db/results/week-4.md` 与 `db/README.md` §7。
+本轮的**复现证据**（SQLCMD 九步的原始输出 `db/results/week-4-verify2-*.txt`）与**结果证据**（八类 SSMS 截图 **13 张**
+`db/results/week-4-verify2-ssms-<类别>.png`，另有 4 张总览 / 对账图）都在 `db/results/`；
+**每张截图对应的 SQL 语句与预期值**集中记在 `docs/evidence-v0.1.md` **§3**，
+结论与核对方式见 `db/results/week-4.md` 与 `db/README.md` §7。
