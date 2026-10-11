@@ -89,11 +89,14 @@ Database-Project/
 | `docs/spec-data-boundary.md` | 数据边界清单：进库 19 条、不进库 20 条 + 四条判据 | 当前口径 |
 | `docs/spec-data-dictionary.md` | 数据字典：19 张表的字段、域、码与样例元组 | 当前口径 |
 | `docs/project-conventions.md` | 项目规范（本文） | ✅ |
-| `docs/task-week-N.md` | 第 N 周任务说明 | ✅ 第 1–4 周 |
+| `docs/task-week-N.md` | 第 N 周任务说明 | ✅ 第 1–5 周 |
 | `docs/task-v0.1.md` | 第一阶段作业（可运行的数据库原型 v0.1）任务说明与验收标准 | 当前口径 |
 | `docs/report-v0.1.md` | v0.1 阶段总结，汇总设计、过程、问题修正与当前边界 | ✅ 已整理 |
 | `docs/team-division-v0.1.md` | v0.1 组内分工、复核责任与证据维护责任 | ✅ 已整理 |
 | `docs/evidence-v0.1.md` | v0.1 八类验收证据索引，区分文本结果与 SSMS 截图（含每张截图对应的语句与预期） | ✅ 八类齐备（2026-10-06） |
+| `docs/er-mapping-v1.0.md` | 业务规则与映射清单（第 5 周核心产出：19 张表逐张审查结论 + ER 图图例） | 🔄 施工中 |
+| `docs/design-notes-v1.0.md` | ER 设计说明与验证记录（设计思路 · 三组对照 · 实例验证） | 🔄 骨架已建 |
+| `docs/issues-v0.1.md` | v0.1 问题清单（三种结论：保留 / 拟第 6 周调整 / 当场已改） | 🔄 骨架已建 |
 | `docs/ai-usage-log.md` | AI 使用记录（按周留痕） | ✅ 第 1–4 周 |
 | `db/` 第三、四周脚本与结果 | 建库、样例、CRUD、查询、视图、约束、角色与原始输出 | ✅ 已由**非作者组员**独立复现通过（2026-10-05，记录见 `db/results/week-4.md`） |
 

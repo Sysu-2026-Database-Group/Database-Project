@@ -26,6 +26,7 @@ Database-Project/
 ├─ README.md       项目速览（本文件）
 ├─ docs/           正式文档 —— 已被敲定的设计口径
 ├─ drafts/         草稿 —— 讨论稿与中间产物（敲定后才迁入 docs/）
+├─ ER/             第 5 周 ER 图（可编辑源文件 + 清晰导出图 + 审查记录）
 ├─ homework/       课程官方材料 —— 每周底线任务
 └─ db/             Week 3–4 的 SQL 脚本、复现说明与执行记录
 ```
@@ -109,18 +110,22 @@ Database-Project/
 | `docs/spec-businesses.md` | 业务清单与**业务流程**（15 条动作链）+ R 系列规定 | ✅ 已敲定 |
 | `docs/spec-data-boundary.md` | 数据边界清单：什么进库 / 什么不进库（逐条给理由） | ✅ 已敲定 |
 | `docs/spec-data-dictionary.md` | 数据字典：19 张表的字段、域、码与样例元组 | 设计口径 |
-| `docs/task-week-N.md` | 第 N 周任务说明：官方原文、本组任务说明与验收标准 | ✅ 第 1–4 周 |
+| `docs/task-week-N.md` | 第 N 周任务说明：官方原文、本组任务说明与验收标准 | ✅ 第 1–5 周 |
 | `docs/task-v0.1.md` | 第一阶段作业（可运行的数据库原型 v0.1）任务说明与验收标准 | 当前口径 |
 | `docs/report-v0.1.md` | v0.1 阶段总结：场景、边界、表设计、约束权限、过程与问题修正 | ✅ 已整理 |
 | [`docs/review-week-1.md`](docs/review-week-1.md) – [`docs/review-week-4.md`](docs/review-week-4.md) | 第一至第四周组内验收记录 | ✅ 已整理 |
 | `docs/team-division-v0.1.md` | v0.1 组内分工与复核责任 | ✅ 已整理 |
 | `docs/evidence-v0.1.md` | v0.1 八类验收证据索引（脚本、文本结果、SSMS 截图及对应语句） | ✅ 八类齐备（2026-10-06） |
-| `docs/ai-usage-log.md` | AI 使用记录（按周留痕：AI 协助了什么、人改了什么） | ✅ 第 1–4 周 |
+| `docs/er-mapping-v1.0.md` | **业务规则与映射清单**：19 张表逐张审查的结论 + ER 图图例 | ✅ Week 5 定稿（2026-10-11） |
+| `docs/design-notes-v1.0.md` | **ER 设计说明与验证记录**：设计思路 · 三组对照 · 实例验证 | ✅ Week 5 定稿（2026-10-11） |
+| `docs/issues-v0.1.md` | **v0.1 问题清单**：现象 / 业务证据 / 影响 / 方向 + 三种结论 | ✅ Week 5 定稿（2026-10-11） |
+| [`ER/er-diagram-v1.0.drawio`](ER/er-diagram-v1.0.drawio) · [`ER/er-diagram-v1.0.png`](ER/er-diagram-v1.0.png) | **ER 图**：可编辑源文件 + 清晰导出图（审查记录 `ER/review-v1.0.md`） | ✅ Week 5 定稿（2026-10-11） |
+| `docs/ai-usage-log.md` | AI 使用记录（按周留痕：AI 协助了什么、人改了什么） | ✅ 第 1–5 周 |
 | `docs/project-conventions.md` | 项目规范：物料结构、目录职责、命名与协作约定 | ✅ |
 | `db/README.md` 及脚本 | Week 3–4 的 SQL 执行、复现和验收说明（结果与记录见 `db/results/`） | ✅ 已由非作者组员在本机独立复现（2026-10-05，记录见 `db/results/week-4.md`） |
 
 **文档不再用编号** —— `docs/` 下一律「前缀 + 名字」，前缀如 `task-` / `plan-` / `dev-` / `debug-` 等。
-`drafts/` 仅保留几份历史周计划与草稿索引（`plan-week-*.md` / `README.md`），用于追溯旧方案；当前业务、编号和表结构以 `docs/spec-*.md` 为准。课程原件及第四周 Markdown 转写在 `homework/`。
+`drafts/` 仅保留几份历史周计划与草稿索引（`plan-week-*.md` / `README.md`），用于追溯旧方案；当前业务、编号和表结构以 `docs/spec-*.md` 为准。课程原件及各周 Markdown 转写（第一至五周）在 `homework/`。
 
 本轮的**复现证据**（SQLCMD 九步的原始输出 `db/results/week-4-verify2-*.txt`）与**结果证据**（八类 SSMS 截图 **13 张**
 `db/results/week-4-verify2-ssms-<类别>.png`，另有 4 张总览 / 对账图）都在 `db/results/`；
