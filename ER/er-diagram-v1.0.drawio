@@ -7,7 +7,7 @@
         <mxCell id="title" value="拾光书店 · ER 图 v1.0（正式版 · 完整 19 张 · draw.io 手工布局 · 2026-10-11）" style="text;html=1;align=center;fontSize=16;fontStyle=1;fillColor=none;" vertex="1" parent="1">
           <mxGeometry x="880" y="8" width="640" height="26" as="geometry" />
         </mxCell>
-        <mxCell id="legend" value="&lt;b&gt;图例（附录 A）&lt;/b&gt;&lt;br&gt;&lt;br&gt;矩形 = 实体&lt;br&gt;双线矩形 = 联系实体 / 弱实体&lt;br&gt;虚线椭圆 = 派生属性（不落库）&lt;br&gt;空心三角 = 子类型（与同类互斥）&lt;br&gt;连线两端 (min,max) = 参与约束&lt;br&gt;虚线 = 取值来源（取自 …）&lt;br&gt;备注框 = 汇总边（一条线 + 注明包含哪些列）" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=10;spacingTop=8;fontSize=11;fillColor=#FAFAFA;strokeColor=#999999;" vertex="1" parent="1">
+        <mxCell id="legend" value="&lt;b&gt;图例（附录 A）&lt;/b&gt;&lt;br&gt;&lt;br&gt;矩形 = 实体&lt;br&gt;双线矩形 = 联系实体 / 弱实体&lt;br&gt;虚线椭圆 = 派生属性（不落库）&lt;br&gt;空心三角 = 子类型（与同类互斥）&lt;br&gt;连线两端 (min,max) = 参与约束（min 1 = 必须参与 / 0 = 可选参与；不是比值）&lt;br&gt;备注框 = 汇总边（一条线 + 注明包含哪些列）" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=10;spacingTop=8;fontSize=11;fillColor=#FAFAFA;strokeColor=#999999;" vertex="1" parent="1">
           <mxGeometry x="2740" y="40" width="290" height="190" as="geometry" />
         </mxCell>
         <mxCell id="nc2" value="C-2 汇总边：17 类留痕列（含 card_type.set_by，另见 C-4）&#10;→ 图上画一条，注明包含哪些列；岗位 × 动作只有校验（I-02）" style="shape=note;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;spacingTop=6;fontSize=10;fillColor=#FFF8D6;strokeColor=#B07A00;dashed=1;" vertex="1" parent="1">
@@ -15,9 +15,6 @@
         </mxCell>
         <mxCell id="nc8" value="C-8 汇总边：goods ↔ 三张明细的 goods_id（purchase_request_item · sale_item · reservation_item）；&#10;均为 (0,N)—(1,1)；C-8 不另画线，以本框注明" style="shape=note;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;spacingTop=6;fontSize=10;fillColor=#FFF8D6;strokeColor=#B07A00;dashed=1;" vertex="1" parent="1">
           <mxGeometry x="640" y="340" width="330" height="60" as="geometry" />
-        </mxCell>
-        <mxCell id="nc5" value="C-5 取值来源：折扣率 / 办卡费 取自 card_type（成交 / 办卡时快照，&#10;不画实线；升级按两档差价 → I-20）" style="shape=note;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;spacingTop=6;fontSize=10;fillColor=#FFF8D6;strokeColor=#B07A00;dashed=1;" vertex="1" parent="1">
-          <mxGeometry x="1150" y="810" width="300" height="50" as="geometry" />
         </mxCell>
 
         <mxCell id="employee" value="&lt;b&gt;employee 员工&lt;/b&gt;&lt;hr&gt;phone 【PK】&lt;br&gt;name · role&lt;br&gt;created_by · updated_by → employee" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;spacingTop=5;fontSize=11;fillColor=#DDE7F5;strokeColor=#3D6EA5;" vertex="1" parent="1">
@@ -102,24 +99,6 @@
         </mxCell>
         <mxCell id="e_c4" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=0;startArrow=none;endArrow=none;strokeWidth=1.2;exitX=0.8;exitY=0;exitDx=0;exitDy=0;entryX=0.8;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="card_type" target="employee">
           <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="e_c5a" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=0;startArrow=none;endArrow=none;strokeWidth=1.2;strokeColor=#7A5BA8;dashed=1;exitX=1;exitY=0.82;exitDx=0;exitDy=0;entryX=0.15;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="card_type" target="sale">
-          <mxGeometry relative="1" as="geometry">
-            <Array as="points">
-              <mxPoint x="322" y="340" />
-              <mxPoint x="322" y="430" />
-              <mxPoint x="1340" y="430" />
-            </Array>
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="e_c5b" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=0;startArrow=none;endArrow=none;strokeWidth=1.2;strokeColor=#7A5BA8;dashed=1;exitX=0;exitY=0.73;exitDx=0;exitDy=0;entryX=0.86;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="card_type" target="fund_flow">
-          <mxGeometry relative="1" as="geometry">
-            <Array as="points">
-              <mxPoint x="30" y="330" />
-              <mxPoint x="30" y="950" />
-              <mxPoint x="2480" y="950" />
-            </Array>
-          </mxGeometry>
         </mxCell>
         <mxCell id="e_c6" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=0;startArrow=none;endArrow=block;endFill=0;strokeWidth=1.2;strokeColor=#2E7D32;exitX=0.35;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="goods" target="book">
           <mxGeometry relative="1" as="geometry" />
@@ -260,35 +239,33 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="t_c1" value="C-1 (1,1)/(0,N) 自反" style="text;html=1;align=left;verticalAlign=middle;fontSize=10;fillColor=#FFFFFF;rounded=1;strokeColor=none;" vertex="1" parent="1"><mxGeometry x="95" y="22" width="160" height="18" as="geometry" /></mxCell>
-        <mxCell id="t_c2" value="C-2（汇总，见备注）" style="text;html=1;align=left;verticalAlign=middle;fontSize=10;fillColor=#FFFFFF;rounded=1;strokeColor=none;" vertex="1" parent="1"><mxGeometry x="200" y="100" width="170" height="18" as="geometry" /></mxCell>
-        <mxCell id="t_c3" value="C-3 (0,N)—(1,1) 当前档位" style="text;html=1;align=left;verticalAlign=middle;fontSize=10;fillColor=#FFFFFF;rounded=1;strokeColor=none;" vertex="1" parent="1"><mxGeometry x="180" y="415" width="180" height="18" as="geometry" /></mxCell>
-        <mxCell id="t_c4" value="C-4 (1,1)—(0,N) set_by 仅店长" style="text;html=1;align=left;verticalAlign=middle;fontSize=10;fillColor=#FFFFFF;rounded=1;strokeColor=none;" vertex="1" parent="1"><mxGeometry x="243" y="204" width="220" height="18" as="geometry" /></mxCell>
-        <mxCell id="t_c5a" value="C-5 取自（折扣率快照）" style="text;html=1;align=left;verticalAlign=middle;fontSize=10;fillColor=#FFFFFF;rounded=1;strokeColor=none;" vertex="1" parent="1"><mxGeometry x="600" y="412" width="200" height="18" as="geometry" /></mxCell>
-        <mxCell id="t_c5b" value="C-5 取自（办卡费快照）" style="text;html=1;align=left;verticalAlign=middle;fontSize=10;fillColor=#FFFFFF;rounded=1;strokeColor=none;" vertex="1" parent="1"><mxGeometry x="1000" y="932" width="200" height="18" as="geometry" /></mxCell>
-        <mxCell id="t_c6" value="C-6 (0,1)—(0,1) 子类型（与 toy 互斥）" style="text;html=1;align=left;verticalAlign=middle;fontSize=10;fillColor=#FFFFFF;rounded=1;strokeColor=none;" vertex="1" parent="1"><mxGeometry x="462" y="436" width="240" height="18" as="geometry" /></mxCell>
-        <mxCell id="t_c7" value="C-7 (0,1)—(0,1) 子类型（与 book 互斥）" style="text;html=1;align=left;verticalAlign=middle;fontSize=10;fillColor=#FFFFFF;rounded=1;strokeColor=none;" vertex="1" parent="1"><mxGeometry x="600" y="581" width="220" height="18" as="geometry" /></mxCell>
-        <mxCell id="t_c9" value="C-9 (0,N)—(1,1)" style="text;html=1;align=left;verticalAlign=middle;fontSize=10;fillColor=#FFFFFF;rounded=1;strokeColor=none;" vertex="1" parent="1"><mxGeometry x="1000" y="196" width="130" height="18" as="geometry" /></mxCell>
-        <mxCell id="t_c10" value="C-10 (0,N)—(1,1)" style="text;html=1;align=left;verticalAlign=middle;fontSize=10;fillColor=#FFFFFF;rounded=1;strokeColor=none;" vertex="1" parent="1"><mxGeometry x="760" y="284" width="140" height="18" as="geometry" /></mxCell>
-        <mxCell id="t_c11" value="C-11 (0,N)—(1,1)" style="text;html=1;align=left;verticalAlign=middle;fontSize=10;fillColor=#FFFFFF;rounded=1;strokeColor=none;" vertex="1" parent="1"><mxGeometry x="1115" y="196" width="130" height="18" as="geometry" /></mxCell>
-        <mxCell id="t_c12" value="C-12 (0,N)—(1,1) 一张单只选一家" style="text;html=1;align=left;verticalAlign=middle;fontSize=10;fillColor=#FFFFFF;rounded=1;strokeColor=none;" vertex="1" parent="1"><mxGeometry x="1230" y="96" width="215" height="18" as="geometry" /></mxCell>
-        <mxCell id="t_c13" value="C-13 (0,N)—(0,1) 会员可选（散客为空）" style="text;html=1;align=left;verticalAlign=middle;fontSize=10;fillColor=#FFFFFF;rounded=1;strokeColor=none;" vertex="1" parent="1"><mxGeometry x="600" y="569" width="250" height="18" as="geometry" /></mxCell>
-        <mxCell id="t_c14" value="C-14 (1,1)—(0,N) 记在谁头上" style="text;html=1;align=left;verticalAlign=middle;fontSize=10;fillColor=#FFFFFF;rounded=1;strokeColor=none;" vertex="1" parent="1"><mxGeometry x="1100" y="962" width="230" height="18" as="geometry" /></mxCell>
-        <mxCell id="t_c15" value="C-15 (0,N)—(0,1) 仅办卡费" style="text;html=1;align=left;verticalAlign=middle;fontSize=10;fillColor=#FFFFFF;rounded=1;strokeColor=none;" vertex="1" parent="1"><mxGeometry x="700" y="858" width="200" height="18" as="geometry" /></mxCell>
-        <mxCell id="t_c16" value="C-16 (0,N)—(1,1) 归属（弱实体）" style="text;html=1;align=left;verticalAlign=middle;fontSize=10;fillColor=#FFFFFF;rounded=1;strokeColor=none;" vertex="1" parent="1"><mxGeometry x="1585" y="206" width="230" height="18" as="geometry" /></mxCell>
-        <mxCell id="t_c17" value="C-17 (0,N)—(0,1) 仅购入" style="text;html=1;align=left;verticalAlign=middle;fontSize=10;fillColor=#FFFFFF;rounded=1;strokeColor=none;" vertex="1" parent="1"><mxGeometry x="1800" y="130" width="190" height="18" as="geometry" /></mxCell>
-        <mxCell id="t_c19" value="C-19 (0,N)—(1,1) 归属（弱实体）" style="text;html=1;align=left;verticalAlign=middle;fontSize=10;fillColor=#FFFFFF;rounded=1;strokeColor=none;" vertex="1" parent="1"><mxGeometry x="1438" y="636" width="230" height="18" as="geometry" /></mxCell>
-        <mxCell id="t_c20" value="C-20 (0,N)—(1,1) 按原单受理" style="text;html=1;align=left;verticalAlign=middle;fontSize=10;fillColor=#FFFFFF;rounded=1;strokeColor=none;" vertex="1" parent="1"><mxGeometry x="1560" y="410" width="200" height="18" as="geometry" /></mxCell>
-        <mxCell id="t_c21" value="C-21 (0,N)—(0,1) 仅卖出" style="text;html=1;align=left;verticalAlign=middle;fontSize=10;fillColor=#FFFFFF;rounded=1;strokeColor=none;" vertex="1" parent="1"><mxGeometry x="1800" y="387" width="190" height="18" as="geometry" /></mxCell>
-        <mxCell id="t_c22" value="C-22 (0,N)—(0,1) 收款 / 退款" style="text;html=1;align=left;verticalAlign=middle;fontSize=10;fillColor=#FFFFFF;rounded=1;strokeColor=none;" vertex="1" parent="1"><mxGeometry x="1600" y="832" width="220" height="18" as="geometry" /></mxCell>
-        <mxCell id="t_c23" value="C-23 (0,N)—(0,1) 获得 / 回滚" style="text;html=1;align=left;verticalAlign=middle;fontSize=10;fillColor=#FFFFFF;rounded=1;strokeColor=none;" vertex="1" parent="1"><mxGeometry x="1800" y="435" width="220" height="18" as="geometry" /></mxCell>
-        <mxCell id="t_c24" value="C-24 (0,1)—(0,1) 1:1 整单取货" style="text;html=1;align=left;verticalAlign=middle;fontSize=10;fillColor=#FFFFFF;rounded=1;strokeColor=none;" vertex="1" parent="1"><mxGeometry x="1565" y="604" width="190" height="18" as="geometry" /></mxCell>
-        <mxCell id="t_c25" value="C-25 (0,N)—(1,1) 退原销售明细" style="text;html=1;align=left;verticalAlign=middle;fontSize=10;fillColor=#FFFFFF;rounded=1;strokeColor=none;" vertex="1" parent="1"><mxGeometry x="1650" y="806" width="230" height="18" as="geometry" /></mxCell>
-        <mxCell id="t_c26" value="C-26 (0,N)—(1,1) 归属（弱实体）" style="text;html=1;align=left;verticalAlign=middle;fontSize=10;fillColor=#FFFFFF;rounded=1;strokeColor=none;" vertex="1" parent="1"><mxGeometry x="1742" y="614" width="230" height="18" as="geometry" /></mxCell>
-        <mxCell id="t_c27" value="C-27 (0,N)—(1,1) 归属（弱实体）" style="text;html=1;align=left;verticalAlign=middle;fontSize=10;fillColor=#FFFFFF;rounded=1;strokeColor=none;" vertex="1" parent="1"><mxGeometry x="2088" y="614" width="230" height="18" as="geometry" /></mxCell>
-        <mxCell id="t_c28" value="C-28 (0,N)—(0,1) 退款" style="text;html=1;align=left;verticalAlign=middle;fontSize=10;fillColor=#FFFFFF;rounded=1;strokeColor=none;" vertex="1" parent="1"><mxGeometry x="2100" y="630" width="170" height="18" as="geometry" /></mxCell>
-        <mxCell id="t_c29" value="C-29 (0,N)—(0,1) 回滚挂退货" style="text;html=1;align=left;verticalAlign=middle;fontSize=10;fillColor=#FFFFFF;rounded=1;strokeColor=none;" vertex="1" parent="1"><mxGeometry x="2080" y="457" width="190" height="18" as="geometry" /></mxCell>
-        <mxCell id="t_c30" value="C-30 (0,N)—(0,1) 退货入库（明细级）" style="text;html=1;align=left;verticalAlign=middle;fontSize=10;fillColor=#FFFFFF;rounded=1;strokeColor=none;" vertex="1" parent="1"><mxGeometry x="2300" y="600" width="250" height="18" as="geometry" /></mxCell>
+        <mxCell id="t_c1" value="C-1 (1,1)/(0,N) 自反" style="text;html=1;align=left;verticalAlign=middle;fontSize=10;fillColor=none;rounded=1;strokeColor=none;" vertex="1" parent="1"><mxGeometry x="95" y="22" width="160" height="18" as="geometry" /></mxCell>
+        <mxCell id="t_c2" value="C-2（汇总，见备注）" style="text;html=1;align=left;verticalAlign=middle;fontSize=10;fillColor=none;rounded=1;strokeColor=none;" vertex="1" parent="1"><mxGeometry x="200" y="100" width="170" height="18" as="geometry" /></mxCell>
+        <mxCell id="t_c3" value="C-3 (0,N)—(1,1) 当前档位" style="text;html=1;align=left;verticalAlign=middle;fontSize=10;fillColor=none;rounded=1;strokeColor=none;" vertex="1" parent="1"><mxGeometry x="180" y="415" width="180" height="18" as="geometry" /></mxCell>
+        <mxCell id="t_c4" value="C-4 (1,1)—(0,N) set_by 仅店长" style="text;html=1;align=left;verticalAlign=middle;fontSize=10;fillColor=none;rounded=1;strokeColor=none;" vertex="1" parent="1"><mxGeometry x="243" y="204" width="220" height="18" as="geometry" /></mxCell>
+        <mxCell id="t_c6" value="C-6 (0,1)—(1,1) 子类型（与 toy 互斥）" style="text;html=1;align=left;verticalAlign=middle;fontSize=10;fillColor=none;rounded=1;strokeColor=none;" vertex="1" parent="1"><mxGeometry x="462" y="436" width="240" height="18" as="geometry" /></mxCell>
+        <mxCell id="t_c7" value="C-7 (0,1)—(1,1) 子类型（与 book 互斥）" style="text;html=1;align=left;verticalAlign=middle;fontSize=10;fillColor=none;rounded=1;strokeColor=none;" vertex="1" parent="1"><mxGeometry x="600" y="581" width="220" height="18" as="geometry" /></mxCell>
+        <mxCell id="t_c9" value="C-9 (0,N)—(1,1)" style="text;html=1;align=left;verticalAlign=middle;fontSize=10;fillColor=none;rounded=1;strokeColor=none;" vertex="1" parent="1"><mxGeometry x="1000" y="196" width="130" height="18" as="geometry" /></mxCell>
+        <mxCell id="t_c10" value="C-10 (0,N)—(1,1)" style="text;html=1;align=left;verticalAlign=middle;fontSize=10;fillColor=none;rounded=1;strokeColor=none;" vertex="1" parent="1"><mxGeometry x="760" y="284" width="140" height="18" as="geometry" /></mxCell>
+        <mxCell id="t_c11" value="C-11 (0,N)—(1,1)" style="text;html=1;align=left;verticalAlign=middle;fontSize=10;fillColor=none;rounded=1;strokeColor=none;" vertex="1" parent="1"><mxGeometry x="1115" y="196" width="130" height="18" as="geometry" /></mxCell>
+        <mxCell id="t_c12" value="C-12 (0,N)—(1,1) 一张单只选一家" style="text;html=1;align=left;verticalAlign=middle;fontSize=10;fillColor=none;rounded=1;strokeColor=none;" vertex="1" parent="1"><mxGeometry x="1230" y="96" width="215" height="18" as="geometry" /></mxCell>
+        <mxCell id="t_c13" value="C-13 (0,N)—(0,1) 会员可选（散客为空）" style="text;html=1;align=left;verticalAlign=middle;fontSize=10;fillColor=none;rounded=1;strokeColor=none;" vertex="1" parent="1"><mxGeometry x="600" y="569" width="250" height="18" as="geometry" /></mxCell>
+        <mxCell id="t_c14" value="C-14 (1,1)—(0,N) 记在谁头上" style="text;html=1;align=left;verticalAlign=middle;fontSize=10;fillColor=none;rounded=1;strokeColor=none;" vertex="1" parent="1"><mxGeometry x="1100" y="962" width="230" height="18" as="geometry" /></mxCell>
+        <mxCell id="t_c15" value="C-15 (1,N)—(0,1) 仅办卡费" style="text;html=1;align=left;verticalAlign=middle;fontSize=10;fillColor=none;rounded=1;strokeColor=none;" vertex="1" parent="1"><mxGeometry x="700" y="858" width="200" height="18" as="geometry" /></mxCell>
+        <mxCell id="t_c16" value="C-16 (1,N)—(1,1) 归属（弱实体）" style="text;html=1;align=left;verticalAlign=middle;fontSize=10;fillColor=none;rounded=1;strokeColor=none;" vertex="1" parent="1"><mxGeometry x="1585" y="206" width="230" height="18" as="geometry" /></mxCell>
+        <mxCell id="t_c17" value="C-17 (0,N)—(0,1) 仅购入" style="text;html=1;align=left;verticalAlign=middle;fontSize=10;fillColor=none;rounded=1;strokeColor=none;" vertex="1" parent="1"><mxGeometry x="1800" y="130" width="190" height="18" as="geometry" /></mxCell>
+        <mxCell id="t_c19" value="C-19 (1,N)—(1,1) 归属（弱实体）" style="text;html=1;align=left;verticalAlign=middle;fontSize=10;fillColor=none;rounded=1;strokeColor=none;" vertex="1" parent="1"><mxGeometry x="1438" y="636" width="230" height="18" as="geometry" /></mxCell>
+        <mxCell id="t_c20" value="C-20 (0,N)—(1,1) 按原单受理" style="text;html=1;align=left;verticalAlign=middle;fontSize=10;fillColor=none;rounded=1;strokeColor=none;" vertex="1" parent="1"><mxGeometry x="1560" y="410" width="200" height="18" as="geometry" /></mxCell>
+        <mxCell id="t_c21" value="C-21 (1,N)—(0,1) 仅卖出" style="text;html=1;align=left;verticalAlign=middle;fontSize=10;fillColor=none;rounded=1;strokeColor=none;" vertex="1" parent="1"><mxGeometry x="1800" y="387" width="190" height="18" as="geometry" /></mxCell>
+        <mxCell id="t_c22" value="C-22 (1,N)—(0,1) 收款 / 退款" style="text;html=1;align=left;verticalAlign=middle;fontSize=10;fillColor=none;rounded=1;strokeColor=none;" vertex="1" parent="1"><mxGeometry x="1600" y="832" width="220" height="18" as="geometry" /></mxCell>
+        <mxCell id="t_c23" value="C-23 (0,N)—(0,1) 获得 / 回滚" style="text;html=1;align=left;verticalAlign=middle;fontSize=10;fillColor=none;rounded=1;strokeColor=none;" vertex="1" parent="1"><mxGeometry x="1800" y="435" width="220" height="18" as="geometry" /></mxCell>
+        <mxCell id="t_c24" value="C-24 (0,1)—(0,1) 1:1 整单取货" style="text;html=1;align=left;verticalAlign=middle;fontSize=10;fillColor=none;rounded=1;strokeColor=none;" vertex="1" parent="1"><mxGeometry x="1565" y="604" width="190" height="18" as="geometry" /></mxCell>
+        <mxCell id="t_c25" value="C-25 (0,N)—(1,1) 退原销售明细" style="text;html=1;align=left;verticalAlign=middle;fontSize=10;fillColor=none;rounded=1;strokeColor=none;" vertex="1" parent="1"><mxGeometry x="1650" y="806" width="230" height="18" as="geometry" /></mxCell>
+        <mxCell id="t_c26" value="C-26 (1,N)—(1,1) 归属（弱实体）" style="text;html=1;align=left;verticalAlign=middle;fontSize=10;fillColor=none;rounded=1;strokeColor=none;" vertex="1" parent="1"><mxGeometry x="1742" y="614" width="230" height="18" as="geometry" /></mxCell>
+        <mxCell id="t_c27" value="C-27 (1,N)—(1,1) 归属（弱实体）" style="text;html=1;align=left;verticalAlign=middle;fontSize=10;fillColor=none;rounded=1;strokeColor=none;" vertex="1" parent="1"><mxGeometry x="2088" y="614" width="230" height="18" as="geometry" /></mxCell>
+        <mxCell id="t_c28" value="C-28 (0,1)—(0,1) 退款" style="text;html=1;align=left;verticalAlign=middle;fontSize=10;fillColor=none;rounded=1;strokeColor=none;" vertex="1" parent="1"><mxGeometry x="2100" y="630" width="170" height="18" as="geometry" /></mxCell>
+        <mxCell id="t_c29" value="C-29 (0,1)—(0,1) 回滚挂退货" style="text;html=1;align=left;verticalAlign=middle;fontSize=10;fillColor=none;rounded=1;strokeColor=none;" vertex="1" parent="1"><mxGeometry x="2080" y="457" width="190" height="18" as="geometry" /></mxCell>
+        <mxCell id="t_c30" value="C-30 (1,N)—(0,1) 退货入库（明细级）" style="text;html=1;align=left;verticalAlign=middle;fontSize=10;fillColor=none;rounded=1;strokeColor=none;" vertex="1" parent="1"><mxGeometry x="2300" y="600" width="250" height="18" as="geometry" /></mxCell>
         <mxCell id="e_c18" value="" style="edgeStyle=orthogonalEdgeStyle;html=1;rounded=0;startArrow=none;endArrow=none;strokeWidth=1.2;exitX=1;exitY=0.95;exitDx=0;exitDy=0;entryX=0;entryY=0.34;entryDx=0;entryDy=0;" edge="1" parent="1" source="purchase_request" target="fund_flow">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
@@ -297,8 +274,8 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="t_c18" value="C-18 (0,N)—(0,1) 一次付清" style="text;html=1;align=left;verticalAlign=middle;fontSize=10;fillColor=#FFFFFF;rounded=1;strokeColor=none;" vertex="1" parent="1"><mxGeometry x="1896" y="300" width="200" height="18" as="geometry" /></mxCell>
-        <mxCell id="readme" value="&lt;b&gt;读图说明&lt;/b&gt;&lt;br&gt;· 分区（左 → 右）：主体参数 → 商品 → 供应 · 采购 → 单据 → 流水&lt;br&gt;· 长途连线走外圈走廊（左 / 右 / 顶 / 底缘），不横穿图心&lt;br&gt;· C-18 在 y=215 / 400 / 430 / 455 处与 C-9 / C-21 / C-20 / C-23 有 4 处 90° 交叉（均在空白区）&lt;br&gt;· 汇总边 C-2 / C-8、取值来源 C-5 见上方与右下备注框" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;spacingTop=6;fontSize=10;fillColor=#FFFFFF;strokeColor=#999999;dashed=1;" vertex="1" parent="1">
+        <mxCell id="t_c18" value="C-18 (0,1)—(0,1) 一次付清" style="text;html=1;align=left;verticalAlign=middle;fontSize=10;fillColor=none;rounded=1;strokeColor=none;" vertex="1" parent="1"><mxGeometry x="1896" y="300" width="200" height="18" as="geometry" /></mxCell>
+        <mxCell id="readme" value="&lt;b&gt;读图说明&lt;/b&gt;&lt;br&gt;· 分区（左 → 右）：主体参数 → 商品 → 供应 · 采购 → 单据 → 流水&lt;br&gt;· 长途连线走外圈走廊（左 / 右 / 顶 / 底缘），不横穿图心&lt;br&gt;· C-18 在 y=215 / 400 / 430 / 455 处与 C-9 / C-21 / C-20 / C-23 有 4 处 90° 交叉（均在空白区）&lt;br&gt;· 汇总边 C-2 / C-8 见上方与右下备注框" style="rounded=0;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;spacingTop=6;fontSize=10;fillColor=#FFFFFF;strokeColor=#999999;dashed=1;" vertex="1" parent="1">
           <mxGeometry x="2740" y="250" width="290" height="190" as="geometry" />
         </mxCell>
 
