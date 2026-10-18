@@ -1,12 +1,14 @@
 # 数据字典（spec-data-dictionary）
 
 **性质**：第 2 周正式产出 —— **关系模式**（表、字段、域、码）+ **模拟样例元组**。
-**历史过程**：`drafts/plan-week-2.md` 记录第 2 周早期方案；本文件正文是当前表结构口径。
+**历史过程**：`drafts/plan-week-2.md` 记录第 2 周早期方案；本文件以 v0.1 基线加第六周增量共同描述当前目标结构。
 **上游口径**：`spec-data-boundary.md`（进库 / 不进库清单）、`spec-businesses.md`（业务与 R-\*）、
 `spec-roles.md`（谁能看 / 谁能改）、`spec-scenario.md`（场景规矩）。
 **用途**：第 3 周据此建库并落实基础主外键及检查约束；第 4 周复核约束、补业务验证与权限。
 本文件是数据设计；SQL 建库和实际验证属于第 3 周任务。
 **样例截面**：以下元组描述 2026-09-20 收盘时的状态，预订单的“有效”状态只在这个截面判断；不代表当前实时状态。
+
+> **版本口径**：§0—§6 保留 v0.1 的 19 张业务表与 77 行旧样例，作为迁移前基线。第六周迁移后的结构和扩展样例以本文末尾的“第六周增量（v0.2-w6）”为准；增量不覆盖或删除旧场景。
 
 ---
 
@@ -546,7 +548,7 @@ Week 4 验证证据：合法地将金卡办卡费增加 1 元，事务内检查�
 | `request_id` | `BIGINT` | 外键 → `purchase_request.id` | **是** | — | **只有"采购付款"非空** | 挂在哪张**采购单**上 |
 | `member_phone` | `VARCHAR(11)` | 外键 → `member.phone` | **是** | — | **只有"办卡费"非空** | 办的是哪位会员的卡（B8） |
 | `fund_before` | `DECIMAL(12,2)` | — | 否 | — | ≥ 0 | 收付**前**的资金总额 |
-| `fund_after` | `DECIMAL(12,2)` | — | 否 | — | = `fund_before` ± `amount` | 收付**后**的资金总额（**= 店内资金总额**，A17、R-15） |
+| `fund_after` | `DECIMAL(12,2)` | — | 否 | — | = `fund_before` ± `amount`；第六周另强制 ≥ 0（§7.4） | 收付**后**的资金总额（**= 店内资金总额**，A17、R-15） |
 | `recorded_by` | `VARCHAR(11)` | 外键 → `employee.phone` | 否 | — | — | 登记人 —— **做这笔业务的人**（R-22 §4） |
 | `recorded_at` | `DATETIME2` | — | 否 | `SYSDATETIME()` | — | 收付时刻 |
 
@@ -672,3 +674,89 @@ Week 4 验证证据：合法地将金卡办卡费增加 1 元，事务内检查�
 第 3 周把基线写入 `db/sample-data.sql`，验证主外键、唯一性、字段域及上述静态对账；第 4 周补充权限、状态迁移、事务与自动处理用例。覆盖行中的操作由相应脚本落实，复杂规则不能仅靠字段检查约束表达。
 
 实际记录须包含规则编号、初始数据、执行步骤、实际结果和是否符合预期；第 3 周结果放入 `db/results/week-3.md`，后续按周记录。执行时按当前规则检查边界情况，并保存实际结果。当前表格是覆盖设计，不代表 26 条规则均已实现或验证通过。
+
+## 7 第六周增量（v0.2-w6，2026-10-18）
+
+### 7.1 版本、范围与保留策略
+
+本节与 §0—§6 的 v0.1 基线合用。结构增量以 [`migration.sql`](../db/migration.sql) 为准，目标库为 `ShiguangBookstoreWeek6Work`，原库 `ShiguangBookstoreWeek3` 保留。旧 19 张业务表及其 77 行数据不删除、不重命名、不覆盖；新增 1 张技术表 `schema_migration`，迁移后共 **20 张用户表、49 条外码**。原 47 条外码保留，新增 `supplier.updated_by` 与 `schema_migration.applied_by` 两条员工引用。主码与原有候选码保持，新增技术表的码见 §7.3。
+
+迁移前先检查重复子类引用、重复取货销售、重复积分事件、积分来源缺失和负余额；冲突应阻止迁移，不能自动删行“去重”。必要的数据处理为保留旧业务事实、给供应商新增留痕列置 NULL，并写入一条迁移版本记录；没有需搬移到替代表的旧业务数据。样例扩充由独立的 [`sample-data-week-6.sql`](../db/sample-data-week-6.sql) 追加。
+
+### 7.2 `supplier` 字段增量（I-09）
+
+供应商从 4 列增至 6 列，原四列、`PK_supplier` 与 `UQ_supplier_name` 保持。
+
+| 新增字段 | 类型 | 键 / 默认 | 可空 | 域与含义 |
+|---|---|---|---|---|
+| `updated_by` | `VARCHAR(11)` | `FK_supplier_updated_by` → `employee.phone`；无默认 | 是 | 最近一次已记录修改人；非空时为 11 位数字，受 `CK_supplier_updated_by_phone` 检查 |
+| `updated_at` | `DATETIME2` | 无默认 | 是 | 最近一次已记录修改时刻 |
+
+`CK_supplier_updated_by_pair` 要求两列同时为空或同时非空。旧供应商两列均为 NULL，表示没有可信的历史修改记录；不得复制 `created_by / created_at` 伪造历史，也不能把 NULL 解读为“从未修改”。这些约束提供留痕位置与值的形态检查，尚不自动填写修改人 / 时刻，不强制实际操作者身份、岗位或每次改名都更新留痕；I-09 为**部分完成**。
+
+[供应商留痕专项记录](../db/results/week-6-supplier-audit.md) 已获用户执行反馈：合法改名及成对填写成功，两种只填一列情况和不存在员工引用均被预期约束拒绝，每项回滚后供应商、报价及采购记录保持。该专项证据补充于原 22 项反例之外，手机号格式 CHECK 不单列为已实测项。
+
+### 7.3 `schema_migration` 技术表
+
+一行表示一次目标版本迁移记录，用于追溯版本，不作为第 20 个业务实体。完整字段如下：
+
+| 字段 | 类型 | 键 | 可空 | 默认 | 域与含义 |
+|---|---|---|---|---|---|
+| `migration_key` | `VARCHAR(64)` | 主码 `PK_schema_migration` | 否 | — | 迁移标识；本次为 `W6-NORMALIZATION-1.0` |
+| `source_version` | `VARCHAR(32)` | — | 否 | — | 来源版本；本次为 `v0.1` |
+| `target_version` | `VARCHAR(32)` | 候选码 `UQ_schema_migration_target_version` | 否 | — | 目标版本；本次为 `v0.2-w6` |
+| `applied_at` | `DATETIME2` | — | 否 | `SYSDATETIME()`（`DF_schema_migration_applied_at`） | 实际执行时刻，以数据库记录为准 |
+| `applied_by` | `VARCHAR(11)` | `FK_schema_migration_applied_by` → `employee.phone` | 是 | — | 可关联项目员工；本次写 NULL，不将 SSMS 登录身份冒充业务员工 |
+| `status` | `NVARCHAR(10)` | — | 否 | — | `CK_schema_migration_status`：仅 `已完成` / `已回滚`；本次为 `已完成` |
+| `notes` | `NVARCHAR(400)` | — | 否 | — | 本次变更与旧数据保留策略 |
+
+`CK_schema_migration_applied_by_phone` 要求 `applied_by` 为空或为 11 位数字。`status` 允许“已回滚”只是值域定义，不表示脚本已经实现自动回滚与状态维护。迁移脚本检测本次已完成记录时跳过；该版本标记不等于业务请求的幂等机制。
+
+### 7.4 既有表的约束增量
+
+新增的六个筛选唯一索引如下，列与筛选条件均按迁移脚本登记：
+
+| 索引 | 表与索引列 | 筛选条件 | 强制的上界 |
+|---|---|---|---|
+| `UX_goods_book_isbn` | `goods(book_isbn)` | `book_isbn IS NOT NULL` | 同一图书细节至多被一个商品引用（I-07） |
+| `UX_goods_toy_code` | `goods(toy_code)` | `toy_code IS NOT NULL` | 同一文创细节至多被一个商品引用（I-07） |
+| `UX_sale_reservation_id` | `sale(reservation_id)` | `reservation_id IS NOT NULL` | 同一预订至多关联一张销售单（I-16） |
+| `UX_point_movement_earn` | `point_movement(sale_id)` | `change_type = N'消费获得'` | 每销售单至多一笔获得（I-18） |
+| `UX_point_movement_use` | `point_movement(sale_id)` | `change_type = N'抵扣使用'` | 每销售单至多一笔抵扣（I-18） |
+| `UX_point_movement_return` | `point_movement(return_id)` | `change_type = N'退货回滚'` | 每退货单至多一笔回滚（I-18） |
+
+这些索引表达特定非空集合或类别中的条件唯一性；不把可空引用列单独登记为全表候选码，也不推导无条件的全表函数依赖。I-07 的上界已解决，细节行必须有人引用的下界仍属 I-05。I-16 尚未强制取货前预订有效、取货后置已取及库存 / 收款的原子联动。
+
+`CK_point_movement_kind` 已替换为下列三个分支：
+
+| `change_type` | `points` | `sale_id` | `return_id` |
+|---|---|---|---|
+| 消费获得 | > 0 | 非空 | 空 |
+| 抵扣使用 | < 0 | 非空 | 空 |
+| 退货回滚 | < 0 | 非空 | 非空 |
+
+`sale_id` 列的物理定义仍允许 NULL，但当前三个合法类别均要求非空，因此积分行到销售单的实际参与为 `(1,1)`；§3.3 的旧“非销售引起时为空”不适用于本版本。外码保证来源存在，CHECK 和唯一索引不保证回滚所挂销售单等于退货原单、会员一致或点数正确。当前 [`regression.sql`](../db/regression.sql) 的 `51552` 显式检查 NULL、错误原单与会员；历史 `verify.sql` 的 `51215` 保留原样，不作为已修复证据。I-18 为**结构补强已完成、跨表归属有主动检测，完整写入控制待完成**。
+
+`CK_fund_flow_amount` 已替换为 `amount > 0 AND fund_before >= 0 AND fund_after >= 0`，原 `CK_fund_flow_balance` 继续检查行内加减等式。I-19 的单行非负约束已完成；历史补录也必须满足每行前后余额非负。全链衔接、来源金额一致和并发资金安全仍需要主动校验及事务控制，不能由此判为全部解决。
+
+### 7.5 旧样例与扩充截面
+
+§1—§6 的旧样例元组保留。迁移后、扩充前仍为 **77 行业务数据 + 1 行技术记录**，旧现金 `1430.30`、经营盈亏 `-69.70`。扩充脚本另加 121 行业务数据，合计 **198 行业务数据 + 1 行技术记录 = 199 行**；扩充场景与对象见 [`sample-data-week-6-plan.md`](../db/sample-data-week-6-plan.md)。
+
+| 项目 | 扩充后预期值 |
+|---|---:|
+| `goods` | 10 |
+| `member` | 6 |
+| `purchase_request` | 10 |
+| `reservation` | 8 |
+| `sale` | 9 |
+| `goods_return` | 5 |
+| `stock_movement` | 31 |
+| `point_movement` | 13 |
+| `fund_flow` | 29 |
+| 现金余额 | 555.30 |
+| 经营盈亏 | -944.70 |
+
+以上扩充截面由用户在 SSMS 执行后反馈符合预期，见 [`week-6-sample-data.md`](../db/results/week-6-sample-data.md)；迁移结构核对见 [`week-6-migration-check.md`](../db/results/week-6-migration-check.md)。这些记录是执行反馈摘要，仓库未保存原始 SSMS 网格，非作者独立复现尚未完成。
+
+结构性反例见 [`regression-negative.sql`](../db/regression-negative.sql) 及其 [22 项结果摘要](../db/results/week-6-regression-negative.md)：其中覆盖重复图书引用、重复取货销售、重复获得积分、获得积分缺销售来源、重复回滚及负资金余额。另有[唯一索引专项补测](../db/results/week-6-unique-index.md)覆盖文创重复和重复抵扣，两项均获用户执行符合预期反馈；供应商成对留痕另见[四项专项结果](../db/results/week-6-supplier-audit.md)。这些补测独立登记，不改写原 22 项反例的覆盖范围，亦不表示每个新增约束均已单独实测。重复取消和自动过期仍分别观察到 `DIRECT_DML_ACCEPTED_NO_IDEMPOTENCY_GUARD`、`AUTO_EXPIRY_NOT_APPLIED`，详见 [重复请求边界](../db/results/week-6-duplicate-request-boundary.md)、[自动过期边界](../db/results/week-6-auto-expiry-boundary.md)。本节增量不代表 R-1—R-26 或第六周全部任务已验收。

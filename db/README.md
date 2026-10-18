@@ -1,6 +1,6 @@
 # 数据库脚本执行与复现说明
 
-本目录保存拾光书店数据库项目的 Week 3 和 Week 4 SQL 脚本。
+本目录保存拾光书店数据库项目的 Week 3、Week 4 和 Week 6 SQL 脚本。
 
 **验证环境（数据库引擎与客户端工具的版本、以及实例名，一律以本地为准）**：
 
@@ -219,3 +219,69 @@ sqlcmd -S localhost\SQLEXPRESS -E -C -b -f 65001 -W -s "|" `
 > `docs/evidence-v0.1.md`（八类对照表 + §3）。
 
 > "应当看到什么"（判据）见 §5；以上是某次实际核对的结果。
+
+## 8. Week 6 迁移、样例扩充与回归
+
+第六周脚本在从 `ShiguangBookstoreWeek3` 备份还原出的工作副本
+`ShiguangBookstoreWeek6Work` 上执行。原始库只用于保留 v0.1 基线，不能作为迁移或样例装载目标。
+第六周脚本中的 `USE` 目标固定为 `ShiguangBookstoreWeek6Work`；执行前必须确认 SSMS 查询窗口的当前数据库和脚本中的目标一致。
+
+### 8.1 执行顺序
+
+按下面顺序执行，每一步确认结果符合预期后再继续：
+
+1. 在原始库完成备份，并将备份还原为 `ShiguangBookstoreWeek6Work`；确认数据库状态为 `ONLINE`。
+2. 在工作副本执行 `verify.sql` 或迁移前只读基线检查，确认 19 张表、47 个外码、77 行旧样例、现金 `1430.30` 和经营盈亏 `-69.70`。
+3. 执行 `migration.sql`，完成 `schema_migration`、供应商留痕字段、唯一索引、来源约束和迁移标记；失败时按脚本事务回滚，必要时使用备份恢复。
+4. 执行 `migration-check.sql`，确认目标结构和旧业务快照仍可追溯。
+5. 执行 `sample-data-week-6.sql`，装载 W6-S01—W6-S11 的新增对象、单据、明细和流水。该脚本只允许在已完成迁移的工作副本上运行。
+6. 执行 `regression.sql`，核对旧场景、新场景、库存 / 预订、积分、销售、退货和资金对账。
+7. 依次执行 `regression-negative.sql`、`role.sql` 和 `transaction-week-6.sql`，分别检查结构反例、角色越权和中途失败回滚。反例和事务测试必须在事务中回滚，不得污染扩充后的合法截面。
+8. 最后再次执行 `regression.sql`，确认测试没有改变样例数量、四类账目或旧场景快照。
+9. 单独执行 `duplicate-cancel-boundary-check.sql` 和 `auto-expiry-boundary-check.sql`，如实记录当前是否具备重复请求幂等和自动过期入口；这两个脚本的 `PASS` 只表示边界检查完成，不表示相应业务功能已经实现。
+
+### 8.2 第六周脚本入口
+
+| 文件 | 用途 |
+|---|---|
+| `migration.sql` | 从 v0.1 副本迁移到第六周目标结构 |
+| `migration-check.sql` | 迁移后元数据、旧场景和约束只读核对 |
+| `sample-data-week-6.sql` | 装载 W6-S01—W6-S11 新增样例 |
+| `sample-data-week-6-plan.md` | 新场景编号、业务键、时点和预期值 |
+| `regression.sql` | 扩充后只读回归和四类账目对账 |
+| `regression-negative.sql` | 22 个已实现结构约束反例；每项应拒绝并回滚 |
+| `role.sql` | 店长、收银员和库存管理员的授权 / 越权检查 |
+| `transaction-week-6.sql` | 中途约束失败时整笔事务回滚 |
+| `price-snapshot-week-6.sql` | W6-S08：临时调价 / 修改卡参数，验证历史成交快照不变并回滚 |
+| `supplier-audit-week-6.sql` | I-09：合法改名、成对留痕及员工外码专项测试，逐项回滚 |
+| `unique-index-week-6.sql` | I-07 / I-18：补测重复文创引用及重复积分抵扣，核对索引名并回滚 |
+| `sales-statistics-week-6.sql` | 只读输出旧 / 新订单明细、逐商品销量、逐日实付退款及范围汇总，核对显式预期 |
+| `inventory-query-week-6.sql` | 只读输出逐商品库存、预订占用及来源对账；另列已到期但未释放的占用 |
+| `supplier-cost-week-6.sql` | W6-S11：只读比较当前报价与历史采购批次成本，按供应商对账入库和付款 |
+| `member-validity-week-6.sql` | W6-S05：只读核对到期日 / 次日边界及第六周成交卡档快照 |
+| `duplicate-cancel-boundary-check.sql` | 重复取消请求的当前实现边界 |
+| `auto-expiry-boundary-check.sql` | 到期但仍有效预订的当前实现边界 |
+| `results/week-6-*.md` | 第六周执行反馈、预期 / 实际、差异和未实现项 |
+
+### 8.3 第六周预期截面
+
+扩充后工作副本应满足以下关键值；旧截面仍按历史时点单独核对：
+
+- 用户表 20 张，外码 49 个，迁移记录 1 条；
+- `goods=10`、`member=6`、`purchase_request=10`、`reservation=8`；
+- `sale=9`、`goods_return=5`、`stock_movement=31`、`point_movement=13`、`fund_flow=29`；
+- 扩充后现金余额 `555.30`，经营盈亏 `-944.70`；
+- 旧商品、旧会员、旧单据和旧流水仍可按迁移前快照复核。
+
+这些数字是脚本定义的第六周截面，不要求扩充后全库仍保持 77 行。临时反例、权限和事务测试不计入合法样例基线。
+
+### 8.4 已知实现边界
+
+当前数据库已经验证了结构约束、权限边界和一个中途失败事务的回滚，但以下能力仍需业务入口或后续应用阶段实现：
+
+- 重复取消、重复取货、重复退款等请求的幂等保护；
+- 预订到期后的自动状态更新和已订量释放；
+- 并发销售 / 预订下的库存锁定；
+- 覆盖全部采购、取货、退货和资金流程的统一受控入口。
+
+静态终态样例只能证明数据覆盖，不能替代这些流程功能的实现。第六周非作者独立复现和 ER 最终人工复核记录在 `../docs/review-week-6.md` 与 `../ER/review-v1.0.md`。

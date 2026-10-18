@@ -5,11 +5,11 @@
 **它不记录什么**：正常结论（进 `docs/er-mapping-v1.0.md`）；ER 设计叙述（进 `docs/design-notes-v1.0.md`）。
 **官方要求**：记录问题、业务证据、影响及改进方向；**注明哪些内容保留、哪些拟在第六周调整**。
 **编号**：`I-01` 起**连续**，不许空号。
-**状态**：**Week 5 定稿（2026-10-11）** —— 正式交付版，共 **21 条**（`I-01` – `I-21`，编号连续）；每条三种结论之一见上方总览表。
+**状态**：保留 Week 5 定稿（2026-10-11）的 21 条发现与原始判定；2026-10-18 补记第六周工作副本 `v0.2-w6` 的处理结果。五项总览已更新，详述保留迁移前分析并另列当前结果。
 
 ---
 
-## 三种结论（判定口径）
+## 三种结论（第五周原始判定口径）
 
 | 结论 | 什么时候用 | 必须补什么 |
 |---|---|---|
@@ -17,6 +17,8 @@
 | **拟第 6 周调整** | 属**结构性问题**（约束不够严、需要触发器 / 迁移脚本） | 写清改什么、为什么不在本周改 |
 | **当场已改** | 属**冲突**：两个已定要求不能同时成立 / 与业务规则或官方明文矛盾 / 按现有设计必然出错 / 同一事实两处写法不一致 | 写**改动前后** + 单一出处（先改 `docs/` 口径 → 再改脚本 → 再同步结果）+ **回归验证结果** + 是否仍需第 6 周迁移（口径见 `docs/task-week-5.md` §3 第 15 条） |
 
+> 上述判定用于第五周；第六周另记“已完成 / 部分完成”，不覆盖原始结论。
+>
 > **不属于冲突、不要当场改**：约束不够严 · 命名风格不统一 · 冗余与性能 · "更好看"的优化 → 记「拟第 6 周调整」或「保留」。
 
 ---
@@ -31,19 +33,19 @@
 | **I-04** | 库存两个计数（`stock_total` / `reserved_qty`）的**跨行等式无 DDL 约束** | `goods` · `stock_movement` · `reservation_item` · `db/verify.sql` | **拟第 6 周调整** | ✅ 已记 |
 | **I-05** | `book` / `toy` 的**反向引用无约束**，可能出现没人引用的细节行 | `goods.book_isbn` · `goods.toy_code` | **保留** | ✅ 已记 |
 | **I-06** | `book` / `toy` **没有留痕列**，录入人与时刻只能间接追溯 | `book` · `toy` · `goods.created_by` | **保留** | ✅ 已记 |
-| **I-07** | 子类细节行的**上界**无约束：同一 `toy_code` / `book_isbn` 可被**两件商品**引用 | `goods.toy_code` · `goods.book_isbn` · `toy` · `book` | **拟第 6 周调整** | ✅ 已记 |
+| **I-07** | 子类重复引用上界已补强；参与下界仍见 I-05 | `goods.book_isbn` · `goods.toy_code` | **第六周已完成（上界）** | 两个筛选唯一索引 |
 | **I-08** | `supplier` 用**名称当身份**（`UQ_supplier_name`）：**两家同名供应商无法共存** | `supplier.name` | **保留** | ✅ 已记 |
-| **I-09** | `supplier` **没有 `updated_by` / `updated_at`**：改名（属"改基础数据"）**不留痕** | `supplier` · `spec-roles.md` §4 第 4 条 | **拟第 6 周调整** | ✅ 已记 |
+| **I-09** | 修改留痕字段已增加；受控改名入口待实现 | `supplier.updated_by` · `updated_at` | **第六周部分完成** | 字段 + 外码 + 成对 CHECK |
 | **I-10** | `member.points_balance` 的**跨行等式无 DDL 约束**（须 = `point_movement` 之和，R-25） | `member.points_balance` · `point_movement` · `db/verify.sql` | **拟第 6 周调整** | ✅ 已记 |
 | **I-11** | 单据**"至少一条明细"**（弱实体侧 `min = 1`）无 DDL 约束 | `purchase_request` · `purchase_request_item`（`sale` 等同类） | **保留** | ✅ 已记 |
-| **I-12** | 单据**状态跃迁的单向性**无 DDL 约束（**"审批后不可取消"已由 `CK_purchase_request_stage` 拦住**；一般回退与终态不回退未约束） | `purchase_request.status` · `db/verify.sql` | **拟第 6 周调整** | ✅ 已记 |
+| **I-12** | 单据**状态跃迁的单向性**无 DDL 约束（CHECK 只检查当前状态与留痕组合；同时清空审批留痕后仍可能把已审批单改成已取消；一般回退与终态不回退未约束） | `purchase_request.status` · `db/verify.sql` | **拟第 6 周调整** | ✅ 已记 |
 | **I-13** | R-26「**一次付清 + 入库数量 = 申请数量**」只有跨表校验查询，无 DDL 约束 | `purchase_request` · `purchase_request_item` · `stock_movement` · `fund_flow` · `db/verify.sql` | **拟第 6 周调整** | ✅ 已记 |
 | **I-14** | **销售侧跨行 / 跨表一致性**只有校验查询（单头金额 = Σ行 · 状态 ⟺ 累计退款 · 收款恰好 1 笔 · 数量 ⟺ 库存流水） | `sale` · `sale_item` · `goods_return` · `fund_flow` · `stock_movement` · `db/verify.sql` | **拟第 6 周调整** | ✅ 已记 |
 | **I-15** | **R-7 的积分算式只落了一半**：抵扣 ≤ 积分余额 · 获得 = ⌊实付⌋ · 使用 = 抵扣 × 100 **都无 CHECK 也无校验** | `sale` · `point_movement` · `member.points_balance` | **拟第 6 周调整** | ✅ 已记 |
-| **I-16** | **取货那条边两端都松**：`sale.reservation_id` 无唯一约束（一张预订可被多张销售单引用）· 未要求预订"必须有效"· 取货后置"已取"也无约束 | `sale.reservation_id` · `reservation.status` | **拟第 6 周调整** | ✅ 已记 |
+| **I-16** | 每预订至多一张销售单已强制；取货状态门槛及联动待实现 | `sale.reservation_id` · `reservation.status` | **第六周部分完成** | 筛选唯一索引 |
 | **I-17** | **退货侧跨行 / 跨表一致性**只有校验查询（退款额 = Σ明细 · 明细属同一原单 · 累计退货 ≤ 原量 · 退款流水笔数金额 · 回滚积分挂原单 · 入库数量一致） | `goods_return` · `goods_return_item` · `fund_flow` · `point_movement` · `stock_movement` · `db/verify.sql` | **拟第 6 周调整** | ✅ 已记 |
-| **I-18** | **回滚积分未强制指回原单**（`sale_id` 不在类别 CHECK 里；`51215` 用 `<>` 比较，**遇 NULL 为 UNKNOWN 不触发**）· **积分可能被重复发放 / 重复回滚**（上界无约束） | `point_movement.sale_id` · `return_id` · `db/verify.sql` | **拟第 6 周调整** | ✅ 已记 |
-| **I-19** | `fund_after` **没有非负约束** → "付"可把现金余额压成负数（链条校验只查**相邻衔接**、基线校验只查**终值**，都不查符号） | `fund_flow.fund_after` · `CK_fund_flow_amount` · `db/verify.sql` | **拟第 6 周调整** | ✅ 已记 |
+| **I-18** | 来源非空和事件上界已强制；跨表原单 / 会员归属只有主动检测 | `point_movement` · `db/regression.sql` | **第六周部分完成** | 类别 CHECK + 三个索引 + `51552` |
+| **I-19** | 收付前后余额非负已强制；跨行链条及并发另行控制 | `fund_flow` · `CK_fund_flow_amount` | **第六周已完成（单行非负）** | 非负 CHECK |
 | **I-20** | **"办卡费"这条线整段无校验**：金额（R-24 收费规则无落点；办理时的档位费用 / 差价不存快照）· **"每个会员必有办卡费"（R-17 不支持免费办卡）同样无约束** | `fund_flow.amount` · `member_phone` · R-17 · R-24 · `db/verify.sql` | **拟第 6 周调整** | ✅ 已记 |
 | **I-21** | **同一列被两条联系登记**：`C-2`（留痕汇总）的清单含 `card_type.set_by`，该列又单独登记为 **C-4** → 按"一外码一联系"数会把 47 条数成 48 | `card_type.set_by` · `er-mapping` §1.3 / §2.3 | **保留** | ✅ 已记 |
 
@@ -106,7 +108,10 @@
 
 ### I-07 子类细节行的"上界"没有约束（同一细节行可被两件商品引用）
 
-- **现象**：`goods.toy_code` / `goods.book_isbn` **可空、且没有唯一约束**。子类联系的两端都声明为 `(0,1)`（`docs/er-mapping-v1.0.md` §3.3 的 C-6 / C-7、§5.3），但库里只保证了"**商品侧** `(0,1)`"（`CK_goods_category` + 外码），**细节行侧的上界没有保证** —— 两件商品可以填同一个 `toy_code` / `book_isbn`。
+> 以下现象、影响、改进方向及“结论”为 **v0.1 迁移前审查记录**；当前状态见本条末尾处理结果。
+
+
+- **现象**：`goods.toy_code` / `goods.book_isbn` **可空、且没有唯一约束**。当前口径是：具体子类型联系的**商品侧为 `(0,1)`**，细节侧业务要求为 **`(1,1)`**（`docs/er-mapping-v1.0.md` §3.3 的 C-6 / C-7、§4.3 / §5.3）；库里只保证了商品侧的类别匹配与引用存在性（`CK_goods_category` + 外码），**细节行侧的上界没有保证** —— 两件商品可以填同一个 `toy_code` / `book_isbn`。
 - **业务证据**：字典的总览·外码清单（`goods.toy_code` → `toy.inner_code`、`goods.book_isbn` → `book.isbn`）**只登记外码、没有唯一**；字典 §1.1 说明"商品用代理键统一标识两类商品"（细节行属商品的子类型行）；B1「库管登记商品并上报报价」——**一件文创 / 一本图书对应一件商品**；样例中 `SP-BAG-001`（拾光帆布袋）与 `SP-MARK-002`（拾光书签）各只被一行引用（`goods` 3 / 4），**样例没有覆盖"两件商品挂同一细节行"的情形**。
 - **影响**：同一件文创 / 同一本书出现**两行商品**时，两行**各自计库存、各自被报价与单据引用**（"一个货号两个商品"），库存与销售口径分裂；**数据库不会报错**，现有 `db/verify.sql` 的校验也查不出来。
 - **实测（2026-10-10，库 `ShiguangBookstoreVerify2`）**：事务内连插两行文创（`name` 不同、**`toy_code` 同为 `SP-BAG-001`**）——**两行都被接受**（该码行数 1 → 3），随即 `ROLLBACK`，基线 `goods 4 / toy 2` 复原；库上 `goods` / `toy` / `book` 的**唯一索引只有三个主键**（`PK_goods` / `PK_toy` / `PK_book`），`toy_code` / `book_isbn` 上**没有任何唯一约束或唯一索引** —— **静态 DDL 与运行实测双向确认，非纸面推断**。
@@ -121,6 +126,10 @@ CREATE UNIQUE INDEX [UX_goods_book_isbn] ON dbo.[goods]([book_isbn]) WHERE [book
 - **结论**：**拟第 6 周调整**（属"**约束不够严**"，**非冲突** —— 两个已定要求并不互相矛盾，只是没写足）。理由：涉及改 `schema.sql`，按 `task-week-5.md` §2.4 本周不动结构。
 - **关联**：与 **I-05** 是同一对边的**两端**：I-05 管"下界"（细节行可以没人引用），本条目管"上界"（细节行可以被引用两次）；处理时 **`book` 与 `toy` 要同步**。
 
+**第六周处理结果（2026-10-18）：已完成（上界）。** 已创建 `UX_goods_book_isbn`、`UX_goods_toy_code`，按各列 `IS NOT NULL` 筛选，强制同一非空细节编码至多被一个商品引用，多个合法 NULL 不互相排斥。结构核对获预期反馈；22 项反例包含重复图书引用拒绝，另有[唯一索引专项补测](../db/results/week-6-unique-index.md)的用户反馈，重复文创引用由目标索引拒绝并回滚。多个 NULL 的专项运行证据尚未单列，I-05 的无人引用下界、I-06 的独立留痕边界继续保留。
+
+**第六周证据**：[`migration.sql`](../db/migration.sql)、[迁移结构核对](../db/results/week-6-migration-check.md)、[22 项反例摘要](../db/results/week-6-regression-negative.md)；字段详见[数据字典第六周增量](spec-data-dictionary.md)。结果为用户在 SSMS 执行后的反馈摘要，尚不替代非作者独立复现。
+
 ### I-08 `supplier` 用"名称"当身份 —— 同名供应商无法共存
 
 - **现象**：`supplier` 用代理键 `id` 做主键，但**名称加了唯一约束**（`UQ_supplier_name`）。于是**两家名字相同的供应商只能存在一家** —— 想再建一家"博文图书批发"，无论是否真的同一家，都会被 `2627` 拒绝。
@@ -132,12 +141,19 @@ CREATE UNIQUE INDEX [UX_goods_book_isbn] ON dbo.[goods]([book_isbn]) WHERE [book
 
 ### I-09 `supplier` 没有改名留痕（缺 `updated_by` / `updated_at`）
 
+> 以下现象、影响、改进方向及“结论”为 **v0.1 迁移前审查记录**；当前状态见本条末尾处理结果。
+
+
 - **现象**：`supplier` 只有 `created_by` / `created_at`，**没有 `updated_by` / `updated_at`**；而同一类"基础数据"表的 `goods`、`card_type`（`set_by` / `set_at`）、`member` 都有"最近一次改动人与时刻"。
 - **业务证据**：**`spec-roles.md` §4 第 4 条**（R-22 明写"本条是唯一口径，指向此处"）："每个'**动数据 / 改基础数据**'的动作都要记下**操作人 + 时刻**（可溯源）"；字典 §0.4 对 `supplier` 的选择理由写着"**名称可以改**"，即**改名是设计里预设会发生的事**。
 - **影响**：改名后**答不出"谁改的、何时改的"** —— 供应商名进了采购单与报价的选择过程，名称变动却无痕；同一件事在 `goods` / `card_type` / `member` 上有痕、在 `supplier` 上无痕，**做法不一致**。（**静态侧无争议**：`db/verify.sql` 的列基线对该表只登记 **4 列** —— `id` / `name` / `created_by` / `created_at`，与"没有 `updated_*`"一致。）
 - **改进方向**：（a）第 6 周给 `supplier` 补 `updated_by`（可空外码 → `employee.phone`）+ `updated_at`，与 `goods` 的两列同构（并同步字典与样例）；(b) 明确"本阶段**不支持改供应商名**"（改名一律新建档案），并在字典与报告中写明 —— 取 (b) 则本条转"保留"。
 - **结论**：**拟第 6 周调整**（属"列不全 / 规则覆盖不全"，**非冲突** —— 规则要求与现有列并不互相矛盾，只是没写足）。理由：涉及改 `schema.sql`，按 `task-week-5.md` §2.4 本周不动结构。
 - **关联**：与 **I-06**（`book` / `toy` 无留痕列）是**同一类问题**（留痕覆盖不全），但成因不同 —— I-06 是"细节行的留痕**统一记在 `goods` 上**"（有意为之，故保留），本条是"供应商改名**无处可记**"；**处理时可一并决定留痕的统一边界**。
+
+**第六周处理结果（2026-10-18）：部分完成。** 已增加可空 `updated_by VARCHAR(11)`、`updated_at DATETIME2`，以及 `FK_supplier_updated_by`、`CK_supplier_updated_by_phone`、`CK_supplier_updated_by_pair`。旧供应商两列保持 NULL，不复制建档信息虚构修改历史。[供应商留痕专项测试](../db/results/week-6-supplier-audit.md) 已由用户执行并反馈符合预期：合法改名及成对填写成功、两种只填一列情况被成对 CHECK 拒绝、无效员工引用被外码拒绝，逐项回滚后三张表恢复。字段及上述约束已有专项运行证据；自动记录真实操作者、岗位校验及受控改名入口仍待实现，手机号格式 CHECK 未单独实测，非作者独立复现仍待补。
+
+**第六周证据**：[`migration.sql`](../db/migration.sql)、[迁移结构核对](../db/results/week-6-migration-check.md)、[22 项反例摘要](../db/results/week-6-regression-negative.md)；字段详见[数据字典第六周增量](spec-data-dictionary.md)。结果为用户在 SSMS 执行后的反馈摘要，尚不替代非作者独立复现。
 
 ### I-10 `member.points_balance` 的"跨行等式"没有 DDL 约束
 
@@ -160,10 +176,10 @@ CREATE UNIQUE INDEX [UX_goods_book_isbn] ON dbo.[goods]([book_isbn]) WHERE [book
 
 - **现象**：`CK_purchase_request_stage` 只保证"**状态 ⟺ 留痕列组合**"（例："已取消"必须无审批人），`CK_purchase_request_times` 只保证时刻先后；**"只能往前推进、终态不回退"没有约束** —— 把"已审批"直接改成"**已提交**"（并清空审批人）在库上写得进去。
 - **业务证据**：R-5 的状态机（草稿 → 已提交 → 已审批 → 已收货；**审批后不可取消**；已取消单据保留且不能恢复 —— 需要时**另开申请**）。
-- **影响**：**"审批后不可取消"已被拦住**（它是阶段-留痕组合的直接推论 ✅）；但更一般的回退（已收货 → 已审批、已提交 → 草稿）能写进去，且本表**不留状态变更历史**，事后无法核对。
+- **影响**：当前约束只检查**修改后的状态与留痕组合**，不能比较修改前状态；因此“已取消状态不能同时保留审批留痕”的反例会被拒绝，但把“已审批”一次更新为“已取消”并同时清空 `approved_by` / `approved_at`、填写取消留痕，仍可能通过。更一般的回退（已收货 → 已审批、已提交 → 草稿）也能写进去，且本表**不留状态变更历史**，事后无法核对。
 - **改进方向**：第 6 周评估用**触发器**校验"新状态只能来自允许的前态"；或**记录状态变更日志**（代价：多一张表）；或明确"状态只由应用层推进"并写清边界。
 - **结论**：**拟第 6 周调整**（结构性问题；按 `task-week-5.md` §2.4 本周不动结构）。
-- **关联**：规则落点为 `er-mapping-v1.0.md` §9.4 的 **D-25 / D-26 / D-27**；与 **I-10** / **I-13** 同属"要靠触发器或校验查询补足"的一类。
+- **关联**：规则落点为 `er-mapping-v1.0.md` §9.4 的 **D-25 / D-26 / D-27**；其中 D-26 只覆盖当前状态与留痕列的组合，不等于状态跃迁约束。与 **I-10** / **I-13** 同属"要靠触发器、事务入口或校验查询补足"的一类。
 
 ### I-13 R-26 的"一次付清 + 入库数量 = 申请数量"没有 DDL 约束
 
@@ -198,6 +214,9 @@ CREATE UNIQUE INDEX [UX_goods_book_isbn] ON dbo.[goods]([book_isbn]) WHERE [book
 
 ### I-16 "取货"那条边两端都松（一张预订可被多张销售单引用）
 
+> 以下现象、影响、改进方向及“结论”为 **v0.1 迁移前审查记录**；当前状态见本条末尾处理结果。
+
+
 - **现象**：`sale.reservation_id` 是**可空外码**，但**没有唯一约束**；库里也没有任何要求"取货必须挂**有效**预订"或"取货后把预订置**已取**"的约束。于是有三处松：
   ① **上界**：同一张预订可被**多张销售单**引用（业务上 B6 是**整单取货一次**；R-12 明文"已取 / 已过期 / 已取消为**终态，不能再次取货**"）；
   ② **状态门槛**：取货销售可以挂到"已过期 / 已取消 / 已取"的预订上；
@@ -208,10 +227,14 @@ CREATE UNIQUE INDEX [UX_goods_book_isbn] ON dbo.[goods]([book_isbn]) WHERE [book
   ```sql
   CREATE UNIQUE INDEX [UX_sale_reservation_id] ON dbo.[sale]([reservation_id]) WHERE [reservation_id] IS NOT NULL;
   ```
-  另补**校验查询**：取货销售的预订状态必须为"有效"、取货后预订须置"已取"。
+  另补**动作入口与校验**：取货前必须为“有效”，取货后置“已取”；完成后截面不能仍要求“有效”。
   ⚠️ 与 **I-07** 一样**不能加普通 `UNIQUE`**（多个 `NULL` 会被视为重复 → 第二张门店直销单插不进去）。
 - **结论**：**拟第 6 周调整**（属"约束不够严"，非冲突）。
 - **关联**：与 **I-07**（子类细节行的上界）**同为"上界无约束 → 需要筛选唯一索引"**，建议第 6 周一起做；`er-mapping-v1.0.md` §13.3 的 **C-24** 是它的联系落点（基数已更正为**两端 `(0,1)`**）。
+
+**第六周处理结果（2026-10-18）：部分完成。** 已创建 `UX_sale_reservation_id`，对非空预订引用唯一，重复取货销售反例获预期拒绝反馈，门店直销多个 NULL 仍合法。取货前必须有效、取货后置已取，以及销售 / 库存 / 积分 / 收款原子联动仍未强制。唯一索引不等于通用请求幂等；重复取消边界仍为 `DIRECT_DML_ACCEPTED_NO_IDEMPOTENCY_GUARD`。
+
+**第六周证据**：[`migration.sql`](../db/migration.sql)、[迁移结构核对](../db/results/week-6-migration-check.md)、[22 项反例摘要](../db/results/week-6-regression-negative.md)；字段详见[数据字典第六周增量](spec-data-dictionary.md)。结果为用户在 SSMS 执行后的反馈摘要，尚不替代非作者独立复现。
 
 ### I-17 退货侧的"跨行 / 跨表一致性"没有 DDL 约束
 
@@ -229,6 +252,9 @@ CREATE UNIQUE INDEX [UX_goods_book_isbn] ON dbo.[goods]([book_isbn]) WHERE [book
 - **关联**：与 **I-14**（销售侧）是**同一对单据的两端**，建议一起做；规则落点为 `er-mapping-v1.0.md` §15.3 的 **C-28** 与 §16.4 的 **D-56 / D-57 / D-58**；**回滚积分的数额**正确性（`⌊E × T / S⌋` 差额）与 **I-15** 同族，一并补。
 
 ### I-18 回滚积分未强制"指回原单"，且积分可能被重复发放 / 重复回滚
+
+> 以下现象、影响、改进方向及“结论”为 **v0.1 迁移前审查记录**；当前状态见本条末尾处理结果。
+
 
 - **现象**：两半 ——
   ① **`sale_id` 不在类别约束里**：`CK_point_movement_kind` 的三个分支只约束 `points` 的**符号**与 `return_id`，**都没管 `sale_id`**；而对"**退货回滚**"这一类，业务上 `sale_id` **必须非空**（R-25 明写"退货回滚要能指回原单"；字典 §3.3 的"含义"列同样写着"引起它的那张销售单（退货回滚要能指回原单，R-25）"）。
@@ -248,7 +274,7 @@ CREATE UNIQUE INDEX [UX_goods_book_isbn] ON dbo.[goods]([book_isbn]) WHERE [book
 ```sql
 CREATE UNIQUE INDEX [UX_point_movement_earn]   ON dbo.[point_movement]([sale_id])   WHERE [change_type] = N'消费获得';
 CREATE UNIQUE INDEX [UX_point_movement_use]    ON dbo.[point_movement]([sale_id])   WHERE [change_type] = N'抵扣使用';
-CREATE UNIQUE INDEX [UX_point_movement_return] ON dbo.[point_movement]([return_id]) WHERE [return_id] IS NOT NULL;
+CREATE UNIQUE INDEX [UX_point_movement_return] ON dbo.[point_movement]([return_id]) WHERE [change_type] = N'退货回滚';
 ```
 
   ⚠️ **不能只加一个普通 `UNIQUE`**（三类混在一起会把"**同一次结算的获得 + 抵扣**"判成重复）；必须**按类别分别筛选**。
@@ -256,7 +282,16 @@ CREATE UNIQUE INDEX [UX_point_movement_return] ON dbo.[point_movement]([return_i
 - **关联**：与 **I-16**（取货重放）、**I-07**（子类上界）**同族**（上界无约束 → 筛选唯一索引），建议第 6 周一起做；与 **I-10**（余额 = 流水之和）、**I-15**（积分算式）**配套** —— I-10 保"**总额**对"、I-15 保"**每笔数额**对"、本条保"**每笔归属且不重复**"。
 - ⚠️ **一条可复用的经验**：**用 `=` / `<>` 做跨表比对时，NULL 会让校验静默失效** —— 这类校验要显式写 `IS NULL OR <>`。
 
+**第六周处理结果（2026-10-18）：部分完成。** 已替换 `CK_point_movement_kind`：三类均要求 `sale_id IS NOT NULL`；仅退货回滚要求退货来源非空，其余两类要求为空。新增 `UX_point_movement_earn`、`UX_point_movement_use`、`UX_point_movement_return`，每销售单获得 / 抵扣各至多一笔，每退货单回滚至多一笔；实际回滚筛选条件为 `change_type = N'退货回滚'`。物理 `sale_id` 列仍可空，合法行由 CHECK 强制非空。
+
+历史 `verify.sql` 的 `51215` 未修改；当前 `regression.sql` 的 `51552` 显式检测 NULL、错误原销售单、原单无会员及会员不一致。来源非空和重复上界属于写入约束，跨表归属仅主动检测，尚无完整写入控制。22 项反例包含重复获得、获得缺销售来源、重复回滚的预期反馈；[唯一索引专项补测](../db/results/week-6-unique-index.md)另补重复抵扣，用户反馈目标索引拒绝且回滚恢复。点数算式、事件必生成、余额同步和通用请求幂等不由这些索引保证。
+
+**第六周证据**：[`migration.sql`](../db/migration.sql)、[迁移结构核对](../db/results/week-6-migration-check.md)、[22 项反例摘要](../db/results/week-6-regression-negative.md)；字段详见[数据字典第六周增量](spec-data-dictionary.md)。结果为用户在 SSMS 执行后的反馈摘要，尚不替代非作者独立复现。
+
 ### I-19 `fund_after` 没有非负约束（可"付出超过手上的现金"）
+
+> 以下现象、影响、改进方向及“结论”为 **v0.1 迁移前审查记录**；当前状态见本条末尾处理结果。
+
 
 - **现象**：`CK_fund_flow_amount` 只约束 `amount > 0 AND fund_before >= 0`，`CK_fund_flow_balance` 只要求 `fund_after = fund_before ± amount` —— **"付"这一支把余额压成负数时，任何约束都不报错**。例：手上 `fund_before = 100.00`，记一笔 `amount = 500.00` 的提现 → `fund_after = -400.00` **通过**。
 - **业务证据**：R-15「**现金余额 = 全部收付之和**」（= 店内资金总额，A17）—— 店里现金不可能为负；字典 §4.1 对 `fund_before` 明写 `≥ 0`，对 `fund_after` 只写"= `fund_before` ± `amount`"（**只约束算式、没约束符号**）；样例链条从 `0.00` 起、**每一笔之后都为正**（`0 → 2000 → … → 1430.30`）—— **样例没有覆盖"余额为负"这一情形**，所以在材料里看不出来。
@@ -264,6 +299,10 @@ CREATE UNIQUE INDEX [UX_point_movement_return] ON dbo.[point_movement]([return_i
 - **改进方向**：（a）把 `fund_after >= 0` 写进 `CK_fund_flow_amount`（**改一条 CHECK 即可，不需要筛选索引**）—— 代价：**补录历史**时必须按时刻顺序插入（先补付款、后补注资会因中间态为负被拒）；(b) 在字典与报告中明确"允许链中短暂为负（补录顺序所致）"，则本条转**保留**。
 - **结论**：**拟第 6 周调整**（建议取 a）。理由：涉及改 `schema.sql`，按 `task-week-5.md` §2.4 本周不动结构；**最终裁决取决于"是否允许补录"**（若允许，需在字典写明负余额的含义）。
 - **关联**：与 **I-04 / I-10** **不同族** —— I-04 / I-10 是"**总额没有校验**"，本条是"**单行没有非负约束**"（链尾可为负）。
+
+**第六周处理结果（2026-10-18）：已完成（单行非负）。** 已替换 `CK_fund_flow_amount` 为 `amount > 0 AND fund_before >= 0 AND fund_after >= 0`，保留 `CK_fund_flow_balance` 行内等式；负余额反例获预期拒绝反馈。历史补录也须满足每行前后非负。全链连续性、原单金额、重复付款 / 退款及并发资金控制不在本条完成范围。
+
+**第六周证据**：[`migration.sql`](../db/migration.sql)、[迁移结构核对](../db/results/week-6-migration-check.md)、[22 项反例摘要](../db/results/week-6-regression-negative.md)；字段详见[数据字典第六周增量](spec-data-dictionary.md)。结果为用户在 SSMS 执行后的反馈摘要，尚不替代非作者独立复现。
 
 ### I-20 "办卡费"金额没有任何校验（时点参数不存快照）
 
