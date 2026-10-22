@@ -7,6 +7,7 @@
 | `week-3/` | 第三周建库、样例、CRUD 和结构校验输出 | [执行记录](week-3/week-3.md) |
 | `week-4/` | 第四周查询、视图、权限、空库复现及 SSMS 截图 | [执行记录](week-4/week-4.md) |
 | `week-6/records/` | 第六周逐项执行反馈和专项结果摘要，保留当时执行者及范围 | 由正式设计和报告按需引用；不是另一份审核结论 |
-| `week-6/acceptance/` | 当前审核证据：final-check为本轮主代理45步，原子代理输出保留历史归属 | [证据说明](week-6/acceptance/README.md) |
+| `week-6/acceptance/` | 作者侧审核证据：final-check为本轮主代理45步，原子代理输出保留历史归属 | [证据说明](week-6/acceptance/README.md) |
+| `week-6/acceptance-b-20261022/` | 第二复核人（Reviewer B）在独立副本上的 39 步复现：原始输出、`steps.json`、`manifest.json` 与来源清单 | [复现说明](week-6/acceptance-b-20261022/README.md) |
 
 第六周正式审核结论仅保留 [docs/reviews/review-week-6.md](../../docs/reviews/review-week-6.md) 当前版本，复核人登记“梁宇聪”，ER图人工验收已于2026-10-22由梁宇聪确认通过。目录整理的历史操作不代表本轮执行；本轮按用户授权在新副本重跑，当前结论允许AI自检，本周声明范围内验收已完成。

@@ -1,0 +1,9 @@
+﻿已将数据库上下文更改为 "ShiguangBookstoreWeek6B20261022R3"。
+fixed_test_time|effective_reservations_past_expiry|observed_behavior
+---------------|----------------------------------|-----------------
+2026-10-01 12:00:00.0000000|2|AUTO_EXPIRY_NOT_APPLIED
+code|status|created_at|expires_at|cancelled_by_employee|cancelled_at
+----|------|----------|----------|---------------------|------------
+517436|有效|2026-09-18 10:00:00.0000000|2026-09-21 10:00:00.0000000|NULL|NULL
+W6R-2105|有效|2026-09-27 09:00:00.0000000|2026-09-30 09:00:00.0000000|NULL|NULL
+auto-expiry-boundary-check.sql PASS: read-only observation completed; no reservation status was changed.

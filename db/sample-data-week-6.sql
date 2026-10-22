@@ -19,10 +19,10 @@ SET NUMERIC_ROUNDABORT OFF;
 SET NOCOUNT ON;
 SET XACT_ABORT ON;
 
+-- 目标必须精确等于传入库名且以 ShiguangBookstoreWeek6 开头；
+-- 原始库 ShiguangBookstoreWeek3 因不满足此条件同样被 51400 拒绝，不再另设不可达分支。
 IF (DB_NAME() <> N'$(DatabaseName)' OR DB_NAME() NOT LIKE N'ShiguangBookstoreWeek6%')
-    THROW 51400, N'当前数据库不是 ShiguangBookstoreWeek6Work，停止装载。', 1;
-IF DB_NAME() = N'ShiguangBookstoreWeek3'
-    THROW 51401, N'禁止在 ShiguangBookstoreWeek3 原始库上装载第六周样例。', 1;
+    THROW 51400, N'目标数据库不是本次指定的 Week6 专用副本（含原始库 Week3），停止装载。', 1;
 IF @@TRANCOUNT <> 0
     THROW 51402, N'请在没有外层事务的新查询窗口执行样例脚本。', 1;
 IF OBJECT_ID(N'dbo.schema_migration', N'U') IS NULL

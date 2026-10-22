@@ -1,0 +1,3 @@
+﻿已为数据库 'ShiguangBookstoreWeek6B20261022R3Failure'，文件 'ShiguangBookstoreVerify2' (位于文件 1 上)处理了 904 页。
+已为数据库 'ShiguangBookstoreWeek6B20261022R3Failure'，文件 'ShiguangBookstoreVerify2_log' (位于文件 1 上)处理了 2 页。
+RESTORE DATABASE 成功处理了 906 页，花费 0.084 秒(84.216 MB/秒)。

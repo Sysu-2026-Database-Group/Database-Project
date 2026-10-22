@@ -1,4 +1,4 @@
-{
+﻿{
   "previous_index_entries": 58,
   "unchanged_entries": 55,
   "metadata_changes": [
@@ -20,5 +20,122 @@
       "current_sha256": "2d2e56be54d8acd3b50a107bba57297c5932ebfaacc324bbd3571fa47bca865c",
       "reason": "current policy, v1.4 evidence and AI self-check entry updated; original SQL outputs unchanged"
     }
-  ]
+  ],
+  "reviewer_b_2026_10_22": {
+    "note": "Reviewer B 因两个清单与当前字节不符而重算；下列条目含作者整理期改动与 Reviewer B 自身修订，SQL 结果均未重跑。",
+    "entries": [
+      {
+        "scope": "source",
+        "file": "db/accept-week-6.ps1",
+        "previous_sha256": "17f6de3137a6d8c2577d9d8d632227854eb6321434e7d35bb307c5d7b49ddcca",
+        "current_sha256": "2fc5c70948888c317094612a21e391f5222843d39d5d96cda78b6a8595f5ac95",
+        "reason": "作者整理期改动，未随清单登记；Reviewer B 按当前字节重算，SQL 未重跑"
+      },
+      {
+        "scope": "source",
+        "file": "db/checks/legacy-snapshot.sql",
+        "previous_sha256": "343722c5b9eb3b1b41ce18b27647ce6826ffc1d1be36c585311f87c1c8460697",
+        "current_sha256": "86e3dcd774f3fc4efa331c9e5145e2dea8bf981e4af74f3ee7a4ba5e35ee696d",
+        "reason": "作者整理期改动，未随清单登记；Reviewer B 按当前字节重算，SQL 未重跑"
+      },
+      {
+        "scope": "source",
+        "file": "db/sample-data-week-6.sql",
+        "previous_sha256": "967de7f86e2ea74be0a4b89708a3a13c69cd7f3aecc844a4b1d1b4e679744fd6",
+        "current_sha256": "cb06c78ffd4d43b9c53e615a15715f26236f094ce37e7557a3b793cde6a6bad2",
+        "reason": "Reviewer B 2026-10-22 修订（文档 / 死分支 / 清单登记），未重跑数据库"
+      },
+      {
+        "scope": "source",
+        "file": "docs/specs/spec-data-dictionary.md",
+        "previous_sha256": "254a2c7c046761af8a659ca2ae8c799970a960d9659eb10864df6ab305edf01d",
+        "current_sha256": "92e1c5684fc4f80fcedb219b495b2f63a436f8e310b1471c87aab885aee3f075",
+        "reason": "作者整理期改动，未随清单登记；Reviewer B 按当前字节重算，SQL 未重跑"
+      },
+      {
+        "scope": "source",
+        "file": "docs/tasks/task-week-6.md",
+        "previous_sha256": "10ef14ecdd11be9d1b24da28fec74fa35b030bc4f7e0a8fae7cb98620246386e",
+        "current_sha256": "28bdbe532250f278b0619c52c67a02d84b4ed8b105d0a6c4d09aeb60e8d0493a",
+        "reason": "Reviewer B 2026-10-22 修订（文档 / 死分支 / 清单登记），未重跑数据库"
+      },
+      {
+        "scope": "source",
+        "file": "db/checks/audit-week-6-artifacts.py",
+        "previous_sha256": "c8d90fb1e6a7bf07bed9d57ef8ccd9e1e31eff49436bb6b5cc6082e744fbbec7",
+        "current_sha256": "3ac33d1d6b75f9397e8de4c2913d1a03229156dc30de268b649bb7569c2dd3e1",
+        "reason": "作者整理期改动，未随清单登记；Reviewer B 按当前字节重算，SQL 未重跑"
+      },
+      {
+        "file": "00-environment.txt",
+        "previous_sha256": "5b765efc18a49a43330d23da11ab6d64c9803556471b0523600ca49ae2b47f04",
+        "current_sha256": "d17bf2b775628827568fd2b1f10a0d05dc92102ffa87b14c68cca20e401bb92b",
+        "reason": "作者整理期改动（判定为事后重查覆盖），Reviewer B 按当前字节重算，SQL 未重跑"
+      },
+      {
+        "file": "metadata-updates.json",
+        "previous_sha256": "606a9cd117133d8d8433dbfc1ff4a3f8409444aeee23c0f40a4d06a7115e76af",
+        "current_sha256": "7815c922b1deacc96f92e256c729b105591477a88a42332d44a30cf0c5cfb415",
+        "reason": "Reviewer B 2026-10-22 修订（文档 / 死分支 / 清单登记），未重跑数据库"
+      }
+    ],
+    "final_check_entries": [
+      {
+        "file": "00-environment.txt",
+        "previous_sha256": "5b765efc18a49a43330d23da11ab6d64c9803556471b0523600ca49ae2b47f04",
+        "current_sha256": "d17bf2b775628827568fd2b1f10a0d05dc92102ffa87b14c68cca20e401bb92b",
+        "reason": "作者整理期改动（判定为事后重查覆盖），Reviewer B 按当前字节重算，SQL 未重跑"
+      },
+      {
+        "file": "metadata-updates.json",
+        "previous_sha256": "606a9cd117133d8d8433dbfc1ff4a3f8409444aeee23c0f40a4d06a7115e76af",
+        "current_sha256": "7815c922b1deacc96f92e256c729b105591477a88a42332d44a30cf0c5cfb415",
+        "reason": "Reviewer B 2026-10-22 修订（文档 / 死分支 / 清单登记），未重跑数据库"
+      }
+    ],
+    "evidence_entries": [
+      {
+        "file": "00-environment.txt",
+        "previous_sha256": "9ea39ca22684c10f123beb32ff1024f6b981e9813c420d0c3137c5e36cb55170",
+        "current_sha256": "d00d4437792aed5ba6849df6b1550fdba3dceede8cb90215731f463b332e6bb5",
+        "reason": "作者整理期改动（判定为事后重查覆盖），Reviewer B 按当前字节重算，SQL 未重跑"
+      },
+      {
+        "file": "final-check/00-environment.txt",
+        "previous_sha256": "5b765efc18a49a43330d23da11ab6d64c9803556471b0523600ca49ae2b47f04",
+        "current_sha256": "d17bf2b775628827568fd2b1f10a0d05dc92102ffa87b14c68cca20e401bb92b",
+        "reason": "作者整理期改动（判定为事后重查覆盖），Reviewer B 按当前字节重算，SQL 未重跑"
+      },
+      {
+        "file": "final-check/manifest.json",
+        "previous_sha256": "effc8b4a0802ad40158d1ca032a7d4f7ebac21e8a453e55e09e30ba2cfd5acf3",
+        "current_sha256": "32705843808032af3b9810c70dad9e685c1bdd7b5b7c9bc25c66ccf19f38fd7e",
+        "reason": "Reviewer B 2026-10-22 修订（文档 / 死分支 / 清单登记），未重跑数据库"
+      },
+      {
+        "file": "final-check/metadata-updates.json",
+        "previous_sha256": "606a9cd117133d8d8433dbfc1ff4a3f8409444aeee23c0f40a4d06a7115e76af",
+        "current_sha256": "4a15455358e3d9acd12873dc429d037d2e7baf29fa2a865a8ae33b881e86c8be",
+        "reason": "Reviewer B 2026-10-22 修订（文档 / 死分支 / 清单登记），未重跑数据库"
+      },
+      {
+        "file": "README.md",
+        "previous_sha256": "9e5b6eab842ddadef4e7e98b6018b5f613d1acb606c908cb2a777a933fd8d434",
+        "current_sha256": "249b0dffe56a534edd6da5d9068d44e79ae883f0a0ed66b3fe84f0900843d6a2",
+        "reason": "Reviewer B 2026-10-22 修订（文档 / 死分支 / 清单登记），未重跑数据库"
+      },
+      {
+        "file": "reviewer-findings.md",
+        "previous_sha256": "6fba5949e2d09e80d8c884ba1c76b973448222d61a57844759ad1741ec8e76b8",
+        "current_sha256": "bd0ed8756a338908a36c514c67a2582e493ae9921ee67d4a15d458c97779de76",
+        "reason": "Reviewer B 2026-10-22 修订（文档 / 死分支 / 清单登记），未重跑数据库"
+      },
+      {
+        "file": "source-current-manifest.json",
+        "previous_sha256": "7851017db8fc407ed0d263fc13022737cebc66191451df8f9460852991ff541e",
+        "current_sha256": "25eb1542f09be458e4f1783e35d6c6b28c1972bf6d531e5c945065a6a5eea96f",
+        "reason": "Reviewer B 2026-10-22 修订（文档 / 死分支 / 清单登记），未重跑数据库"
+      }
+    ]
+  }
 }

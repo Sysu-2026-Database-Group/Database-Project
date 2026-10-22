@@ -1,0 +1,4 @@
+﻿已为数据库 'ShiguangBookstoreVerify2'，文件 'ShiguangBookstoreVerify2' (位于文件 1 上)处理了 904 页。
+已为数据库 'ShiguangBookstoreVerify2'，文件 'ShiguangBookstoreVerify2_log' (位于文件 1 上)处理了 2 页。
+BACKUP DATABASE 成功处理了 906 页，花费 0.137 秒(51.636 MB/秒)。
+文件 1 上的备份集有效。

@@ -1,0 +1,35 @@
+﻿已将数据库上下文更改为 "ShiguangBookstoreWeek6B20261022R3"。
+case_name|opened_date|expiry_date|as_of_date|expected_valid|actual_valid
+---------|-----------|-----------|----------|--------------|------------
+before_open|2026-09-21|2027-09-21|2026-09-20|0|0
+opening_day|2026-09-21|2027-09-21|2026-09-21|1|1
+before_expiry|2026-09-21|2027-09-21|2027-09-20|1|1
+expiry_day|2026-09-21|2027-09-21|2027-09-21|1|1
+after_expiry|2026-09-21|2027-09-21|2027-09-22|0|0
+case_name|expected_expiry|actual_expiry
+---------|---------------|-------------
+expired_rebuy|2027-09-21|2027-09-21
+expiry_day_rebuy|2028-09-21|2028-09-21
+leap_first_purchase|2025-03-01|2025-03-01
+leap_valid_rebuy|2025-03-01|2025-03-01
+ordinary_feb28|2024-02-28|2024-02-28
+valid_rebuy|2028-09-21|2028-09-21
+phone|card_level|opened_date|expires_at|valid_on_expiry_day|valid_on_next_day|points_balance|observation_scope
+-----|----------|-----------|----------|-------------------|-----------------|--------------|-----------------
+13900000001|金卡|2026-09-08|2027-09-08|1|0|-26|STATIC_DATA_ONLY
+13900000002|金卡|2026-09-09|2027-09-09|1|0|0|STATIC_DATA_ONLY
+13900000003|银卡|2026-09-21|2027-09-21|1|0|122|STATIC_DATA_ONLY
+13900000004|金卡|2026-09-21|2027-09-21|1|0|197|STATIC_DATA_ONLY
+13900000005|金卡|2026-09-21|2027-09-21|1|0|0|STATIC_DATA_ONLY
+13900000006|银卡|2026-09-21|2027-09-21|1|0|0|STATIC_DATA_ONLY
+sale_no|member_phone|sale_card_level|sale_discount_rate|paid_amount|card_fee|current_card_level|snapshot_check
+-------|------------|---------------|------------------|-----------|--------|------------------|--------------
+S20260922-W604|13900000003|银卡|.95|64.60|20.00|银卡|PASS
+S20260923-W605|13900000004|金卡|.90|10.80|50.00|金卡|PASS
+S20260924-W606|13900000004|金卡|.90|187.20|50.00|金卡|PASS
+S20260925-W607|13900000003|银卡|.95|68.40|20.00|银卡|PASS
+S20260927-W609|13900000003|银卡|.95|210.80|20.00|银卡|PASS
+member_count|snapshot_sale_count|fixed_date_rule_cases|renewal_date_rule_cases|static_date_observations|result
+------------|-------------------|---------------------|-----------------------|------------------------|------
+6|5|5|6|6|PASS
+member-validity-week-6.sql PASS: 11 fixed-input date rule examples and five sales snapshots; no membership action endpoint tested.

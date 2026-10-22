@@ -197,7 +197,7 @@
 | 依赖与规范化设计 | `docs/design/design-normalization-v1.0.md` | 逐表分析、目标关系模式、无损连接与依赖保持、冗余及保留取舍 |
 | 迁移脚本 | `db/migration.sql` | 创建 / 调整、码及约束、旧数据迁移、冲突检查、旧表处理、执行与恢复说明 |
 | 新样例脚本 | `db/sample-data-week-6.sql` | 场景编号、新对象与完整关联数据、截面、执行前提及冲突处理 |
-| 回归脚本 | `db/regression.sql` | 旧 / 新场景、目标元数据、标识映射、数量和账目、正反例及权限 |
+| 回归脚本 | `db/regression.sql` + `db/role.sql`（由验收入口按序执行） | 旧 / 新场景、目标元数据、标识映射、数量和账目、正反例；权限正反例在 `role.sql` 中执行，结果与回归同目录归档 |
 | 实际运行记录 | `db/results/week-6/acceptance/*.txt`、`steps.json`、`docs/reviews/review-week-6.md` | 版本、环境、顺序、预期 / 实际、差异、失败项与恢复证据 |
 | ER 图与说明 | 现有 `ER/` 图源、PNG、审查记录及 `docs/design/er-mapping-v1.0.md` | 审查整改、目标结构、全部联系引用及真实复核范围 |
 | 同步文档与报告 | 数据字典、问题清单、`db/README.md`、项目 README、`docs/ai-usage-log.md` 及第二阶段报告素材 | 目标口径、执行入口、问题处理结果、设计思路、实验过程、实验总结及人工验证 |

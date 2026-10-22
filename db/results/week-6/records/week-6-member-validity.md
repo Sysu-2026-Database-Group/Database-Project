@@ -1,5 +1,7 @@
 # 第六周会员静态规则与成交快照记录
 
+> **当前状态（2026-10-22）**：本文件是当时的逐项反馈，不是当前审核结论；"非作者复核"门槛已由 `docs/project-conventions.md` 取消，当前结论见 `docs/reviews/review-week-6.md`，Reviewer B 独立复现见 `db/results/week-6/acceptance-b-20261022/`。
+
 2026-10-21修正：移除用每行自身到期日反推边界的通过判据。现有6名会员只标为 `STATIC_DATA_ONLY`；业务办理入口尚未实现。
 
 | 项目 | 预期 | 本轮实际 | 原始输出 |

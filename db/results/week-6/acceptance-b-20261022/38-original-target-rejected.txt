@@ -1,0 +1,3 @@
+﻿已将数据库上下文更改为 "ShiguangBookstoreVerify2"。
+消息 51040，级别 16，状态 1，服务器 Moony\SQLEXPRESS，第 17 行
+迁移目标必须是 ShiguangBookstoreWeek6 开头的专用副本。

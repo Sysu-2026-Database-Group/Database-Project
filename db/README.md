@@ -279,7 +279,7 @@ SSMS 中需启用“查询 → SQLCMD 模式”，在调用脚本之前单独定
 | `tests/sales-statistics-week-6.sql` | 只读输出旧 / 新订单明细、逐商品销量、逐日实付退款及范围汇总，核对显式预期 |
 | `tests/inventory-query-week-6.sql` | 只读输出逐商品库存、预订占用及来源对账；另列已到期但未释放的占用 |
 | `tests/supplier-cost-week-6.sql` | W6-S11：只读比较当前报价与历史采购批次成本，按供应商对账入库和付款 |
-| `tests/member-validity-week-6.sql` | W6-S05：只读核对到期日 / 次日边界及第六周成交卡档快照 |
+| `tests/member-validity-week-6.sql` | W6-S05：11 个独立固定输入的日期规则示例（到期日 / 次日、过期与有效期内重买起算、闰日顺延）＋成交卡档快照；6 名会员标 `STATIC_DATA_ONLY`，不代表办理入口已实现 |
 | `tests/duplicate-cancel-boundary-check.sql` | 重复取消请求的当前实现边界 |
 | `tests/auto-expiry-boundary-check.sql` | 到期但仍有效预订的当前实现边界 |
 | `results/week-6/records/week-6-*.md` | 第六周执行反馈、预期 / 实际、差异和未实现项 |

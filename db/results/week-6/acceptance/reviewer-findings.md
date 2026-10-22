@@ -13,6 +13,8 @@
 ```powershell
 ./db/accept-week-6.ps1 -Server localhost -DatabaseName ShiguangBookstoreWeek6ReviewSubagent20261021 -EvidenceDirectory db/results/week-6-review-subagent-2026-10-21
 ./db/results/week-6-review-subagent-2026-10-21/independent-audit.ps1
+# 注：该临时目录已在交付整理时并入 db/results/week-6/acceptance/（00—44 即本次输出），
+#     现路径为 ./db/results/week-6/acceptance/independent-audit.ps1；旧路径不再存在。
 ```
 
 第一条命令退出码 0。第二条命令独立重读原始结果和退出码、比较完整快照与查询文本并产出 `independent-checks.json`，退出码 0。另使用 SQLCMD 直接只读查询当前副本，结果保存在 `independent-current-state.txt`。该补充查询的长 CHECK 定义受 SQLCMD 默认宽度截断，不将其当成完整 DDL 证据；完整定义以源脚本和执行核对为依据。

@@ -1,7 +1,7 @@
-[
+﻿[
   {
     "file": "db/accept-week-6.ps1",
-    "sha256": "17f6de3137a6d8c2577d9d8d632227854eb6321434e7d35bb307c5d7b49ddcca",
+    "sha256": "2fc5c70948888c317094612a21e391f5222843d39d5d96cda78b6a8595f5ac95",
     "previous_layout_sha256": "17f6de3137a6d8c2577d9d8d632227854eb6321434e7d35bb307c5d7b49ddcca",
     "scope": "current code; SQL changes validated by final-check 45-step run"
   },
@@ -31,7 +31,7 @@
   },
   {
     "file": "db/checks/legacy-snapshot.sql",
-    "sha256": "343722c5b9eb3b1b41ce18b27647ce6826ffc1d1be36c585311f87c1c8460697",
+    "sha256": "86e3dcd774f3fc4efa331c9e5145e2dea8bf981e4af74f3ee7a4ba5e35ee696d",
     "previous_layout_sha256": "343722c5b9eb3b1b41ce18b27647ce6826ffc1d1be36c585311f87c1c8460697",
     "scope": "current code; SQL changes validated by final-check 45-step run"
   },
@@ -97,7 +97,7 @@
   },
   {
     "file": "db/sample-data-week-6.sql",
-    "sha256": "967de7f86e2ea74be0a4b89708a3a13c69cd7f3aecc844a4b1d1b4e679744fd6",
+    "sha256": "cb06c78ffd4d43b9c53e615a15715f26236f094ce37e7557a3b793cde6a6bad2",
     "previous_layout_sha256": "967de7f86e2ea74be0a4b89708a3a13c69cd7f3aecc844a4b1d1b4e679744fd6",
     "scope": "current code; SQL changes validated by final-check 45-step run"
   },
@@ -150,13 +150,13 @@
   },
   {
     "file": "docs/specs/spec-data-dictionary.md",
-    "sha256": "254a2c7c046761af8a659ca2ae8c799970a960d9659eb10864df6ab305edf01d",
+    "sha256": "92e1c5684fc4f80fcedb219b495b2f63a436f8e310b1471c87aab885aee3f075",
     "previous_layout_sha256": "254a2c7c046761af8a659ca2ae8c799970a960d9659eb10864df6ab305edf01d",
     "scope": "current code; SQL changes validated by final-check 45-step run"
   },
   {
     "file": "docs/tasks/task-week-6.md",
-    "sha256": "10ef14ecdd11be9d1b24da28fec74fa35b030bc4f7e0a8fae7cb98620246386e",
+    "sha256": "28bdbe532250f278b0619c52c67a02d84b4ed8b105d0a6c4d09aeb60e8d0493a",
     "previous_layout_sha256": "90561b5e8f79a62aab8efadf2e79e48e180537cbb506ce2e84bd4bdf63b6be1b",
     "scope": "current code; SQL changes validated by final-check 45-step run",
     "acceptance_update": {
@@ -167,7 +167,7 @@
   },
   {
     "file": "db/checks/audit-week-6-artifacts.py",
-    "sha256": "c8d90fb1e6a7bf07bed9d57ef8ccd9e1e31eff49436bb6b5cc6082e744fbbec7",
+    "sha256": "3ac33d1d6b75f9397e8de4c2913d1a03229156dc30de268b649bb7569c2dd3e1",
     "scope": "current artifact/verification source",
     "acceptance_update": {
       "date": "2026-10-22",

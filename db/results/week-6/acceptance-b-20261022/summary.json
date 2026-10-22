@@ -1,0 +1,18 @@
+﻿{
+  "status": "PASS",
+  "reviewer": "Reviewer B",
+  "server": ".\\SQLEXPRESS",
+  "source": "ShiguangBookstoreVerify2",
+  "database": "ShiguangBookstoreWeek6B20261022R3",
+  "failure_database": "ShiguangBookstoreWeek6B20261022R3Failure",
+  "backup": "E:\\SQL_Server\\MSSQL17.SQLEXPRESS\\MSSQL\\Backup\\ShiguangBookstoreWeek6B20261022R3.bak",
+  "backup_integrity": "COPY_ONLY + BACKUP CHECKSUM + RESTORE VERIFYONLY CHECKSUM; file hash not collected",
+  "steps": 46,
+  "source_unchanged": true,
+  "legacy_rows_preserved": true,
+  "test_rows_restored": true,
+  "power_shell": "5.1.26100.9711",
+  "executed_at": "2026-10-22T20:26:15.0534628+08:00",
+  "skipped": "无：官方 45 步内容全部覆盖（37/39/41—43 已补测，另加撤销后复跑）",
+  "supplement": "supplement-37/39/41/42/43/44；测试库 ShiguangBookstoreWeek6B20261022R3"
+}

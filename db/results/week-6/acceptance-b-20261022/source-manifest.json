@@ -1,0 +1,98 @@
+﻿[
+  {
+    "file": "db/migration.sql",
+    "sha256": "930dfb7df84ec3d0fb9b1463ec76ba2c36298336a6dc2f4c74411c5d158ed159"
+  },
+  {
+    "file": "db/sample-data-week-6.sql",
+    "sha256": "cb06c78ffd4d43b9c53e615a15715f26236f094ce37e7557a3b793cde6a6bad2"
+  },
+  {
+    "file": "db/regression.sql",
+    "sha256": "57538998c6e2162c3af01c54ccc6d30a6d9e605e9c64367097980b09292afa3f"
+  },
+  {
+    "file": "db/role.sql",
+    "sha256": "a82e8dcfb5681dab64ba683db8bff76845f6de720dbe2c913dd1cf5e6e881dbe"
+  },
+  {
+    "file": "db/query.sql",
+    "sha256": "a2a8479bb861ae4d87e112acc07ffe66785709242d8f90fdf41497d54f400588"
+  },
+  {
+    "file": "db/constraint.sql",
+    "sha256": "f53946484c934c5866b2b245afeb2940f61ba85aa342edb3f55fb0b0402eebbc"
+  },
+  {
+    "file": "db/schema.sql",
+    "sha256": "48f8c5b2ee69081d7fd261971a9b008a11c209310aea8856f0b76a5e9fe5c658"
+  },
+  {
+    "file": "db/checks/verify.sql",
+    "sha256": "765b03875f40b2e84f3821ccd5ed3863559bb06c5c6dfad50c41cdd7e9efe119"
+  },
+  {
+    "file": "db/checks/migration-check.sql",
+    "sha256": "037766f0c45f8f816a4f7796deb105d963cd822345906eaa5181b41077747eba"
+  },
+  {
+    "file": "db/checks/legacy-snapshot.sql",
+    "sha256": "86e3dcd774f3fc4efa331c9e5145e2dea8bf981e4af74f3ee7a4ba5e35ee696d"
+  },
+  {
+    "file": "db/results/week-6/acceptance-b-20261022/run-b.ps1",
+    "sha256": "b6c0e664b331f4aad86c7503a4a485ea60080deb37f305d7b166633a49d05fb0"
+  },
+  {
+    "file": "db/results/week-6/acceptance-b-20261022/run-b-supplement.ps1",
+    "sha256": "7f80ff8bf7fa84cf0f067ef92fe2d432ddbe9eeff614af5df071bb37dca19f04"
+  },
+  {
+    "file": "db/tests/auto-expiry-boundary-check.sql",
+    "sha256": "c952713f920fed2b0208c670e01d91fe61505ba42c89c7bc1760a4cd5f23c77e"
+  },
+  {
+    "file": "db/tests/crud.sql",
+    "sha256": "665dfb0003db3481307fe222143cf31f4288d636b8553833491de2dceefaa8b3"
+  },
+  {
+    "file": "db/tests/duplicate-cancel-boundary-check.sql",
+    "sha256": "919bb2d1bf8c1f4533387b5372f93dd19d3a056fcd3ab09c314edb66b0d822aa"
+  },
+  {
+    "file": "db/tests/inventory-query-week-6.sql",
+    "sha256": "418032044b68736c8e5218a4a3e3e9331af0b4715f2f1e2f05df5314b0b48346"
+  },
+  {
+    "file": "db/tests/member-validity-week-6.sql",
+    "sha256": "09dca24460e7bdcc4ddba0930ac57e579e34180f23f9aef97086a2bb9d6ec2ea"
+  },
+  {
+    "file": "db/tests/price-snapshot-week-6.sql",
+    "sha256": "a6031ac1c18e5cd43e48159d7a74d20132982fed692f510d51826b1e801598b3"
+  },
+  {
+    "file": "db/tests/regression-negative.sql",
+    "sha256": "45ddcfd98fa36e74d6954f2cba13c0cb6ca9959ce57461a3522ef20e753a5121"
+  },
+  {
+    "file": "db/tests/sales-statistics-week-6.sql",
+    "sha256": "f30e239ca0dcdf564e14325e017a3ab285d96d559843ac5b727ff30ceb571872"
+  },
+  {
+    "file": "db/tests/supplier-audit-week-6.sql",
+    "sha256": "bb76d1e5c23efa679d3ac6c5c492e3528c6d5edcbb78a852c8cbe84fe8fe52e2"
+  },
+  {
+    "file": "db/tests/supplier-cost-week-6.sql",
+    "sha256": "5708f9d462c21c876c29526eb7cf9528894f51cd368eb645a42655b766d1bfc9"
+  },
+  {
+    "file": "db/tests/transaction-week-6.sql",
+    "sha256": "6199de0811b06fa74c57addef9068d479d2e58dc03aff2570058244a89813bb9"
+  },
+  {
+    "file": "db/tests/unique-index-week-6.sql",
+    "sha256": "0ea3f584be0892d956532daebb06f18d770f810ce766a323d3a8bffe211027e9"
+  }
+]

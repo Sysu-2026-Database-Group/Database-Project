@@ -1,0 +1,6 @@
+﻿已将数据库上下文更改为 "ShiguangBookstoreWeek6B20261022R3"。
+result
+------
+injected: cashier can update price
+
+(1 行受影响)

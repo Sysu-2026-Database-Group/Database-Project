@@ -1,0 +1,6 @@
+﻿已将数据库上下文更改为 "ShiguangBookstoreWeek6B20261022R3"。
+result
+------
+PASS: injected permission revoked
+
+(1 行受影响)

@@ -1,5 +1,7 @@
 # 第六周测试后最终只读核对记录
 
+> **当前状态（2026-10-22）**：本文件是当时的逐项反馈，不是当前审核结论；"非作者复核"门槛已由 `docs/project-conventions.md` 取消，当前结论见 `docs/reviews/review-week-6.md`，Reviewer B 独立复现见 `db/results/week-6/acceptance-b-20261022/`。
+
 - 日期：2026-10-18
 - 目标数据库：`ShiguangBookstoreWeek6Work`
 - 核对脚本：[`db/regression.sql`](../../../regression.sql)
