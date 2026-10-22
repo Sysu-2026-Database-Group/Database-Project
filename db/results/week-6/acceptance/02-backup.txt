@@ -1,0 +1,4 @@
+﻿已为数据库 'ShiguangBookstoreWeek3'，文件 'ShiguangBookstoreWeek3' (位于文件 1 上)处理了 840 页。
+已为数据库 'ShiguangBookstoreWeek3'，文件 'ShiguangBookstoreWeek3_log' (位于文件 1 上)处理了 2 页。
+BACKUP DATABASE 成功处理了 842 页，花费 0.019 秒(346.011 MB/秒)。
+文件 1 上的备份集有效。

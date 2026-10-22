@@ -1,10 +1,18 @@
 :On Error exit
 -- 第六周迁移：v0.1 -> v0.2-w6
--- 使用 SSMS 的 SQLCMD 模式执行。若在命令行运行，可用 -v DatabaseName=ShiguangBookstoreWeek6Work 覆盖下面的默认值。
-:setvar DatabaseName ShiguangBookstoreWeek6Work
+-- SQLCMD 模式；DatabaseName 必须由调用者指定，不在脚本内覆盖 -v 参数。
+-- 例：sqlcmd -S localhost -E -C -b -v DatabaseName=ShiguangBookstoreWeek6Acceptance -i db/migration.sql
 
 USE [$(DatabaseName)];
 GO
+-- 筛选索引的创建及相关表 DML 所需会话选项，不依赖 SSMS / SQLCMD 默认值。
+SET ANSI_NULLS ON;
+SET QUOTED_IDENTIFIER ON;
+SET ANSI_PADDING ON;
+SET ANSI_WARNINGS ON;
+SET CONCAT_NULL_YIELDS_NULL ON;
+SET ARITHABORT ON;
+SET NUMERIC_ROUNDABORT OFF;
 
 SET NOCOUNT ON;
 SET XACT_ABORT ON;
@@ -12,6 +20,8 @@ SET XACT_ABORT ON;
 -- 安全门：迁移只能在还原出来的工作副本上执行，不能碰原始 Week 3 库。
 IF DB_NAME() = N'ShiguangBookstoreWeek3'
     THROW 51040, N'禁止在 ShiguangBookstoreWeek3 原始库上执行迁移。请先还原为独立工作副本。', 1;
+IF DB_NAME() NOT LIKE N'ShiguangBookstoreWeek6%'
+    THROW 51040, N'迁移目标必须是 ShiguangBookstoreWeek6 开头的专用副本。', 1;
 IF DB_ID(N'$(DatabaseName)') IS NULL
     THROW 51041, N'目标数据库不存在。请检查 SQLCMD 模式和 DatabaseName 变量。', 1;
 IF @@TRANCOUNT <> 0
@@ -225,6 +235,19 @@ BEGIN TRY
                (SELECT COUNT_BIG(*) FROM dbo.supplier
                 WHERE updated_by IS NULL AND updated_at IS NULL) AS legacy_supplier_rows_with_null_audit;';
     EXEC sys.sp_executesql @migration_result_sql;
+    -- 展示六项重复分组计数；前置检查和唯一索引保证它们均为0。
+    SELECT N'goods_book_isbn' AS duplicate_check, COUNT_BIG(*) AS duplicate_groups
+    FROM (SELECT book_isbn FROM dbo.goods WHERE book_isbn IS NOT NULL GROUP BY book_isbn HAVING COUNT_BIG(*)>1) d
+    UNION ALL SELECT N'goods_toy_code', COUNT_BIG(*)
+    FROM (SELECT toy_code FROM dbo.goods WHERE toy_code IS NOT NULL GROUP BY toy_code HAVING COUNT_BIG(*)>1) d
+    UNION ALL SELECT N'sale_reservation_id', COUNT_BIG(*)
+    FROM (SELECT reservation_id FROM dbo.sale WHERE reservation_id IS NOT NULL GROUP BY reservation_id HAVING COUNT_BIG(*)>1) d
+    UNION ALL SELECT N'point_earn', COUNT_BIG(*)
+    FROM (SELECT sale_id FROM dbo.point_movement WHERE change_type=N'消费获得' GROUP BY sale_id HAVING COUNT_BIG(*)>1) d
+    UNION ALL SELECT N'point_use', COUNT_BIG(*)
+    FROM (SELECT sale_id FROM dbo.point_movement WHERE change_type=N'抵扣使用' GROUP BY sale_id HAVING COUNT_BIG(*)>1) d
+    UNION ALL SELECT N'point_return', COUNT_BIG(*)
+    FROM (SELECT return_id FROM dbo.point_movement WHERE change_type=N'退货回滚' GROUP BY return_id HAVING COUNT_BIG(*)>1) d;
 END TRY
 BEGIN CATCH
     IF XACT_STATE() <> 0 ROLLBACK;

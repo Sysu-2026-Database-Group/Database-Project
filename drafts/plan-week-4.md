@@ -1,21 +1,21 @@
 # 第 4 周工作汇报草案（plan-week-4）
 
-> **性质**：过程汇报草案，不替代 `docs/task-week-4.md` 的验收结论。
+> **性质**：过程汇报草案，不替代 `docs/tasks/task-week-4.md` 的验收结论。
 > 本稿面向组员，说明本周已经完成的实现、测试、文档整理和仍需组内配合的验收工作。
-> 正式规则以 `docs/spec-*.md` 和 `docs/task-week-4.md` 为准。
+> 正式规则以 `docs/specs/spec-*.md` 和 `docs/tasks/task-week-4.md` 为准。
 
 ## 1. 本周目标与当前状态
 
-本周围绕 `docs/task-week-4.md` 完成多表查询、统计视图、完整性约束和角色权限四项 SQL 工作，并在本机 SQL Server 2022 上执行验证。
+本周围绕 `docs/tasks/task-week-4.md` 完成多表查询、统计视图、完整性约束和角色权限四项 SQL 工作，并在本机 SQL Server 2022 上执行验证。
 
 | 工作项 | 状态 | 主要产物或证据 |
 |---|---|---|
-| 多表查询与统计 | 已完成初版并实际执行 | `db/query.sql`、`db/results/week-4-query.txt` |
-| 统计视图 | 已完成并实际执行 | `db/view.sql`、`db/results/week-4-view.txt` |
-| 完整性约束测试 | 已完成并实际执行 | `db/constraint.sql`、`db/results/week-4-constraint.txt` |
-| 角色权限测试 | 已完成并实际执行 | `db/role.sql`、`db/results/week-4-role.txt` |
-| 空库 Replay | 当前执行者已完成 | `db/results/week-4-replay-*.txt` |
-| 结果和执行说明 | 已补充 | `db/README.md`、`db/results/week-4.md` |
+| 多表查询与统计 | 已完成初版并实际执行 | `db/query.sql`、`db/results/week-4/week-4-query.txt` |
+| 统计视图 | 已完成并实际执行 | `db/view.sql`、`db/results/week-4/week-4-view.txt` |
+| 完整性约束测试 | 已完成并实际执行 | `db/constraint.sql`、`db/results/week-4/week-4-constraint.txt` |
+| 角色权限测试 | 已完成并实际执行 | `db/role.sql`、`db/results/week-4/week-4-role.txt` |
+| 空库 Replay | 当前执行者已完成 | `db/results/week-4/week-4-replay-*.txt` |
+| 结果和执行说明 | 已补充 | `db/README.md`、`db/results/week-4/week-4.md` |
 | PASS 标记统一 | 已修改脚本，待重新生成结果 | `query.sql`、`view.sql` 末尾新增 PASS 输出 |
 | 非作者组员独立复现 | 待组员完成 | 需要补录执行人、环境、命令和结果 |
 | 现场演示 | 待组员完成 | 需要演示查询、非法数据拒绝和越权失败 |
@@ -60,7 +60,7 @@
 | `v_goods_sales_summary` | 所有商品的销量和销售金额 | 4 行，保留无销售商品 |
 | `v_inventory_status` | 库存、已订数量、可售数量和可售标志 | 4 行 |
 
-第一次执行时发现 `CREATE VIEW` 必须是批次中的第一条语句，在脚本中补充批次分隔后重跑成功。之后使用 `db/results/week-4-view-compare.txt` 对视图和基表直接查询进行对照，行数和关键值差异均为 `0`。
+第一次执行时发现 `CREATE VIEW` 必须是批次中的第一条语句，在脚本中补充批次分隔后重跑成功。之后使用 `db/results/week-4/week-4-view-compare.txt` 对视图和基表直接查询进行对照，行数和关键值差异均为 `0`。
 
 ### 2.3 完整性约束：`db/constraint.sql`
 
@@ -123,7 +123,7 @@ constraint.sql
 role.sql
 ```
 
-Replay 结果保存在 `db/results/week-4-replay-*.txt`。目前已核对：
+Replay 结果保存在 `db/results/week-4/week-4-replay-*.txt`。目前已核对：
 
 - 19 张表；
 - 47 个外键；
@@ -139,8 +139,8 @@ Replay 结果保存在 `db/results/week-4-replay-*.txt`。目前已核对：
 已补充或更新：
 
 - `db/README.md`：Week 3 到 Week 4 的执行顺序、SQLCMD 命令、结果文件和基线；
-- `db/results/week-4.md`：查询预期结果、视图对照、R-17 约束证据和角色权限矩阵；
-- `docs/spec-data-dictionary.md`：R-17 会员卡档位关系；
+- `db/results/week-4/week-4.md`：查询预期结果、视图对照、R-17 约束证据和角色权限矩阵；
+- `docs/specs/spec-data-dictionary.md`：R-17 会员卡档位关系；
 - `docs/ai-usage-log.md`：Week 4 的 AI 起草、人工修改、错误修正和实际执行记录。
 
 另外，已经在 `query.sql` 和 `view.sql` 末尾分别补充：
@@ -154,7 +154,7 @@ PRINT N'view.sql PASS';
 
 ## 5. 目前还需要组员完成的事项
 
-根据 `docs/task-week-4.md` 的硬性验收标准，以下事项不能由当前执行者自己替代：
+根据 `docs/tasks/task-week-4.md` 的硬性验收标准，以下事项不能由当前执行者自己替代：
 
 1. 由非脚本作者组员创建新的空数据库，按 `db/README.md` 完整执行 Week 3 和 Week 4 脚本；
 2. 记录执行人的姓名、SQL Server 环境、命令、每一步退出码、遇到的问题和最终结果；

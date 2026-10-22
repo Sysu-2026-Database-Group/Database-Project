@@ -1,0 +1,5 @@
+﻿已将数据库上下文更改为 "ShiguangBookstoreWeek6ReviewSubagent20261021"。
+check_name|caught_error|caught_message|sale_count_before|sale_count_after|sale_item_count_before|sale_item_count_after
+----------|------------|--------------|-----------------|----------------|----------------------|---------------------
+transaction-week-6|547|INSERT 语句与 CHECK 约束"CK_sale_item_quantity"冲突。该冲突发生于数据库"ShiguangBookstoreWeek6ReviewSubagent20261021"，表"dbo.sale_item", column 'quantity'。|9|9|13|13
+transaction-week-6.sql PASS: mid-transaction failure rolled back sale and sale_item.

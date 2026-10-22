@@ -1,0 +1,3 @@
+﻿已为数据库 'ShiguangBookstoreWeek6Final20261021220913'，文件 'ShiguangBookstoreWeek3' (位于文件 1 上)处理了 840 页。
+已为数据库 'ShiguangBookstoreWeek6Final20261021220913'，文件 'ShiguangBookstoreWeek3_log' (位于文件 1 上)处理了 2 页。
+RESTORE DATABASE 成功处理了 842 页，花费 0.009 秒(730.468 MB/秒)。

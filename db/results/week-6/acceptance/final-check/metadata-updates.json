@@ -1,0 +1,24 @@
+{
+  "previous_index_entries": 58,
+  "unchanged_entries": 55,
+  "metadata_changes": [
+    {
+      "file": "er-consistency.json",
+      "previous_sha256": "66042542225a4250317d8d45a7e8391d337861c900b493c885850ecf3234f686",
+      "current_sha256": "b131bd083d02ae0778cfd232e378abe14d383ab785a87a04fac33b1b92659779",
+      "reason": "current policy, v1.4 evidence and AI self-check entry updated; original SQL outputs unchanged"
+    },
+    {
+      "file": "independent-audit.ps1",
+      "previous_sha256": "fea726a91217e0fb1118ae1677a38fbb91d2bb0f33cf0db16a58c73ca61a4634",
+      "current_sha256": "410c748dae2b97574e8b22cae945d34679ccfa40ae3dabe70ec13fd4eb48c8bb",
+      "reason": "current policy, v1.4 evidence and AI self-check entry updated; original SQL outputs unchanged"
+    },
+    {
+      "file": "README.md",
+      "previous_sha256": "843564e67b15e80d641cd0a28d931100ca116d5991e907a4d657f98900b2f915",
+      "current_sha256": "2d2e56be54d8acd3b50a107bba57297c5932ebfaacc324bbd3571fa47bca865c",
+      "reason": "current policy, v1.4 evidence and AI self-check entry updated; original SQL outputs unchanged"
+    }
+  ]
+}

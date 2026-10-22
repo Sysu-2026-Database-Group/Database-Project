@@ -1,14 +1,25 @@
+:On Error exit
+-- SQLCMD 模式；DatabaseName 由调用者传入，目标须以 ShiguangBookstoreWeek6 开头。
 -- 第六周扩充后的只读回归核对
--- 本阶段只读取 ShiguangBookstoreWeek6Work，不写入业务表，也不执行反例事务。
+-- 本脚本验证第六周固定装载截面，仅用于干净的Week6验收副本。
+-- 行数、余额和旧商品当前值断言有意固定；应用写入后另用业务测试，不复用本快照验收。
 -- 结构性非法操作、权限和事务回滚测试在本只读核对通过后分步执行。
 
-USE [ShiguangBookstoreWeek6Work];
+USE [$(DatabaseName)];
 GO
+-- 筛选索引的创建及相关表 DML 所需会话选项，不依赖 SSMS / SQLCMD 默认值。
+SET ANSI_NULLS ON;
+SET QUOTED_IDENTIFIER ON;
+SET ANSI_PADDING ON;
+SET ANSI_WARNINGS ON;
+SET CONCAT_NULL_YIELDS_NULL ON;
+SET ARITHABORT ON;
+SET NUMERIC_ROUNDABORT OFF;
 
 SET NOCOUNT ON;
 SET XACT_ABORT ON;
 
-IF DB_NAME() <> N'ShiguangBookstoreWeek6Work'
+IF (DB_NAME() <> N'$(DatabaseName)' OR DB_NAME() NOT LIKE N'ShiguangBookstoreWeek6%')
     THROW 51500, N'当前数据库不是 ShiguangBookstoreWeek6Work，停止回归。', 1;
 IF @@TRANCOUNT <> 0
     THROW 51501, N'请在没有外层事务的新查询窗口执行回归脚本。', 1;
@@ -241,6 +252,12 @@ IF EXISTS (
            OR COALESCE(u.used,0)<>-CONVERT(int,ROUND(s.point_deduction_amount*100,0)))
 )
     THROW 51551, N'会员销售的获得或抵扣积分算式不一致。', 1;
+IF EXISTS (
+    SELECT 1 FROM dbo.point_movement p
+    JOIN dbo.sale s ON s.id=p.sale_id
+    WHERE s.member_phone IS NULL OR p.member_phone<>s.member_phone
+)
+    THROW 51558, N'积分获得、抵扣或回滚的会员与原销售单不一致。', 1;
 IF EXISTS (
     SELECT 1 FROM dbo.point_movement p
     JOIN dbo.goods_return r ON r.id=p.return_id

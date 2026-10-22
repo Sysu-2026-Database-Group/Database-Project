@@ -1,0 +1,5 @@
+﻿已将数据库上下文更改为 "ShiguangBookstoreWeek6ReviewSubagent20261021"。
+observed_behavior|rows_updated_inside_transaction|reservation_code|status_after_rollback|cancelled_by_after_rollback|cancelled_at_after_rollback
+-----------------|-------------------------------|----------------|---------------------|---------------------------|---------------------------
+DIRECT_DML_ACCEPTED_NO_IDEMPOTENCY_GUARD|1|W6R-2108|已取消|13800000003|2026-09-26 11:00:00.0000000
+duplicate-cancel-boundary-check.sql PASS: test transaction rolled back and original reservation values were preserved.

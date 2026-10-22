@@ -1,0 +1,16 @@
+[
+  {
+    "name": "date-exclusive-expiry",
+    "expected_error": 51966,
+    "exit_code": 1,
+    "output": "date-exclusive-expiry.txt",
+    "passed": true
+  },
+  {
+    "name": "date-wrong-leap",
+    "expected_error": 51967,
+    "exit_code": 1,
+    "output": "date-wrong-leap.txt",
+    "passed": true
+  }
+]

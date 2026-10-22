@@ -1,0 +1,26 @@
+﻿已将数据库上下文更改为 "ShiguangBookstoreWeek6Final20261021220913"。
+case_id|label|expected_errors|actual_error|result|error_message
+-------|-----|---------------|------------|------|-------------
+1|主键重复：book.isbn|2627,2601|2627|PASS|违反了 PRIMARY KEY 约束“PK_book”。不能在对象“dbo.book”中插入重复键。重复键值为 (9787506365437)。
+2|业务唯一键重复：supplier.name|2627,2601|2627|PASS|违反了 UNIQUE KEY 约束“UQ_supplier_name”。不能在对象“dbo.supplier”中插入重复键。重复键值为 (博文图书批发)。
+3|外码不存在：supplier_quote.supplier_id|547|547|PASS|INSERT 语句与 FOREIGN KEY 约束"FK_supplier_quote_supplier_id"冲突。该冲突发生于数据库"ShiguangBookstoreWeek6Final20261021220913"，表"dbo.supplier", column 'id'。
+4|非空约束：toy.spec|515|515|PASS|不能将值 NULL 插入列 'spec'，表 'ShiguangBookstoreWeek6Final20261021220913.dbo.toy'；列不允许有 Null 值。INSERT 失败。
+5|CHECK：商品价格必须为正数|547|547|PASS|UPDATE 语句与 CHECK 约束"CK_goods_price"冲突。该冲突发生于数据库"ShiguangBookstoreWeek6Final20261021220913"，表"dbo.goods", column 'price'。
+6|CHECK：商品类别与细节必须匹配|547|547|PASS|UPDATE 语句与 CHECK 约束"CK_goods_category"冲突。该冲突发生于数据库"ShiguangBookstoreWeek6Final20261021220913"，表"dbo.goods"。
+7|CHECK：已订量不能超过在架量|547|547|PASS|UPDATE 语句与 CHECK 约束"CK_goods_stock"冲突。该冲突发生于数据库"ShiguangBookstoreWeek6Final20261021220913"，表"dbo.goods"。
+8|CHECK：损坏流水必须有原因|547|547|PASS|UPDATE 语句与 CHECK 约束"CK_stock_movement_source"冲突。该冲突发生于数据库"ShiguangBookstoreWeek6Final20261021220913"，表"dbo.stock_movement"。
+9|CHECK：预订有效期必须为三天|547|547|PASS|UPDATE 语句与 CHECK 约束"CK_reservation_expiry"冲突。该冲突发生于数据库"ShiguangBookstoreWeek6Final20261021220913"，表"dbo.reservation"。
+10|CHECK：采购取消不能保留审批留痕|547|547|PASS|UPDATE 语句与 CHECK 约束"CK_purchase_request_stage"冲突。该冲突发生于数据库"ShiguangBookstoreWeek6Final20261021220913"，表"dbo.purchase_request"。
+11|CHECK：积分抵扣不得超过折后金额上限|547|547|PASS|UPDATE 语句与 CHECK 约束"CK_sale_amount"冲突。该冲突发生于数据库"ShiguangBookstoreWeek6Final20261021220913"，表"dbo.sale"。
+12|CHECK：卡费必须大于零|547|547|PASS|UPDATE 语句与 CHECK 约束"CK_card_type_fee"冲突。该冲突发生于数据库"ShiguangBookstoreWeek6Final20261021220913"，表"dbo.card_type", column 'card_fee'。
+13|CHECK：资金前后余额必须相等|547|547|PASS|UPDATE 语句与 CHECK 约束"CK_fund_flow_balance"冲突。该冲突发生于数据库"ShiguangBookstoreWeek6Final20261021220913"，表"dbo.fund_flow"。
+14|CHECK：会员修改人和时刻成对|547|547|PASS|UPDATE 语句与 CHECK 约束"CK_member_updated_by_pair"冲突。该冲突发生于数据库"ShiguangBookstoreWeek6Final20261021220913"，表"dbo.member"。
+15|CHECK：员工手机号格式|547|547|PASS|INSERT 语句与 CHECK 约束"CK_employee_phone_phone"冲突。该冲突发生于数据库"ShiguangBookstoreWeek6Final20261021220913"，表"dbo.employee", column 'phone'。
+16|CHECK：购入流水必须有采购单来源|547|547|PASS|UPDATE 语句与 CHECK 约束"CK_stock_movement_source"冲突。该冲突发生于数据库"ShiguangBookstoreWeek6Final20261021220913"，表"dbo.stock_movement"。
+17|迁移唯一索引：同一图书只能有一件商品|2601,2627|2601|PASS|不能在具有唯一索引“UX_goods_book_isbn”的对象“dbo.goods”中插入重复键的行。重复键值为 (9787300000001)。
+18|迁移唯一索引：同一预订不能重复取货|2601,2627|2601|PASS|不能在具有唯一索引“UX_sale_reservation_id”的对象“dbo.sale”中插入重复键的行。重复键值为 (6)。
+19|迁移唯一索引：同一销售不能重复发放积分|2601,2627|2601|PASS|不能在具有唯一索引“UX_point_movement_earn”的对象“dbo.point_movement”中插入重复键的行。重复键值为 (11)。
+20|迁移CHECK：消费获得必须指向销售单|547|547|PASS|INSERT 语句与 CHECK 约束"CK_point_movement_kind"冲突。该冲突发生于数据库"ShiguangBookstoreWeek6Final20261021220913"，表"dbo.point_movement"。
+21|迁移唯一索引：同一退货不能重复回滚积分|2601,2627|2601|PASS|不能在具有唯一索引“UX_point_movement_return”的对象“dbo.point_movement”中插入重复键的行。重复键值为 (6)。
+22|迁移CHECK：资金余额不能为负数|547|547|PASS|INSERT 语句与 CHECK 约束"CK_fund_flow_amount"冲突。该冲突发生于数据库"ShiguangBookstoreWeek6Final20261021220913"，表"dbo.fund_flow"。
+regression-negative.sql PASS: 22 implemented constraint cases rejected and rolled back.

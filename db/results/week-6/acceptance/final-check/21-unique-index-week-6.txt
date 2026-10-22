@@ -1,0 +1,13 @@
+﻿已将数据库上下文更改为 "ShiguangBookstoreWeek6Final20261021220913"。
+case_id|test_case|expected_errors|actual_error|checked_index|result
+-------|---------|---------------|------------|-------------|------
+1|同一文创细节不能被两件商品引用|2601,2627|2601|UX_goods_toy_code|PASS
+2|同一销售单不能重复抵扣积分|2601,2627|2601|UX_point_movement_use|PASS
+checked_index|excluded_null_rows|result
+-------------|------------------|------
+UX_goods_book_isbn|5|PASS
+UX_goods_toy_code|5|PASS
+check_name|open_transactions|goods_count|point_movement_count
+----------|-----------------|-----------|--------------------
+UNIQUE-RESTORED|0|10|13
+unique-index-week-6.sql PASS: toy reference and point deduction duplicates rejected; changes rolled back.

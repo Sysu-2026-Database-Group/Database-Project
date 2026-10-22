@@ -1,0 +1,14 @@
+{
+  "status": "PASS",
+  "source": "ShiguangBookstoreWeek3",
+  "database": "ShiguangBookstoreWeek6ReviewSubagent20261021",
+  "failure_database": "ShiguangBookstoreWeek6ReviewSubagent20261021Failure",
+  "backup": "C:\\Program Files\\Microsoft SQL Server\\MSSQL17.MSSQLSERVER\\MSSQL\\Backup\\ShiguangBookstoreWeek6ReviewSubagent20261021.bak",
+  "backup_integrity": "COPY_ONLY, BACKUP CHECKSUM and RESTORE VERIFYONLY CHECKSUM; file hash not collected",
+  "steps": 45,
+  "source_unchanged": true,
+  "legacy_rows_preserved": true,
+  "test_rows_restored": true,
+  "human_signoff": "pending",
+  "executed_at": "2026-10-21T10:59:08.3208749+08:00"
+}

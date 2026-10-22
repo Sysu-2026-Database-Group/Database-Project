@@ -1,0 +1,21 @@
+﻿已将数据库上下文更改为 "ShiguangBookstoreWeek6Final20261021220913"。
+goods_ref|goods_name|stock_total|movement_total|reserved_qty|status_reserved_qty|available_qty|time_valid_reserved_qty|expired_pending_qty|reconciliation_result
+---------|----------|-----------|--------------|------------|-------------------|-------------|-----------------------|-------------------|---------------------
+9787040000003|数据建模入门|5|5|0|0|5|0|0|PASS
+9787111000002|SQL Server 实战|10|10|3|3|7|3|0|PASS
+9787300000001|数据库系统概论|0|0|0|0|0|0|0|PASS
+9787506365437|活着|6|6|6|6|0|0|6|PASS
+9787544253994|百年孤独|0|0|0|0|0|0|0|PASS
+SP-BAG-001|拾光帆布袋|10|10|0|0|10|0|0|PASS
+SP-CUP-004|拾光保温杯|5|5|0|0|5|0|0|PASS
+SP-KEY-005|拾光钥匙扣|18|18|0|0|18|0|0|PASS
+SP-MARK-002|拾光书签|19|19|0|0|19|0|0|PASS
+SP-NOTE-003|拾光便签本|0|0|0|0|0|0|0|PASS
+code|goods_ref|quantity|status|expires_at|expiry_observation
+----|---------|--------|------|----------|------------------
+517436|9787506365437|6|有效|2026-09-21 10:00:00.0000000|已到期但未释放
+W6R-2105|9787111000002|3|有效|2026-09-30 09:00:00.0000000|截面时尚未到期
+fixed_as_of|goods_count|movement_count|mismatch_count|total_stock|total_reserved|total_available|effective_reservations_past_expiry|observed_behavior|reconciliation_result
+-----------|-----------|--------------|--------------|-----------|--------------|---------------|----------------------------------|-----------------|---------------------
+2026-09-29 18:00:00.0000000|10|31|0|73|9|64|1|AUTO_EXPIRY_NOT_APPLIED|PASS
+inventory-query-week-6.sql PASS: inventory and reservation totals match baseline; expiry gap reported separately.

@@ -1,0 +1,46 @@
+[
+  {
+    "check": "45 recorded exit/error checks independently reread",
+    "passed": true
+  },
+  {
+    "check": "01-source-before / 04-restored-snapshot",
+    "tables": 19,
+    "passed": true
+  },
+  {
+    "check": "04-restored-snapshot / 10-migrated-snapshot",
+    "tables": 19,
+    "passed": true
+  },
+  {
+    "check": "01-source-before / 38-source-after",
+    "tables": 19,
+    "passed": true
+  },
+  {
+    "check": "01-source-before / 44-source-final",
+    "tables": 19,
+    "passed": true
+  },
+  {
+    "check": "15-expanded-before-tests / 30-expanded-after-tests",
+    "tables": 19,
+    "passed": true
+  },
+  {
+    "check": "32-failure-snapshot-before / 36-failure-snapshot-after",
+    "tables": 19,
+    "passed": true
+  },
+  {
+    "check": "Full migration before/after query output identical",
+    "passed": true
+  },
+  {
+    "check": "Actual rejected rows",
+    "negative_cases": 22,
+    "permission_229": 3,
+    "passed": true
+  }
+]

@@ -1,15 +1,25 @@
+:On Error exit
+-- SQLCMD 模式；DatabaseName 由调用者传入，目标须以 ShiguangBookstoreWeek6 开头。
 -- 第六周新增样例装载脚本
--- 目标固定为迁移后的工作副本；本脚本不允许在 ShiguangBookstoreWeek3 上执行。
+-- 目标由调用者指定为迁移后的 Week6 专用副本，禁止写入原始库。
 -- 执行前提：已成功执行 db/migration.sql 和 db/migration-check.sql。
--- 本脚本不使用 SQLCMD 变量，避免 SSMS 未启用 SQLCMD 模式时误解析目标库。
+-- 必须启用 SQLCMD 模式并设置 DatabaseName；命令行使用 -v DatabaseName=专用副本名。
 
-USE [ShiguangBookstoreWeek6Work];
+USE [$(DatabaseName)];
 GO
+-- 筛选索引的创建及相关表 DML 所需会话选项，不依赖 SSMS / SQLCMD 默认值。
+SET ANSI_NULLS ON;
+SET QUOTED_IDENTIFIER ON;
+SET ANSI_PADDING ON;
+SET ANSI_WARNINGS ON;
+SET CONCAT_NULL_YIELDS_NULL ON;
+SET ARITHABORT ON;
+SET NUMERIC_ROUNDABORT OFF;
 
 SET NOCOUNT ON;
 SET XACT_ABORT ON;
 
-IF DB_NAME() <> N'ShiguangBookstoreWeek6Work'
+IF (DB_NAME() <> N'$(DatabaseName)' OR DB_NAME() NOT LIKE N'ShiguangBookstoreWeek6%')
     THROW 51400, N'当前数据库不是 ShiguangBookstoreWeek6Work，停止装载。', 1;
 IF DB_NAME() = N'ShiguangBookstoreWeek3'
     THROW 51401, N'禁止在 ShiguangBookstoreWeek3 原始库上装载第六周样例。', 1;

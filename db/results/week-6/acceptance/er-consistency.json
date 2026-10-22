@@ -1,0 +1,46 @@
+{
+  "check": "current approved v1.4 source and PNG embedded XML",
+  "date": "2026-10-22",
+  "source_file": "ER/er-diagram-v1.4.drawio",
+  "png_file": "ER/er-diagram-v1.4.drawio.png",
+  "page_name": "v1.4 原布局修订",
+  "cells": 87,
+  "cell_models_identical": true,
+  "png_sha256": "a0e95d3bb18c0efdf05ffa76e5654f149b2f03496da04eb744030331f37ed6a8",
+  "drawio_sha256": "ced3f8ce02ed030821624c83ce6a09854c5200a885f415448e51af8d3679f0c1",
+  "er_files_modified_this_turn": false,
+  "human_visual_signoff": "passed",
+  "human_acceptance": {
+    "reviewer": "梁宇聪",
+    "confirmation_date": "2026-10-22",
+    "result": "passed",
+    "basis": "用户在本对话明确表示：我已审查通过1.4版本的ER图，并授权AI填写人工审核。",
+    "recorded_by": "Codex，按用户授权补录",
+    "actual_review_time": "未单独提供；日期按对话确认日登记",
+    "review_document": "docs/reviews/review-week-6.md#5-er-图最终人工验收已通过"
+  },
+  "previous_record": {
+    "check": "current v1.4 source and PNG embedded XML",
+    "date": "2026-10-21",
+    "source_file": "ER/er-diagram-v1.4.drawio",
+    "png_file": "ER/er-diagram-v1.4.drawio.png",
+    "page_name": "v1.4 原布局修订",
+    "cells": 87,
+    "cell_models_identical": true,
+    "png_sha256": "2b5b9e3fd57bb6f4ac4f855ed306f983c8deb155c7481a7f668e5f0336cbe3fe",
+    "drawio_sha256": "3bf1870bc1c67345d9ab782ba22d735d77e85bb7b1de505acba9e57ef3fc3f2e",
+    "pixel_data_changed": false,
+    "metadata_only_update": "page id/name and embedded XML; PNG IDAT preserved",
+    "human_visual_signoff": "pending",
+    "previous_record": {
+      "check": "mechanical consistency rechecked during layout cleanup",
+      "date": "2026-10-21",
+      "cells": 88,
+      "cell_models_identical": true,
+      "png_sha256": "730395a56b57507eb728762970c8999b5e884024ebc844fa9ff7f09ed70a28c1",
+      "drawio_sha256": "fd02aebc10ccfd18609492973b522397299a676792a4514d7b11da82d33afb7d",
+      "human_visual_signoff": "pending",
+      "applies_to": "ER/er-diagram-v1.0.drawio and ER/er-diagram-v1.0.png"
+    }
+  }
+}

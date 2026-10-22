@@ -1,0 +1,5 @@
+﻿已将数据库上下文更改为 "ShiguangBookstoreWeek6ReviewSubagent20261021"。
+check_name|database_name|planned_user_rows|goods_count|member_count|sale_count|return_count|cash_balance|operating_result
+----------|-------------|-----------------|-----------|------------|----------|------------|------------|----------------
+sample-data-week-6|ShiguangBookstoreWeek6ReviewSubagent20261021|199|10|6|9|5|555.30|-944.70
+sample-data-week-6.sql PASS: W6-S01 to W6-S11 loaded; legacy rows retained.

@@ -1,0 +1,31 @@
+﻿checked_at|database_name|user_tables|foreign_keys|business_rows|technical_rows
+----------|-------------|-----------|------------|-------------|--------------
+2026-10-21 11:00:59.3868567 +08:00|ShiguangBookstoreWeek6ReviewSubagent20261021|20|49|198|1
+cash_balance|operating_result
+------------|----------------
+555.30|-944.70
+name|filter_definition|is_unique
+----|-----------------|---------
+UX_goods_book_isbn|([book_isbn] IS NOT NULL)|1
+UX_goods_toy_code|([toy_code] IS NOT NULL)|1
+UX_point_movement_earn|([change_type]=N'消费获得')|1
+UX_point_movement_return|([change_type]=N'退货回滚')|1
+UX_point_movement_use|([change_type]=N'抵扣使用')|1
+UX_sale_reservation_id|([reservation_id] IS NOT NULL)|1
+name|is_disabled|is_not_trusted|definition
+----|-----------|--------------|----------
+CK_fund_flow_amount|0|0|([amount]>(0) AND [fund_before]>=(0) AND [fund_after]>=(0))
+CK_point_movement_kind|0|0|([change_type]=N'消费获得' AND [points]>(0) AND [sale_id] IS NOT NULL AND [return_id] IS NULL OR [change_type]=N'抵扣使用' AND [points]<(0) AND [sale_id] IS NOT NULL AND [return_id] IS NULL OR [change_type]=N'退货回滚' AND [points]<(0) AND [sale_id] IS NOT NULL AND [r
+CK_supplier_updated_by_pair|0|0|([updated_by] IS NULL AND [updated_at] IS NULL OR [updated_by] IS NOT NULL AND [updated_at] IS NOT NULL)
+employee_foreign_keys
+---------------------
+21
+name|type_name|max_length|is_nullable
+----|---------|----------|-----------
+migration_key|varchar|64|0
+source_version|varchar|32|0
+target_version|varchar|32|0
+applied_at|datetime2|8|0
+applied_by|varchar|11|1
+status|nvarchar|20|0
+notes|nvarchar|800|0

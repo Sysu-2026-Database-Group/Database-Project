@@ -1,0 +1,302 @@
+{
+  "status": "PASS",
+  "runs": [
+    {
+      "directory": "db\\results\\week-6\\acceptance",
+      "steps": 45,
+      "equal_snapshot_pairs": 6,
+      "tables_per_snapshot": 19,
+      "negative_cases": 22,
+      "permission_denials": 3
+    },
+    {
+      "directory": "db\\results\\week-6\\acceptance\\final-check",
+      "steps": 45,
+      "equal_snapshot_pairs": 6,
+      "tables_per_snapshot": 19,
+      "negative_cases": 22,
+      "permission_denials": 3
+    }
+  ],
+  "date_rule_examples": 11,
+  "date_mutations_rejected": 2,
+  "duplicate_groups": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+  ],
+  "legal_null_rows": [
+    5,
+    5
+  ],
+  "evidence_hashes": 115,
+  "current_source_hashes": 30,
+  "er_source_png_identical": true,
+  "er_business_tables": [
+    {
+      "table": "employee",
+      "columns": [
+        "phone",
+        "name",
+        "role",
+        "created_by",
+        "created_at",
+        "updated_by",
+        "updated_at"
+      ],
+      "missing": []
+    },
+    {
+      "table": "book",
+      "columns": [
+        "isbn",
+        "author",
+        "publisher",
+        "page_count"
+      ],
+      "missing": []
+    },
+    {
+      "table": "toy",
+      "columns": [
+        "inner_code",
+        "spec"
+      ],
+      "missing": []
+    },
+    {
+      "table": "supplier",
+      "columns": [
+        "id",
+        "name",
+        "created_by",
+        "created_at",
+        "updated_by",
+        "updated_at"
+      ],
+      "missing": []
+    },
+    {
+      "table": "card_type",
+      "columns": [
+        "level",
+        "card_fee",
+        "discount_rate",
+        "set_by",
+        "set_at"
+      ],
+      "missing": []
+    },
+    {
+      "table": "goods",
+      "columns": [
+        "id",
+        "category",
+        "name",
+        "book_isbn",
+        "toy_code",
+        "on_shelf",
+        "price",
+        "stock_total",
+        "reserved_qty",
+        "created_by",
+        "created_at",
+        "updated_by",
+        "updated_at"
+      ],
+      "missing": []
+    },
+    {
+      "table": "supplier_quote",
+      "columns": [
+        "supplier_id",
+        "goods_id",
+        "quote_amount",
+        "reported_by",
+        "reported_at"
+      ],
+      "missing": []
+    },
+    {
+      "table": "member",
+      "columns": [
+        "phone",
+        "card_level",
+        "opened_by",
+        "opened_at",
+        "updated_by",
+        "updated_at",
+        "expires_at",
+        "points_balance"
+      ],
+      "missing": []
+    },
+    {
+      "table": "purchase_request",
+      "columns": [
+        "id",
+        "no",
+        "supplier_id",
+        "status",
+        "created_by",
+        "created_at",
+        "submitted_by",
+        "submitted_at",
+        "approved_by",
+        "approved_at",
+        "cancelled_by",
+        "cancelled_at"
+      ],
+      "missing": []
+    },
+    {
+      "table": "purchase_request_item",
+      "columns": [
+        "id",
+        "request_id",
+        "goods_id",
+        "request_qty",
+        "unit_cost"
+      ],
+      "missing": []
+    },
+    {
+      "table": "reservation",
+      "columns": [
+        "id",
+        "code",
+        "phone",
+        "status",
+        "created_at",
+        "expires_at",
+        "cancelled_by_employee",
+        "cancelled_at"
+      ],
+      "missing": []
+    },
+    {
+      "table": "reservation_item",
+      "columns": [
+        "id",
+        "reservation_id",
+        "goods_id",
+        "quantity"
+      ],
+      "missing": []
+    },
+    {
+      "table": "sale",
+      "columns": [
+        "id",
+        "no",
+        "status",
+        "cashier_by",
+        "sold_at",
+        "card_level",
+        "member_phone",
+        "reservation_id",
+        "subtotal_amount",
+        "discount_rate",
+        "point_deduction_amount",
+        "paid_amount"
+      ],
+      "missing": []
+    },
+    {
+      "table": "sale_item",
+      "columns": [
+        "id",
+        "sale_id",
+        "goods_id",
+        "quantity",
+        "unit_price"
+      ],
+      "missing": []
+    },
+    {
+      "table": "goods_return",
+      "columns": [
+        "id",
+        "no",
+        "sale_id",
+        "refund_amount",
+        "handled_by",
+        "handled_at"
+      ],
+      "missing": []
+    },
+    {
+      "table": "goods_return_item",
+      "columns": [
+        "id",
+        "return_id",
+        "sale_item_id",
+        "quantity",
+        "refund_amount"
+      ],
+      "missing": []
+    },
+    {
+      "table": "stock_movement",
+      "columns": [
+        "id",
+        "goods_id",
+        "change_type",
+        "quantity",
+        "note",
+        "changed_by",
+        "changed_at",
+        "request_id",
+        "sale_id",
+        "return_item_id"
+      ],
+      "missing": []
+    },
+    {
+      "table": "point_movement",
+      "columns": [
+        "id",
+        "member_phone",
+        "change_type",
+        "points",
+        "sale_id",
+        "return_id",
+        "changed_by",
+        "changed_at"
+      ],
+      "missing": []
+    },
+    {
+      "table": "fund_flow",
+      "columns": [
+        "id",
+        "amount",
+        "direction",
+        "reason_type",
+        "sale_id",
+        "return_id",
+        "request_id",
+        "member_phone",
+        "fund_before",
+        "fund_after",
+        "recorded_by",
+        "recorded_at"
+      ],
+      "missing": []
+    }
+  ],
+  "human_er_acceptance": "passed",
+  "human_confirmation": {
+    "reviewer": "梁宇聪",
+    "confirmation_date": "2026-10-22",
+    "result": "passed",
+    "basis": "用户在本对话明确表示：我已审查通过1.4版本的ER图，并授权AI填写人工审核。",
+    "recorded_by": "Codex，按用户授权补录",
+    "actual_review_time": "未单独提供；日期按对话确认日登记",
+    "review_document": "docs/reviews/review-week-6.md#5-er-图最终人工验收已通过"
+  },
+  "scope": "Technical evidence rechecked; human approval copied from user confirmation, not performed by this script. No app endpoint certification."
+}

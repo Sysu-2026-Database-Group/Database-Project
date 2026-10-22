@@ -1,0 +1,17 @@
+{
+  "status": "PASS",
+  "source": "ShiguangBookstoreWeek3",
+  "database": "ShiguangBookstoreWeek6Final20261021220913",
+  "failure_database": "ShiguangBookstoreWeek6Final20261021220913Failure",
+  "backup": "C:\\Program Files\\Microsoft SQL Server\\MSSQL17.MSSQLSERVER\\MSSQL\\Backup\\ShiguangBookstoreWeek6Final20261021220913.bak",
+  "backup_integrity": "COPY_ONLY, BACKUP CHECKSUM and RESTORE VERIFYONLY CHECKSUM; file hash not collected",
+  "steps": 45,
+  "source_unchanged": true,
+  "legacy_rows_preserved": true,
+  "test_rows_restored": true,
+  "human_signoff": "pending",
+  "executed_at": "2026-10-21T22:09:24.4420684+08:00",
+  "acceptance_policy": "AI_SELF_CHECK_ALLOWED",
+  "human_signoff_scope": "ER v1.4 final visual acceptance by Liang Yucong only",
+  "application_action_endpoints": "not implemented; accepted follow-up phase boundary"
+}

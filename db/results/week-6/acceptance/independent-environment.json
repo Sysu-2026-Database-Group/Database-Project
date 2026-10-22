@@ -1,0 +1,10 @@
+{
+  "checked_at": "2026-10-21T11:00:40.6939397+08:00",
+  "powershell": "7.6.5",
+  "windows_identity": "DESKTOP-IJTRRN8\\lyclyc_NSP",
+  "sqlcmd": "C:\\Program Files\\Microsoft SQL Server\\Client SDK\\ODBC\\180\\Tools\\Binn\\SQLCMD.EXE",
+  "sqlcmd_help": "Microsoft (R) SQL Server 命令行工具\n版本 17.0.1000.7 NT\n版权所有(C) 2025 Microsoft Corporation。保留所有权利。",
+  "ssms": "本次未使用",
+  "backup_file_readable": false,
+  "backup_file_access_error": "Access to the path 'C:\\Program Files\\Microsoft SQL Server\\MSSQL17.MSSQLSERVER\\MSSQL\\Backup\\ShiguangBookstoreWeek6ReviewSubagent20261021.bak' is denied."
+}

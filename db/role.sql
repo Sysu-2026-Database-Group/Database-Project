@@ -2,6 +2,14 @@
 -- Week 4 least-privilege roles. Run after schema.sql and sample-data.sql.
 USE [$(DatabaseName)];
 GO
+-- 筛选索引的创建及相关表 DML 所需会话选项，不依赖 SSMS / SQLCMD 默认值。
+SET ANSI_NULLS ON;
+SET QUOTED_IDENTIFIER ON;
+SET ANSI_PADDING ON;
+SET ANSI_WARNINGS ON;
+SET CONCAT_NULL_YIELDS_NULL ON;
+SET ARITHABORT ON;
+SET NUMERIC_ROUNDABORT OFF;
 SET NOCOUNT ON;
 
 IF DATABASE_PRINCIPAL_ID(N'bookstore_manager') IS NULL CREATE ROLE [bookstore_manager];
@@ -89,8 +97,9 @@ BEGIN TRY
 END TRY
 BEGIN CATCH
     IF @@TRANCOUNT > 0 ROLLBACK TRANSACTION;
-    IF ISNULL(IS_ROLEMEMBER(N'bookstore_cashier'), 0) = 1 REVERT;
-    IF ERROR_NUMBER() = 51030 THROW;
+    IF USER_NAME() = N'week4_cashier_user' REVERT;
+    -- 只有对象 / 列权限拒绝才算通过；约束、对象不存在等错误必须上抛。
+    IF ERROR_NUMBER() <> 229 THROW;
     SELECT N'PASS' AS result, ERROR_NUMBER() AS error_number, ERROR_MESSAGE() AS error_message;
 END CATCH;
 GO
@@ -107,8 +116,8 @@ BEGIN TRY
 END TRY
 BEGIN CATCH
     IF @@TRANCOUNT > 0 ROLLBACK TRANSACTION;
-    IF ISNULL(IS_ROLEMEMBER(N'bookstore_inventory'), 0) = 1 REVERT;
-    IF ERROR_NUMBER() = 51031 THROW;
+    IF USER_NAME() = N'week4_inventory_user' REVERT;
+    IF ERROR_NUMBER() <> 229 THROW;
     SELECT N'PASS' AS result, ERROR_NUMBER() AS error_number, ERROR_MESSAGE() AS error_message;
 END CATCH;
 GO
@@ -121,18 +130,21 @@ GO
 PRINT N'ROLE TEST: manager cannot edit completed sale content';
 EXECUTE AS USER = N'week4_manager_user';
 BEGIN TRY
+    BEGIN TRANSACTION;
     UPDATE dbo.[sale]
     SET [paid_amount] = [paid_amount]
     WHERE [id] = 1;
 
+    IF @@TRANCOUNT > 0 ROLLBACK TRANSACTION;
     REVERT;
     THROW 51032, N'Manager unexpectedly has permission to update sale content.', 1;
 END TRY
 BEGIN CATCH
+    IF @@TRANCOUNT > 0 ROLLBACK TRANSACTION;
     IF USER_NAME() = N'week4_manager_user'
         REVERT;
 
-    IF ERROR_NUMBER() = 51032
+    IF ERROR_NUMBER() <> 229
         THROW;
 
     SELECT N'PASS' AS result,

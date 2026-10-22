@@ -1,10 +1,10 @@
 # 第 2 周预设草案（plan-week-2）
 
 > **性质**：草案（本组的做法），**不是口径**，供 Owner 逐条审定。
-> 按 `docs/task-week-2.md` §2 拆出的 **4 个子任务**逐条给**方案**，不做额外的任务分析。
-> **上游口径**：`docs/spec-data-boundary.md`（进库清单 = 表的来源）· `spec-businesses.md`（业务与 R-*）·
+> 按 `docs/tasks/task-week-2.md` §2 拆出的 **4 个子任务**逐条给**方案**，不做额外的任务分析。
+> **上游口径**：`docs/specs/spec-data-boundary.md`（进库清单 = 表的来源）· `spec-businesses.md`（业务与 R-*）·
 > `spec-roles.md`（谁能看 / 谁能改）· `spec-scenario.md`（场景规矩）。
-> **落地产物**：`docs/spec-data-dictionary.md`（数据字典）—— **已迁入，本稿留作过程记录**（论证与取舍过程都在这里）。
+> **落地产物**：`docs/specs/spec-data-dictionary.md`（数据字典）—— **已迁入，本稿留作过程记录**（论证与取舍过程都在这里）。
 
 | 子任务 | 方案状态 |
 |---|---|
@@ -65,7 +65,7 @@
 
 ### 1.2 逐条定性：边界清单的 20 条 → 哪些建表、哪些做属性
 
-**依据**：`docs/spec-data-boundary.md` §1 的 **A1–A20**（**A7 留空** —— 随"库存盘点"业务取消）。
+**依据**：`docs/specs/spec-data-boundary.md` §1 的 **A1–A20**（**A7 留空** —— 随"库存盘点"业务取消）。
 判据用 §1.1 的五条规则。**结论：13 条落成表（共 19 张）· 6 条落成属性 · 1 条留空。**
 
 | # | 边界清单里的内容 | 判定 | 落在哪 |
@@ -255,7 +255,7 @@
 | 9 | **删 `purchase_request_item.received_qty`** —— 实收按 **R-29** 进入库记录（`stock_movement`），申请单只表达"申请了什么" | 删 |
 | 10 | **删 `goods_return.rolled_back_points`** —— 回滚积分是积分流水上的一类变动，可由 `point_movement` 算出 | 删 |
 | 11 | **补基础数据表与会员的留痕列** —— `goods` 定价人 · `card_type` / `member_rule` 设定人 · `employee` 账号维护人 · `member` 开卡人（**R-25 附表点名的对象**） | 补 |
-| 12 | **回填 `docs/spec-data-boundary.md`** —— A2 补「名称」、A14 补「卡档位 + 有效期」；并新增 B19「封面图不做」 | 已回填 |
+| 12 | **回填 `docs/specs/spec-data-boundary.md`** —— A2 补「名称」、A14 补「卡档位 + 有效期」；并新增 B19「封面图不做」 | 已回填 |
 
 ---
 
@@ -1153,7 +1153,7 @@
 | 2 | 铺 19 张表的字段（§2 口径 + 样板） | 步 1 ✅ | ✅ **已审定**（Owner 看过全 19 张表） |
 | 3 | 标码（§3 策略 + FK 清单） | 步 2 ✅ | ✅ **已审定**（跨表的 FK 由一人统稿） |
 | 4 | 写样例元组（§4 策略 + 故事线 + 19 张表） | 步 3 ✅ | ✅ **已审定** |
-| 5 | 按 `task-week-2.md` §4 的 11 条自检 → 迁 `docs/spec-data-dictionary.md` | 步 4 ✅ | ✅ **已迁**（2026-09-23）—— 剩余动作：**非本条作者的组员评审** |
+| 5 | 按 `task-week-2.md` §4 的 11 条自检 → 迁 `docs/specs/spec-data-dictionary.md` | 步 4 ✅ | ✅ **已迁**（2026-09-23）—— 剩余动作：**非本条作者的组员评审** |
 
 ---
 

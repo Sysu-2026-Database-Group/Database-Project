@@ -1,0 +1,3 @@
+﻿已将数据库上下文更改为 "ShiguangBookstoreWeek3"。
+消息 51040，级别 16，状态 1，服务器 DESKTOP-IJTRRN8，第 15 行
+禁止在 ShiguangBookstoreWeek3 原始库上执行迁移。请先还原为独立工作副本。

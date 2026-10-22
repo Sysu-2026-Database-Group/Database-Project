@@ -1,0 +1,208 @@
+[
+  {
+    "file": "db/accept-week-6.ps1",
+    "sha256": "17f6de3137a6d8c2577d9d8d632227854eb6321434e7d35bb307c5d7b49ddcca",
+    "previous_layout_sha256": "17f6de3137a6d8c2577d9d8d632227854eb6321434e7d35bb307c5d7b49ddcca",
+    "scope": "current code; SQL changes validated by final-check 45-step run"
+  },
+  {
+    "file": "db/tests/auto-expiry-boundary-check.sql",
+    "sha256": "c952713f920fed2b0208c670e01d91fe61505ba42c89c7bc1760a4cd5f23c77e",
+    "previous_layout_sha256": "c952713f920fed2b0208c670e01d91fe61505ba42c89c7bc1760a4cd5f23c77e",
+    "scope": "current code; SQL changes validated by final-check 45-step run"
+  },
+  {
+    "file": "db/constraint.sql",
+    "sha256": "f53946484c934c5866b2b245afeb2940f61ba85aa342edb3f55fb0b0402eebbc",
+    "previous_layout_sha256": "f53946484c934c5866b2b245afeb2940f61ba85aa342edb3f55fb0b0402eebbc",
+    "scope": "current code; SQL changes validated by final-check 45-step run"
+  },
+  {
+    "file": "db/tests/duplicate-cancel-boundary-check.sql",
+    "sha256": "919bb2d1bf8c1f4533387b5372f93dd19d3a056fcd3ab09c314edb66b0d822aa",
+    "previous_layout_sha256": "919bb2d1bf8c1f4533387b5372f93dd19d3a056fcd3ab09c314edb66b0d822aa",
+    "scope": "current code; SQL changes validated by final-check 45-step run"
+  },
+  {
+    "file": "db/tests/inventory-query-week-6.sql",
+    "sha256": "418032044b68736c8e5218a4a3e3e9331af0b4715f2f1e2f05df5314b0b48346",
+    "previous_layout_sha256": "418032044b68736c8e5218a4a3e3e9331af0b4715f2f1e2f05df5314b0b48346",
+    "scope": "current code; SQL changes validated by final-check 45-step run"
+  },
+  {
+    "file": "db/checks/legacy-snapshot.sql",
+    "sha256": "343722c5b9eb3b1b41ce18b27647ce6826ffc1d1be36c585311f87c1c8460697",
+    "previous_layout_sha256": "343722c5b9eb3b1b41ce18b27647ce6826ffc1d1be36c585311f87c1c8460697",
+    "scope": "current code; SQL changes validated by final-check 45-step run"
+  },
+  {
+    "file": "db/tests/member-validity-week-6.sql",
+    "sha256": "09dca24460e7bdcc4ddba0930ac57e579e34180f23f9aef97086a2bb9d6ec2ea",
+    "previous_layout_sha256": "39204dd54ccc837b1f78bae6c567373fede792483f61833cead59c7ed685a67d",
+    "scope": "current code; SQL changes validated by final-check 45-step run"
+  },
+  {
+    "file": "db/checks/migration-check.sql",
+    "sha256": "037766f0c45f8f816a4f7796deb105d963cd822345906eaa5181b41077747eba",
+    "previous_layout_sha256": "037766f0c45f8f816a4f7796deb105d963cd822345906eaa5181b41077747eba",
+    "scope": "current code; SQL changes validated by final-check 45-step run"
+  },
+  {
+    "file": "db/migration.sql",
+    "sha256": "930dfb7df84ec3d0fb9b1463ec76ba2c36298336a6dc2f4c74411c5d158ed159",
+    "previous_layout_sha256": "d72625899ff513e8407f9fe78acb1c53c0ec077cee91a42f8ddfb11021fee9ac",
+    "scope": "current code; SQL changes validated by final-check 45-step run"
+  },
+  {
+    "file": "db/tests/price-snapshot-week-6.sql",
+    "sha256": "a6031ac1c18e5cd43e48159d7a74d20132982fed692f510d51826b1e801598b3",
+    "previous_layout_sha256": "a6031ac1c18e5cd43e48159d7a74d20132982fed692f510d51826b1e801598b3",
+    "scope": "current code; SQL changes validated by final-check 45-step run"
+  },
+  {
+    "file": "db/query.sql",
+    "sha256": "a2a8479bb861ae4d87e112acc07ffe66785709242d8f90fdf41497d54f400588",
+    "previous_layout_sha256": "a2a8479bb861ae4d87e112acc07ffe66785709242d8f90fdf41497d54f400588",
+    "scope": "current code; SQL changes validated by final-check 45-step run"
+  },
+  {
+    "file": "db/tests/regression-negative.sql",
+    "sha256": "45ddcfd98fa36e74d6954f2cba13c0cb6ca9959ce57461a3522ef20e753a5121",
+    "previous_layout_sha256": "45ddcfd98fa36e74d6954f2cba13c0cb6ca9959ce57461a3522ef20e753a5121",
+    "scope": "current code; SQL changes validated by final-check 45-step run"
+  },
+  {
+    "file": "db/regression.sql",
+    "sha256": "57538998c6e2162c3af01c54ccc6d30a6d9e605e9c64367097980b09292afa3f",
+    "previous_layout_sha256": "78ffd17798af138af5ead6573ce823e6adf5c3e68754eeb4adfc8d4dcc74ea36",
+    "scope": "current code; SQL changes validated by final-check 45-step run"
+  },
+  {
+    "file": "db/role.sql",
+    "sha256": "a82e8dcfb5681dab64ba683db8bff76845f6de720dbe2c913dd1cf5e6e881dbe",
+    "previous_layout_sha256": "a82e8dcfb5681dab64ba683db8bff76845f6de720dbe2c913dd1cf5e6e881dbe",
+    "scope": "current code; SQL changes validated by final-check 45-step run"
+  },
+  {
+    "file": "db/tests/sales-statistics-week-6.sql",
+    "sha256": "f30e239ca0dcdf564e14325e017a3ab285d96d559843ac5b727ff30ceb571872",
+    "previous_layout_sha256": "f30e239ca0dcdf564e14325e017a3ab285d96d559843ac5b727ff30ceb571872",
+    "scope": "current code; SQL changes validated by final-check 45-step run"
+  },
+  {
+    "file": "docs/design/sample-data-week-6-plan.md",
+    "sha256": "a7e9139628d0a7c1506b74f4d161297572feefffccfdd150f47b7bf134adbc27",
+    "previous_layout_sha256": "bc7a48f122eb382e12f3ad4a1d397866405c0d83e71f98dfc79f9075aed98bd9",
+    "scope": "current code; SQL changes validated by final-check 45-step run"
+  },
+  {
+    "file": "db/sample-data-week-6.sql",
+    "sha256": "967de7f86e2ea74be0a4b89708a3a13c69cd7f3aecc844a4b1d1b4e679744fd6",
+    "previous_layout_sha256": "967de7f86e2ea74be0a4b89708a3a13c69cd7f3aecc844a4b1d1b4e679744fd6",
+    "scope": "current code; SQL changes validated by final-check 45-step run"
+  },
+  {
+    "file": "db/schema.sql",
+    "sha256": "48f8c5b2ee69081d7fd261971a9b008a11c209310aea8856f0b76a5e9fe5c658",
+    "previous_layout_sha256": "48f8c5b2ee69081d7fd261971a9b008a11c209310aea8856f0b76a5e9fe5c658",
+    "scope": "current code; SQL changes validated by final-check 45-step run"
+  },
+  {
+    "file": "db/tests/supplier-audit-week-6.sql",
+    "sha256": "bb76d1e5c23efa679d3ac6c5c492e3528c6d5edcbb78a852c8cbe84fe8fe52e2",
+    "previous_layout_sha256": "bb76d1e5c23efa679d3ac6c5c492e3528c6d5edcbb78a852c8cbe84fe8fe52e2",
+    "scope": "current code; SQL changes validated by final-check 45-step run"
+  },
+  {
+    "file": "db/tests/supplier-cost-week-6.sql",
+    "sha256": "5708f9d462c21c876c29526eb7cf9528894f51cd368eb645a42655b766d1bfc9",
+    "previous_layout_sha256": "5708f9d462c21c876c29526eb7cf9528894f51cd368eb645a42655b766d1bfc9",
+    "scope": "current code; SQL changes validated by final-check 45-step run"
+  },
+  {
+    "file": "db/tests/transaction-week-6.sql",
+    "sha256": "6199de0811b06fa74c57addef9068d479d2e58dc03aff2570058244a89813bb9",
+    "previous_layout_sha256": "6199de0811b06fa74c57addef9068d479d2e58dc03aff2570058244a89813bb9",
+    "scope": "current code; SQL changes validated by final-check 45-step run"
+  },
+  {
+    "file": "db/tests/unique-index-week-6.sql",
+    "sha256": "0ea3f584be0892d956532daebb06f18d770f810ce766a323d3a8bffe211027e9",
+    "previous_layout_sha256": "79800f7ef54851884151f7391ed506caf62dde0ef815e170e8b678c2a22c56d2",
+    "scope": "current code; SQL changes validated by final-check 45-step run"
+  },
+  {
+    "file": "db/checks/verify.sql",
+    "sha256": "765b03875f40b2e84f3821ccd5ed3863559bb06c5c6dfad50c41cdd7e9efe119",
+    "previous_layout_sha256": "765b03875f40b2e84f3821ccd5ed3863559bb06c5c6dfad50c41cdd7e9efe119",
+    "scope": "current code; SQL changes validated by final-check 45-step run"
+  },
+  {
+    "file": "docs/design/design-normalization-v1.0.md",
+    "sha256": "a17f45d2302b84f161d62c1a01ce123a460b5cc49f5d53711c76fdf27828d2bb",
+    "previous_layout_sha256": "dfe07fdc5b774b14520e955a7f176c2cb6fc220aedbe3e3a7bc55d8fd09ab25f",
+    "scope": "Documentation finalized after database run; file links and acceptance table checked; no SQL execution claim for docs.",
+    "acceptance_update": {
+      "date": "2026-10-22",
+      "previous_sha256": "64b070897d7790ba17973cf5b749806f899022d469aef872a80c3c2c242fe048",
+      "reason": "Human approval record and current ER fingerprints synchronized; SQL execution artifacts unchanged."
+    }
+  },
+  {
+    "file": "docs/specs/spec-data-dictionary.md",
+    "sha256": "254a2c7c046761af8a659ca2ae8c799970a960d9659eb10864df6ab305edf01d",
+    "previous_layout_sha256": "254a2c7c046761af8a659ca2ae8c799970a960d9659eb10864df6ab305edf01d",
+    "scope": "current code; SQL changes validated by final-check 45-step run"
+  },
+  {
+    "file": "docs/tasks/task-week-6.md",
+    "sha256": "10ef14ecdd11be9d1b24da28fec74fa35b030bc4f7e0a8fae7cb98620246386e",
+    "previous_layout_sha256": "90561b5e8f79a62aab8efadf2e79e48e180537cbb506ce2e84bd4bdf63b6be1b",
+    "scope": "current code; SQL changes validated by final-check 45-step run",
+    "acceptance_update": {
+      "date": "2026-10-22",
+      "previous_sha256": "7be4725062a379166b5b7e6bf542242a8c4ef4e8ba2ff433ba1b83341a9ebc06",
+      "reason": "Human approval record and current ER fingerprints synchronized; SQL execution artifacts unchanged."
+    }
+  },
+  {
+    "file": "db/checks/audit-week-6-artifacts.py",
+    "sha256": "c8d90fb1e6a7bf07bed9d57ef8ccd9e1e31eff49436bb6b5cc6082e744fbbec7",
+    "scope": "current artifact/verification source",
+    "acceptance_update": {
+      "date": "2026-10-22",
+      "previous_sha256": "cb673c351e1b943ecd7a958f3445683a4448487dac7a048b55682cdd6fac550b",
+      "reason": "Human approval record and current ER fingerprints synchronized; SQL execution artifacts unchanged."
+    }
+  },
+  {
+    "file": "db/results/week-6/acceptance/independent-audit.ps1",
+    "sha256": "d61d69b8a250b65370ad318a6f0269c8e488468b371e536a6b61e8c01216330b",
+    "scope": "current artifact/verification source",
+    "acceptance_update": {
+      "date": "2026-10-22",
+      "previous_sha256": "410c748dae2b97574e8b22cae945d34679ccfa40ae3dabe70ec13fd4eb48c8bb",
+      "reason": "Human approval record and current ER fingerprints synchronized; SQL execution artifacts unchanged."
+    }
+  },
+  {
+    "file": "ER/er-diagram-v1.4.drawio",
+    "sha256": "ced3f8ce02ed030821624c83ce6a09854c5200a885f415448e51af8d3679f0c1",
+    "scope": "current artifact/verification source",
+    "acceptance_update": {
+      "date": "2026-10-22",
+      "previous_sha256": "3bf1870bc1c67345d9ab782ba22d735d77e85bb7b1de505acba9e57ef3fc3f2e",
+      "reason": "Human approval record and current ER fingerprints synchronized; SQL execution artifacts unchanged."
+    }
+  },
+  {
+    "file": "ER/er-diagram-v1.4.drawio.png",
+    "sha256": "a0e95d3bb18c0efdf05ffa76e5654f149b2f03496da04eb744030331f37ed6a8",
+    "scope": "current artifact/verification source",
+    "acceptance_update": {
+      "date": "2026-10-22",
+      "previous_sha256": "2b5b9e3fd57bb6f4ac4f855ed306f983c8deb155c7481a7f668e5f0336cbe3fe",
+      "reason": "Human approval record and current ER fingerprints synchronized; SQL execution artifacts unchanged."
+    }
+  }
+]

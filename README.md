@@ -28,7 +28,7 @@ Database-Project/
 ├─ drafts/         草稿 —— 讨论稿与中间产物（敲定后才迁入 docs/）
 ├─ ER/             第 5 周 ER 图（可编辑源文件 + 清晰导出图 + 审查记录）
 ├─ homework/       课程官方材料 —— 每周底线任务
-└─ db/             Week 3–4 的 SQL 脚本、复现说明与执行记录
+└─ db/             Week 3–4 基线及 Week 6 迁移、回归、复现与执行记录
 ```
 
 目录职责、命名规范与协作约定见
@@ -53,19 +53,19 @@ Database-Project/
 | 会员体系 | 购买会员卡入会（卡一年有效）；**分银卡 / 金卡两档**；不做储值 |
 | 资金口径 | 收付实现制；**店内资金总额**与**经营盈亏**分列两个指标 |
 
-> **用词说明**：「**库管**」与 `docs/spec-roles.md` 中的「**库存管理员**」**指同一岗位** ——
+> **用词说明**：「**库管**」与 `docs/specs/spec-roles.md` 中的「**库存管理员**」**指同一岗位** ——
 > 角色文档用后者，数据字典里的岗位枚举用前者；不是两个岗位。
 
-> **业务流程在哪**：15 条业务的「**一串动作（谁做什么）**」见 `docs/spec-businesses.md` §1
+> **业务流程在哪**：15 条业务的「**一串动作（谁做什么）**」见 `docs/specs/spec-businesses.md` §1
 > （按**货线（库存管理员）· 钱与顾客线（收银员）· 决策线（店长）**分组）；
-> 角色能做什么 / 不能做什么见 `docs/spec-roles.md`。
+> 角色能做什么 / 不能做什么见 `docs/specs/spec-roles.md`。
 > 本文**只作索引、不复述** —— 业务口径与理由一律以 `docs/` 为准（单一出处）。
 
 ### 3.2 项目目标
 
 本项目是一次**数据库设计练习**，不是 Web 工程练习。做得好不好，只看两条：
 
-1. **数据建模是否规范** —— ER 是否正确、关系模式是否达到 3NF、约束是否完整。
+1. **数据建模是否规范** —— ER 是否正确、范式判断及保留冗余的理由是否成立、约束是否完整。
 2. **数据流动是否可解释** —— 每个业务动作引起的表级变化，能否说清、查到、回滚。
 
 由此推出一条贯穿全项目的原则：**应用层刻意做薄**，
@@ -75,11 +75,11 @@ Database-Project/
 ### 3.3 设计要点
 
 - **数据库是主角，应用只是遥控器** —— 业务规则尽量下沉为约束、触发器与存储过程；
-  应用层刻意做薄：无分层架构、无 Repository 抽象、不引入重型 ORM。
+  后续应用保持轻量，并按第7—9周要求分为页面、业务、数据访问层；仅数据访问层连接 SQL Server，采用参数绑定、事务管理和后端权限检查。应用尚未实现。
 - **单据驱动** —— 采购申请单、销售单、预订单、退货单都采用「头 + 明细」两级结构，
   明细行逐条留痕、可回溯；**每张单据都有单号**，卖货与预订的单据会交给顾客一份。
 - **库存只维护计数** —— 保留「在架总量」与「已订量」两个计数，
-  可售量由二者**派生**而不单独存列，从根上消除两个数对不上的可能。
+  可售量由二者**派生**而不单独存列，减少独立存储列；两项计数与明细的跨表一致性仍需事务入口维护和主动对账。
 - **线上预订只锁货** —— 预订单不含任何金额字段，价格与折扣等到到店结算时才确定；
   预订阶段不动钱、不动积分。
 - **资金逐笔留痕** —— 每笔资金变动都记录金额、原因、时间与**变动前后余额**，
@@ -105,29 +105,38 @@ Database-Project/
 
 | 文档 | 内容 | 状态 |
 |---|---|---|
-| `docs/spec-scenario.md` | 场景说明：拾光书店 | ✅ 已敲定 |
-| `docs/spec-roles.md` | 角色与职能清单 | ✅ 已敲定 |
-| `docs/spec-businesses.md` | 业务清单与**业务流程**（15 条动作链）+ R 系列规定 | ✅ 已敲定 |
-| `docs/spec-data-boundary.md` | 数据边界清单：什么进库 / 什么不进库（逐条给理由） | ✅ 已敲定 |
-| `docs/spec-data-dictionary.md` | 数据字典：19 张表的字段、域、码与样例元组 | 设计口径 |
-| `docs/task-week-N.md` | 第 N 周任务说明：官方原文、本组任务说明与验收标准 | ✅ 第 1–5 周 |
-| `docs/task-v0.1.md` | 第一阶段作业（可运行的数据库原型 v0.1）任务说明与验收标准 | 当前口径 |
-| `docs/report-v0.1.md` | v0.1 阶段总结：场景、边界、表设计、约束权限、过程与问题修正 | ✅ 已整理 |
-| [`docs/review-week-1.md`](docs/review-week-1.md) – [`docs/review-week-4.md`](docs/review-week-4.md) | 第一至第四周组内验收记录 | ✅ 已整理 |
-| `docs/team-division-v0.1.md` | v0.1 组内分工与复核责任 | ✅ 已整理 |
-| `docs/evidence-v0.1.md` | v0.1 八类验收证据索引（脚本、文本结果、SSMS 截图及对应语句） | ✅ 八类齐备（2026-10-06） |
-| `docs/er-mapping-v1.0.md` | **业务规则与映射清单**：19 张表逐张审查的结论 + ER 图图例 | ✅ Week 5 定稿（2026-10-11） |
-| `docs/design-notes-v1.0.md` | **ER 设计说明与验证记录**：设计思路 · 三组对照 · 实例验证 | ✅ Week 5 定稿（2026-10-11） |
-| `docs/issues-v0.1.md` | **v0.1 问题清单**：现象 / 业务证据 / 影响 / 方向 + 三种结论 | ✅ Week 5 定稿（2026-10-11） |
+| `docs/specs/spec-scenario.md` | 场景说明：拾光书店 | ✅ 已敲定 |
+| `docs/specs/spec-roles.md` | 角色与职能清单 | ✅ 已敲定 |
+| `docs/specs/spec-businesses.md` | 业务清单与**业务流程**（15 条动作链）+ R 系列规定 | ✅ 已敲定 |
+| `docs/specs/spec-data-boundary.md` | 数据边界清单：什么进库 / 什么不进库（逐条给理由） | ✅ 已敲定 |
+| `docs/specs/spec-data-dictionary.md` | 数据字典：19 张表的字段、域、码与样例元组 | 设计口径 |
+| `docs/tasks/task-week-N.md` | 第 N 周任务说明：官方原文、本组任务说明与验收标准 | ✅ 第 1–6 周 |
+| `docs/tasks/task-v0.1.md` | 第一阶段作业（可运行的数据库原型 v0.1）任务说明与验收标准 | 当前口径 |
+| `docs/reports/report-v0.1.md` | v0.1 阶段总结：场景、边界、表设计、约束权限、过程与问题修正 | ✅ 已整理 |
+| [`docs/reviews/review-week-1.md`](docs/reviews/review-week-1.md) – [`docs/reviews/review-week-4.md`](docs/reviews/review-week-4.md) | 第一至第四周组内验收记录 | ✅ 已整理 |
+| `docs/reports/team-division-v0.1.md` | v0.1 组内分工与复核责任 | ✅ 已整理 |
+| `docs/reports/evidence-v0.1.md` | v0.1 八类验收证据索引（脚本、文本结果、SSMS 截图及对应语句） | ✅ 八类齐备（2026-10-06） |
+| `docs/design/er-mapping-v1.0.md` | **业务规则与映射清单**：19 张表逐张审查的结论 + ER 图图例 | ✅ Week 5 定稿（2026-10-11） |
+| `docs/design/design-notes-v1.0.md` | **ER 设计说明与验证记录**：设计思路 · 三组对照 · 实例验证 | ✅ Week 5 定稿（2026-10-11） |
+| `docs/design/issues-v0.1.md` | **v0.1 问题清单**：现象 / 业务证据 / 影响 / 方向 + 三种结论 | ✅ Week 5 定稿（2026-10-11） |
 | [`ER/er-diagram-v1.0.drawio`](ER/er-diagram-v1.0.drawio) · [`ER/er-diagram-v1.0.png`](ER/er-diagram-v1.0.png) | **ER 图**：可编辑源文件 + 清晰导出图（审查记录 `ER/review-v1.0.md`） | ✅ Week 5 定稿（2026-10-11） |
-| `docs/ai-usage-log.md` | AI 使用记录（按周留痕：AI 协助了什么、人改了什么） | ✅ 第 1–5 周 |
+| `docs/ai-usage-log.md` | AI 使用记录（按周留痕：AI 协助了什么、人改了什么） | ✅ 第 1–7 周 |
+| [`docs/design/design-normalization-v1.0.md`](docs/design/design-normalization-v1.0.md) | 19 表依赖与范式、四表冗余取舍、迁移设计 | 2026-10-21 Agent 复核修订 |
+| [`docs/reviews/review-week-6.md`](docs/reviews/review-week-6.md) | Week 6 逐项验收与原始证据入口 | 允许AI自检；本轮45步与规则补测通过，ER人工验收已于2026-10-22由梁宇聪确认通过 |
+| [`docs/reports/report-week-6.md`](docs/reports/report-week-6.md) | 第六周报告素材：思路、过程、结论与限制 | 已同步本轮验收 |
 | `docs/project-conventions.md` | 项目规范：物料结构、目录职责、命名与协作约定 | ✅ |
-| `db/README.md` 及脚本 | Week 3–4 的 SQL 执行、复现和验收说明（结果与记录见 `db/results/`） | ✅ 已由非作者组员在本机独立复现（2026-10-05，记录见 `db/results/week-4.md`） |
+| `db/README.md` 及脚本 | Week 3–4 基线与 Week 6 迁移、回归和验收说明（结果与记录见 `db/results/`） | ✅ 已由非作者组员在本机独立复现（2026-10-05，记录见 `db/results/week-4/week-4.md`） |
 
 **文档不再用编号** —— `docs/` 下一律「前缀 + 名字」，前缀如 `task-` / `plan-` / `dev-` / `debug-` 等。
-`drafts/` 仅保留几份历史周计划与草稿索引（`plan-week-*.md` / `README.md`），用于追溯旧方案；当前业务、编号和表结构以 `docs/spec-*.md` 为准。课程原件及各周 Markdown 转写（第一至五周）在 `homework/`。
+`drafts/` 仅保留几份历史周计划与草稿索引（`plan-week-*.md` / `README.md`），用于追溯旧方案；当前业务、编号和表结构以 `docs/specs/spec-*.md` 为准。课程原件及各周 Markdown 转写（第一至六周）在 `homework/`。
 
-本轮的**复现证据**（SQLCMD 九步的原始输出 `db/results/week-4-verify2-*.txt`）与**结果证据**（八类 SSMS 截图 **13 张**
-`db/results/week-4-verify2-ssms-<类别>.png`，另有 4 张总览 / 对账图）都在 `db/results/`；
-**每张截图对应的 SQL 语句与预期值**集中记在 `docs/evidence-v0.1.md` **§3**，
-结论与核对方式见 `db/results/week-4.md` 与 `db/README.md` §7。
+本轮的**复现证据**（SQLCMD 九步的原始输出 `db/results/week-4/week-4-verify2-*.txt`）与**结果证据**（八类 SSMS 截图 **13 张**
+`db/results/week-4/week-4-verify2-ssms-<类别>.png`，另有 4 张总览 / 对账图）都在 `db/results/`；
+**每张截图对应的 SQL 语句与预期值**集中记在 `docs/reports/evidence-v0.1.md` **§3**，
+结论与核对方式见 `db/results/week-4/week-4.md` 与 `db/README.md` §7。
+
+课程原件对照与提交材料索引见 [docs/README.md](docs/README.md)。第7—9周还需交付应用代码、操作手册、多角色完整流程及正确 / 错误测试；本次整理没有实现这些功能。第二周独立严格样例文件的旧引用缺失，已在该周验收记录标明待核实。
+
+ER 当前使用 [v1.4 用户调整修订图](ER/er-diagram-v1.4.drawio) 与[PNG](ER/er-diagram-v1.4.drawio.png)。保持原整体布局和19实体尺寸，仅微调4框对齐，修正文义、属性和局部连线；见[逐表审查与检查](ER/review-v1.4.md)。此前v1.4/v1.5重排稿已撤下，当前v1.4沿用用户调整的布局，人工验收已于2026-10-22由梁宇聪确认通过。
+
+第六周验收口径已统一为允许AI自检，人工验收确认及当前技术证据见[正式验收记录](docs/reviews/review-week-6.md)。

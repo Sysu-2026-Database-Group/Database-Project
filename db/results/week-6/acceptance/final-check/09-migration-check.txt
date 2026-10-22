@@ -1,0 +1,5 @@
+﻿已将数据库上下文更改为 "ShiguangBookstoreWeek6Final20261021220913"。
+check_name|database_name|user_tables|foreign_keys|legacy_rows|cash_balance|operating_result|migration_records
+----------|-------------|-----------|------------|-----------|------------|----------------|-----------------
+migration-check|ShiguangBookstoreWeek6Final20261021220913|20|49|77|1430.30|-69.70|1
+migration-check.sql PASS: migrated structure and v0.1 business facts are preserved.

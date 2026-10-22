@@ -1,0 +1,11 @@
+﻿已将数据库上下文更改为 "ShiguangBookstoreWeek6Final20261021220913"。
+case_id|test_case|expected_error|actual_error|checked_constraint|result
+-------|---------|--------------|------------|------------------|------
+1|合法改名，同时填写修改人与时刻|0|0|NULL|PASS
+2|只填修改人，不填修改时刻|547|547|CK_supplier_updated_by_pair|PASS
+3|只填修改时刻，不填修改人|547|547|CK_supplier_updated_by_pair|PASS
+4|成对填写，但修改人不存在|547|547|FK_supplier_updated_by|PASS
+check_name|open_transactions|supplier_count|temporary_name_count
+----------|-----------------|--------------|--------------------
+I09-RESTORED|0|5|0
+supplier-audit-week-6.sql PASS: 4 audit cases checked; all test changes rolled back.

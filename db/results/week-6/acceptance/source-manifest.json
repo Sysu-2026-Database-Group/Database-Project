@@ -1,0 +1,132 @@
+[
+  {
+    "file": "db/accept-week-6.ps1",
+    "bytes": 11734,
+    "sha256": "A445A07DB57309D3493475A1E0D4FD16F221D519C1CA8566565CE7B7821A0F67"
+  },
+  {
+    "file": "db/auto-expiry-boundary-check.sql",
+    "bytes": 1605,
+    "sha256": "C952713F920FED2B0208C670E01D91FE61505BA42C89C7BC1760A4CD5F23C77E"
+  },
+  {
+    "file": "db/constraint.sql",
+    "bytes": 5962,
+    "sha256": "F53946484C934C5866B2B245AFEB2940F61BA85AA342EDB3F55FB0B0402EEBBC"
+  },
+  {
+    "file": "db/duplicate-cancel-boundary-check.sql",
+    "bytes": 3168,
+    "sha256": "919BB2D1BF8C1F4533387B5372F93DD19D3A056FCD3AB09C314EDB66B0D822AA"
+  },
+  {
+    "file": "db/inventory-query-week-6.sql",
+    "bytes": 6616,
+    "sha256": "418032044B68736C8E5218A4A3E3E9331AF0B4715F2F1E2F05DF5314B0B48346"
+  },
+  {
+    "file": "db/legacy-snapshot.sql",
+    "bytes": 2159,
+    "sha256": "343722C5B9EB3B1B41CE18B27647CE6826FFC1D1BE36C585311F87C1C8460697"
+  },
+  {
+    "file": "db/member-validity-week-6.sql",
+    "bytes": 4426,
+    "sha256": "39204DD54CCC837B1F78BAE6C567373FEDE792483F61833CEAD59C7ED685A67D"
+  },
+  {
+    "file": "db/migration-check.sql",
+    "bytes": 8802,
+    "sha256": "037766F0C45F8F816A4F7796DEB105D963CD822345906EAA5181B41077747EBA"
+  },
+  {
+    "file": "db/migration.sql",
+    "bytes": 12140,
+    "sha256": "D72625899FF513E8407F9FE78ACB1C53C0EC077CEE91A42F8DDFB11021FEE9AC"
+  },
+  {
+    "file": "db/price-snapshot-week-6.sql",
+    "bytes": 6843,
+    "sha256": "A6031AC1C18E5CD43E48159D7A74D20132982FED692F510D51826B1E801598B3"
+  },
+  {
+    "file": "db/query.sql",
+    "bytes": 4876,
+    "sha256": "A2A8479BB861AE4D87E112ACC07FFE66785709242D8F90FDF41497D54F400588"
+  },
+  {
+    "file": "db/regression-negative.sql",
+    "bytes": 8785,
+    "sha256": "45DDCFD98FA36E74D6954F2CBA13C0CB6CA9959CE57461A3522EF20E753A5121"
+  },
+  {
+    "file": "db/regression.sql",
+    "bytes": 18210,
+    "sha256": "78FFD17798AF138AF5EAD6573CE823E6ADF5C3E68754EEB4ADFC8D4DCC74EA36"
+  },
+  {
+    "file": "db/role.sql",
+    "bytes": 8017,
+    "sha256": "A82E8DCFB5681DAB64BA683DB8BFF76845F6DE720DBE2C913DD1CF5E6E881DBE"
+  },
+  {
+    "file": "db/sales-statistics-week-6.sql",
+    "bytes": 8607,
+    "sha256": "F30E239CA0DCDF564E14325E017A3AB285D96D559843AC5B727FF30CEB571872"
+  },
+  {
+    "file": "db/sample-data-week-6-plan.md",
+    "bytes": 12667,
+    "sha256": "367D390F6CB23563F4858250BAD04555A2242090D2F4A6128BFBD265B5211FEA"
+  },
+  {
+    "file": "db/sample-data-week-6.sql",
+    "bytes": 32430,
+    "sha256": "967DE7F86E2EA74BE0A4B89708A3A13C69CD7F3AECC844A4B1D1B4E679744FD6"
+  },
+  {
+    "file": "db/schema.sql",
+    "bytes": 65471,
+    "sha256": "48F8C5B2EE69081D7FD261971A9B008A11C209310AEA8856F0B76A5E9FE5C658"
+  },
+  {
+    "file": "db/supplier-audit-week-6.sql",
+    "bytes": 6356,
+    "sha256": "BB76D1E5C23EFA679D3AC6C5C492E3528C6D5EDCBB78A852C8CBE84FE8FE52E2"
+  },
+  {
+    "file": "db/supplier-cost-week-6.sql",
+    "bytes": 6695,
+    "sha256": "5708F9D462C21C876C29526EB7CF9528894F51CD368EB645A42655B766D1BFC9"
+  },
+  {
+    "file": "db/transaction-week-6.sql",
+    "bytes": 3950,
+    "sha256": "6199DE0811B06FA74C57ADDEF9068D479D2E58DC03AFF2570058244A89813BB9"
+  },
+  {
+    "file": "db/unique-index-week-6.sql",
+    "bytes": 5235,
+    "sha256": "79800F7EF54851884151F7391ED506CAF62DDE0EF815E170E8B678C2A22C56D2"
+  },
+  {
+    "file": "db/verify.sql",
+    "bytes": 25264,
+    "sha256": "765B03875F40B2E84F3821CCD5ED3863559BB06C5C6DFAD50C41CDD7E9EFE119"
+  },
+  {
+    "file": "docs/design-normalization-v1.0.md",
+    "bytes": 124989,
+    "sha256": "E24EF2278FB38F45AC023B3FC9A232065164789635A76336B160FE05F56BACC9"
+  },
+  {
+    "file": "docs/spec-data-dictionary.md",
+    "bytes": 65855,
+    "sha256": "32037A6AFCE575DE37525DE1196450EC0C05FCF5556FD7E081933317FA6AC628"
+  },
+  {
+    "file": "docs/task-week-6.md",
+    "bytes": 25468,
+    "sha256": "E66AD53BE7C4646C03031DCF1A30E352C3D4431F94C6B67A5D914CA79143ECBF"
+  }
+]

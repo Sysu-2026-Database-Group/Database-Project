@@ -24,13 +24,13 @@ Week 3 建库脚本创建 19 张表、47 个外键并装载 77 行样例数据�
 |---|---|
 | `schema.sql` | 创建数据库、19 张表、主键、唯一约束、外键、默认值和基础 CHECK 约束 |
 | `sample-data.sql` | 按外键依赖装载 77 行可复现样例数据 |
-| `verify.sql` | 检查结构、样例行数、库存、积分、资金和基础约束反例 |
-| `crud.sql` | 演示商品、库存和销售单的 CRUD；演示事务结束时回滚 |
+| `checks/verify.sql` | 检查结构、样例行数、库存、积分、资金和基础约束反例 |
+| `tests/crud.sql` | 演示商品、库存和销售单的 CRUD；演示事务结束时回滚 |
 | `query.sql` | 多表连接、`LEFT JOIN`、聚合、`GROUP BY`、`HAVING` 和子查询 |
 | `view.sql` | 创建并查询销售明细、商品销售汇总、库存状态三个视图 |
 | `constraint.sql` | 验证合法数据和非法数据；补充会员卡档位的跨行约束测试 |
 | `role.sql` | 创建店长、收银员、库存管理员角色，授予最小权限并测试越权 |
-| `results/` | 执行结果与记录：`week-3.md` / `week-4.md` 两份记录 + 各脚本的原始输出（`.txt`） |
+| `results/` | 执行结果与记录：`week-3/week-3.md` / `week-4/week-4.md` 两份记录 + 各脚本的原始输出（`.txt`） |
 
 ## 2. 从空数据库完整执行
 
@@ -56,47 +56,47 @@ Week 3 建库脚本创建 19 张表、47 个外键并装载 77 行样例数据�
 sqlcmd -S localhost\SQLEXPRESS -E -C -b -f 65001 `
   -v DatabaseName=ShiguangBookstoreWeek4Replay `
   -i db/schema.sql `
-  -o db/results/week-4-replay-schema.txt
+  -o db/results/week-4/week-4-replay-schema.txt
 
 sqlcmd -S localhost\SQLEXPRESS -E -C -b -f 65001 `
   -v DatabaseName=ShiguangBookstoreWeek4Replay `
   -i db/sample-data.sql `
-  -o db/results/week-4-replay-sample-data.txt
+  -o db/results/week-4/week-4-replay-sample-data.txt
 
 sqlcmd -S localhost\SQLEXPRESS -E -C -b -f 65001 -W -s "|" `
   -v DatabaseName=ShiguangBookstoreWeek4Replay `
-  -i db/verify.sql `
-  -o db/results/week-4-replay-verify-before.txt
+  -i db/checks/verify.sql `
+  -o db/results/week-4/week-4-replay-verify-before.txt
 
 sqlcmd -S localhost\SQLEXPRESS -E -C -b -f 65001 `
   -v DatabaseName=ShiguangBookstoreWeek4Replay `
-  -i db/crud.sql `
-  -o db/results/week-4-replay-crud.txt
+  -i db/tests/crud.sql `
+  -o db/results/week-4/week-4-replay-crud.txt
 
 sqlcmd -S localhost\SQLEXPRESS -E -C -b -f 65001 -W -s "|" `
   -v DatabaseName=ShiguangBookstoreWeek4Replay `
-  -i db/verify.sql `
-  -o db/results/week-4-replay-verify-after.txt
+  -i db/checks/verify.sql `
+  -o db/results/week-4/week-4-replay-verify-after.txt
 
 sqlcmd -S localhost\SQLEXPRESS -E -C -b -f 65001 -W -s "|" `
   -v DatabaseName=ShiguangBookstoreWeek4Replay `
   -i db/query.sql `
-  -o db/results/week-4-replay-query.txt
+  -o db/results/week-4/week-4-replay-query.txt
 
 sqlcmd -S localhost\SQLEXPRESS -E -C -b -f 65001 -W -s "|" `
   -v DatabaseName=ShiguangBookstoreWeek4Replay `
   -i db/view.sql `
-  -o db/results/week-4-replay-view.txt
+  -o db/results/week-4/week-4-replay-view.txt
 
 sqlcmd -S localhost\SQLEXPRESS -E -C -b -f 65001 -W -s "|" `
   -v DatabaseName=ShiguangBookstoreWeek4Replay `
   -i db/constraint.sql `
-  -o db/results/week-4-replay-constraint.txt
+  -o db/results/week-4/week-4-replay-constraint.txt
 
 sqlcmd -S localhost\SQLEXPRESS -E -C -b -f 65001 -W -s "|" `
   -v DatabaseName=ShiguangBookstoreWeek4Replay `
   -i db/role.sql `
-  -o db/results/week-4-replay-role.txt
+  -o db/results/week-4/week-4-replay-role.txt
 ```
 
 每条命令执行后检查退出码：
@@ -112,10 +112,10 @@ $LASTEXITCODE
 当前已使用 `ShiguangBookstoreWeek4` 完成 Week 3 建库和样例装载。Week 4 四个脚本的正式输出为：
 
 ```text
-results/week-4-query.txt
-results/week-4-view.txt
-results/week-4-constraint.txt
-results/week-4-role.txt
+results/week-4/week-4-query.txt
+results/week-4/week-4-view.txt
+results/week-4/week-4-constraint.txt
+results/week-4/week-4-role.txt
 ```
 
 如果该数据库已经完成 Week 3 初始化，只执行下面四个 Week 4 脚本：
@@ -124,22 +124,22 @@ results/week-4-role.txt
 sqlcmd -S localhost\SQLEXPRESS -E -C -b -f 65001 -W -s "|" `
   -v DatabaseName=ShiguangBookstoreWeek4 `
   -i db/query.sql `
-  -o db/results/week-4-query.txt
+  -o db/results/week-4/week-4-query.txt
 
 sqlcmd -S localhost\SQLEXPRESS -E -C -b -f 65001 -W -s "|" `
   -v DatabaseName=ShiguangBookstoreWeek4 `
   -i db/view.sql `
-  -o db/results/week-4-view.txt
+  -o db/results/week-4/week-4-view.txt
 
 sqlcmd -S localhost\SQLEXPRESS -E -C -b -f 65001 -W -s "|" `
   -v DatabaseName=ShiguangBookstoreWeek4 `
   -i db/constraint.sql `
-  -o db/results/week-4-constraint.txt
+  -o db/results/week-4/week-4-constraint.txt
 
 sqlcmd -S localhost\SQLEXPRESS -E -C -b -f 65001 -W -s "|" `
   -v DatabaseName=ShiguangBookstoreWeek4 `
   -i db/role.sql `
-  -o db/results/week-4-role.txt
+  -o db/results/week-4/week-4-role.txt
 ```
 
 ## 4. Week 4 验收内容
@@ -165,7 +165,7 @@ sqlcmd -S localhost\SQLEXPRESS -E -C -b -f 65001 -W -s "|" `
 ## 5. Week 3 基线（判据）
 
 本节写的是**跑完应当看到什么**（判据），**不是某次实测结果** ——
-某次实际执行的环境、命令、退出码与输出见 `db/results/week-4.md` 与 `db/results/*.txt`
+某次实际执行的环境、命令、退出码与输出见 `db/results/week-4/week-4.md` 与 `db/results/*.txt`
 （同一批数字只在一处记"实测"，避免两处说法打架）。
 
 空库复现和 Week 4 测试完成后，应核对：
@@ -189,11 +189,11 @@ sqlcmd -S localhost\SQLEXPRESS -E -C -b -f 65001 -W -s "|" `
 **跑完之后的收尾约定**：
 
 - 复现用的库**先保留**（便于用 SSMS 逐项核对结构、角色、视图与数据），核对完可自行 `DROP DATABASE`；
-- 复现记录写进 `db/results/week-4.md`（或同目录下新建一份），**按四样写**：**环境 · 命令 · 退出码与输出 · 遇到的问题**；
+- 复现记录写进 `db/results/week-4/week-4.md`（或同目录下新建一份），**按四样写**：**环境 · 命令 · 退出码与输出 · 遇到的问题**；
 - 非作者组员已在本机独立复现：**SQLCMD 复现**（九步、退出码全 0）+ **SSMS 人工核对**
   （对象：表 19 · 外键 47 · 主键 19 · 唯一 9 · `CHECK` 95 · 视图 3 · 触发器 1 · 列注释 135（= 字段数，全覆盖）· 3 角色 + 3 测试用户；
   数据：**合计 77 行**、在架 = 变动累加（6 / 0 / 10 / 19）、积分 −26 = 流水之和、末笔现金 1430.30）；
-  记录见 `db/results/week-4.md`，截图见 `db/results/week-4-verify2-ssms-*.png`；
+  记录见 `db/results/week-4/week-4.md`，截图见 `db/results/week-4/week-4-verify2-ssms-*.png`；
 - 相关 AI 候选 SQL、人工修改和验证过程记录在 `docs/ai-usage-log.md` 的 Week 4 条目中。
 
 基础约束和本周测试不代表 26 条业务规则全部自动化实现。积分上限、累计退货、完整状态迁移、自动过期、并发库存控制和重复请求幂等仍需要后续事务、存储过程或应用业务逻辑补充。
@@ -203,9 +203,9 @@ sqlcmd -S localhost\SQLEXPRESS -E -C -b -f 65001 -W -s "|" `
 下面几张截图是**复查（核对）证据**：在 SQLCMD **复现**出来的库 `ShiguangBookstoreVerify2` 上，
 用 SSMS 逐项检查"建出来的东西对不对"。
 
-> **它们不是复现证据** —— 复现证据是 §2 那九步的**可重跑输出**（`db/results/week-4-verify2-*.txt`）。
+> **它们不是复现证据** —— 复现证据是 §2 那九步的**可重跑输出**（`db/results/week-4/week-4-verify2-*.txt`）。
 > 一句话区分：**复现 = 从空库跑出来（可重跑、有退出码）；复查 = 对已建好的库逐项核对（这里就是截图）。**
-> 详细结论与核对方式见 `db/results/week-4.md`。
+> 详细结论与核对方式见 `db/results/week-4/week-4.md`。
 
 | 截图（都在 `db/results/`） | 看的是 | 结论 |
 |---|---|---|
@@ -216,7 +216,7 @@ sqlcmd -S localhost\SQLEXPRESS -E -C -b -f 65001 -W -s "|" `
 
 > **八类验收截图**（2026-10-06 补拍，共 **13 张**）：正常用例 · 非法数据 · 越权访问 · 关键查询 1–4 · CRUD ·
 > 统计视图 1–3 · 角色权限 1–2（成功建库沿用上表第一张）—— 文件名、对应语句与预期值见
-> `docs/evidence-v0.1.md`（八类对照表 + §3）。
+> `docs/reports/evidence-v0.1.md`（八类对照表 + §3）。
 
 > "应当看到什么"（判据）见 §5；以上是某次实际核对的结果。
 
@@ -224,44 +224,65 @@ sqlcmd -S localhost\SQLEXPRESS -E -C -b -f 65001 -W -s "|" `
 
 第六周脚本在从 `ShiguangBookstoreWeek3` 备份还原出的工作副本
 `ShiguangBookstoreWeek6Work` 上执行。原始库只用于保留 v0.1 基线，不能作为迁移或样例装载目标。
-第六周脚本中的 `USE` 目标固定为 `ShiguangBookstoreWeek6Work`；执行前必须确认 SSMS 查询窗口的当前数据库和脚本中的目标一致。
+2026-10-21 起，第六周 SQL 统一用 `$(DatabaseName)` 选择目标，调用者须显式指定以 `ShiguangBookstoreWeek6` 开头的专用副本名；脚本不再用内置 `:setvar` 覆盖命令行 `-v`。所有本周脚本须在 SQLCMD 模式执行，`:On Error exit` 保证目标选择失败后停止；筛选索引要求的 SET 选项已在脚本中明确设置。
+
+推荐用 PowerShell 7 执行完整验收（**每次换新库名和新结果目录**）：
+
+```powershell
+./db/accept-week-6.ps1 -Server localhost `
+  -DatabaseName ShiguangBookstoreWeek6AcceptanceNew `
+  -EvidenceDirectory db/results/week-6/acceptance-new
+```
+
+入口只支持本机默认实例及 Windows 身份验证。从现有 Week3 库 COPY_ONLY 备份并还原两个新副本，逐项保存 SQLCMD 原始输出、退出码和哈希；不存在删库、覆盖还原、自动清理或全局配置变更。SQL Server 服务账号须能访问默认数据 / 备份目录。备份校验使用 BACKUP CHECKSUM 和 RESTORE VERIFYONLY CHECKSUM；不要求终端账号能读取备份文件做文件哈希。
+
+仅手动执行一项时：
+
+```powershell
+sqlcmd -S localhost -E -C -b -f 65001 `
+  -v DatabaseName=ShiguangBookstoreWeek6AcceptanceNew -i db/regression.sql
+```
+
+SSMS 中需启用“查询 → SQLCMD 模式”，在调用脚本之前单独定义 `:setvar DatabaseName 专用副本名`；不要把固定值写回正式脚本。缺少变量或选到错误目标时应停止。
 
 ### 8.1 执行顺序
 
 按下面顺序执行，每一步确认结果符合预期后再继续：
 
 1. 在原始库完成备份，并将备份还原为 `ShiguangBookstoreWeek6Work`；确认数据库状态为 `ONLINE`。
-2. 在工作副本执行 `verify.sql` 或迁移前只读基线检查，确认 19 张表、47 个外码、77 行旧样例、现金 `1430.30` 和经营盈亏 `-69.70`。
+2. 在工作副本执行 `checks/verify.sql` 或迁移前只读基线检查，确认 19 张表、47 个外码、77 行旧样例、现金 `1430.30` 和经营盈亏 `-69.70`。
 3. 执行 `migration.sql`，完成 `schema_migration`、供应商留痕字段、唯一索引、来源约束和迁移标记；失败时按脚本事务回滚，必要时使用备份恢复。
-4. 执行 `migration-check.sql`，确认目标结构和旧业务快照仍可追溯。
+4. 执行 `checks/migration-check.sql`，确认目标结构和旧业务快照仍可追溯。
 5. 执行 `sample-data-week-6.sql`，装载 W6-S01—W6-S11 的新增对象、单据、明细和流水。该脚本只允许在已完成迁移的工作副本上运行。
 6. 执行 `regression.sql`，核对旧场景、新场景、库存 / 预订、积分、销售、退货和资金对账。
-7. 依次执行 `regression-negative.sql`、`role.sql` 和 `transaction-week-6.sql`，分别检查结构反例、角色越权和中途失败回滚。反例和事务测试必须在事务中回滚，不得污染扩充后的合法截面。
+7. 依次执行 `tests/regression-negative.sql`、`role.sql` 和 `tests/transaction-week-6.sql`，分别检查结构反例、角色越权和中途失败回滚。反例和事务测试必须在事务中回滚，不得污染扩充后的合法截面。
 8. 最后再次执行 `regression.sql`，确认测试没有改变样例数量、四类账目或旧场景快照。
-9. 单独执行 `duplicate-cancel-boundary-check.sql` 和 `auto-expiry-boundary-check.sql`，如实记录当前是否具备重复请求幂等和自动过期入口；这两个脚本的 `PASS` 只表示边界检查完成，不表示相应业务功能已经实现。
+9. 单独执行 `tests/duplicate-cancel-boundary-check.sql` 和 `tests/auto-expiry-boundary-check.sql`，如实记录当前是否具备重复请求幂等和自动过期入口；这两个脚本的 `PASS` 只表示边界检查完成，不表示相应业务功能已经实现。
 
 ### 8.2 第六周脚本入口
 
 | 文件 | 用途 |
 |---|---|
+| `accept-week-6.ps1` | 自动备份 / 还原新副本并运行完整验收、故障注入和原始证据归档 |
+| `checks/legacy-snapshot.sql` | 按主键排序，核对 19 张旧业务表完整旧列的行数与 SHA-256 |
 | `migration.sql` | 从 v0.1 副本迁移到第六周目标结构 |
-| `migration-check.sql` | 迁移后元数据、旧场景和约束只读核对 |
+| `checks/migration-check.sql` | 迁移后元数据、旧场景和约束只读核对 |
 | `sample-data-week-6.sql` | 装载 W6-S01—W6-S11 新增样例 |
 | `sample-data-week-6-plan.md` | 新场景编号、业务键、时点和预期值 |
 | `regression.sql` | 扩充后只读回归和四类账目对账 |
-| `regression-negative.sql` | 22 个已实现结构约束反例；每项应拒绝并回滚 |
+| `tests/regression-negative.sql` | 22 个已实现结构约束反例；每项应拒绝并回滚 |
 | `role.sql` | 店长、收银员和库存管理员的授权 / 越权检查 |
-| `transaction-week-6.sql` | 中途约束失败时整笔事务回滚 |
-| `price-snapshot-week-6.sql` | W6-S08：临时调价 / 修改卡参数，验证历史成交快照不变并回滚 |
-| `supplier-audit-week-6.sql` | I-09：合法改名、成对留痕及员工外码专项测试，逐项回滚 |
-| `unique-index-week-6.sql` | I-07 / I-18：补测重复文创引用及重复积分抵扣，核对索引名并回滚 |
-| `sales-statistics-week-6.sql` | 只读输出旧 / 新订单明细、逐商品销量、逐日实付退款及范围汇总，核对显式预期 |
-| `inventory-query-week-6.sql` | 只读输出逐商品库存、预订占用及来源对账；另列已到期但未释放的占用 |
-| `supplier-cost-week-6.sql` | W6-S11：只读比较当前报价与历史采购批次成本，按供应商对账入库和付款 |
-| `member-validity-week-6.sql` | W6-S05：只读核对到期日 / 次日边界及第六周成交卡档快照 |
-| `duplicate-cancel-boundary-check.sql` | 重复取消请求的当前实现边界 |
-| `auto-expiry-boundary-check.sql` | 到期但仍有效预订的当前实现边界 |
-| `results/week-6-*.md` | 第六周执行反馈、预期 / 实际、差异和未实现项 |
+| `tests/transaction-week-6.sql` | 中途约束失败时整笔事务回滚 |
+| `tests/price-snapshot-week-6.sql` | W6-S08：临时调价 / 修改卡参数，验证历史成交快照不变并回滚 |
+| `tests/supplier-audit-week-6.sql` | I-09：合法改名、成对留痕及员工外码专项测试，逐项回滚 |
+| `tests/unique-index-week-6.sql` | I-07 / I-18：补测重复文创引用及重复积分抵扣，核对索引名并回滚 |
+| `tests/sales-statistics-week-6.sql` | 只读输出旧 / 新订单明细、逐商品销量、逐日实付退款及范围汇总，核对显式预期 |
+| `tests/inventory-query-week-6.sql` | 只读输出逐商品库存、预订占用及来源对账；另列已到期但未释放的占用 |
+| `tests/supplier-cost-week-6.sql` | W6-S11：只读比较当前报价与历史采购批次成本，按供应商对账入库和付款 |
+| `tests/member-validity-week-6.sql` | W6-S05：只读核对到期日 / 次日边界及第六周成交卡档快照 |
+| `tests/duplicate-cancel-boundary-check.sql` | 重复取消请求的当前实现边界 |
+| `tests/auto-expiry-boundary-check.sql` | 到期但仍有效预订的当前实现边界 |
+| `results/week-6/records/week-6-*.md` | 第六周执行反馈、预期 / 实际、差异和未实现项 |
 
 ### 8.3 第六周预期截面
 
@@ -284,4 +305,19 @@ sqlcmd -S localhost\SQLEXPRESS -E -C -b -f 65001 -W -s "|" `
 - 并发销售 / 预订下的库存锁定；
 - 覆盖全部采购、取货、退货和资金流程的统一受控入口。
 
-静态终态样例只能证明数据覆盖，不能替代这些流程功能的实现。第六周非作者独立复现和 ER 最终人工复核记录在 `../docs/review-week-6.md` 与 `../ER/review-v1.0.md`。
+静态终态样例只能证明数据覆盖，不能替代这些流程功能的实现。第六周允许 AI 自检；当前技术结果和唯一 ER 人工填写入口见 [正式验收](../docs/reviews/review-week-6.md)，当前 ER 见 [v1.4](../ER/review-v1.4.md)。
+
+
+### 8.5 当前验收结果
+
+当前正式结论只维护在 [`docs/reviews/review-week-6.md`](../docs/reviews/review-week-6.md)。本轮允许AI自检，由Codex主代理在新隔离库完成45步及日期变异检查，最新原始输出见 [`results/week-6/acceptance/final-check/`](results/week-6/acceptance/final-check)。原子代理输出保留历史执行归属；ER图最终人工结果已于2026-10-22由梁宇聪确认通过。
+
+19 表完整旧列哈希验证还原、迁移和测试恢复后数据一致；哈希不覆盖 IDENTITY 内部计数，回滚产生的自增间隙允许存在。供应商新增审计列和技术表另由专项与迁移核对覆盖。会员专项核对11个独立固定输入日期规则示例（含重买起算、闰日）及成交快照；实际办理/收费、权益恢复和积分保持的业务入口未实现，按后续阶段边界登记。
+
+`db/results/` 按验收对象周次组织：第 3、4 周保留对应文本结果和截图；第 6 周 `records/` 保存逐项执行反馈，`acceptance/` 保存唯一最新审核及其原始输出。较早三轮审核目录已清理；本次文件整理没有删除数据库或备份。新运行默认输出到 `results/week-6/<DatabaseName>/`，仍拒绝覆盖已有目录；若要替换当前审核，先确认新结果再整理，不能直接覆盖旧结果。
+
+### 目录职责
+
+根目录保留课程指定交付入口；`checks/` 保存结构 / 数据快照辅助核对，`tests/` 保存 CRUD 演示、反例和专项测试。这些测试属于复现与验收材料，保留。早期三个 I-04 一次性探测脚本已删除，结论及证据限制保留在[规范化说明](../docs/design/design-normalization-v1.0.md) §23；正式 45 步所用脚本均保留。样例规划移入[设计文档](../docs/design/sample-data-week-6-plan.md)。
+
+本轮审核收口：完整45步输出位于 `results/week-6/acceptance/final-check/`。`regression.sql` 为第六周固定装载快照，不用于第7—9周任意写入后的数据库。会员专项验证固定日期规则示例，不代表办理入口已实现。

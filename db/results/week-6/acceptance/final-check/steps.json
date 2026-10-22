@@ -1,0 +1,452 @@
+[
+  {
+    "step": "00-environment",
+    "database": "ShiguangBookstoreWeek6Final20261021220913",
+    "script": "",
+    "query": "SET NOCOUNT ON; SELECT @@VERSION AS version, SUSER_SNAME() AS executor, SYSDATETIMEOFFSET() AS executed_at; SELECT name,state_desc FROM sys.databases WHERE name LIKE N'Shiguang%';",
+    "exit_code": 0,
+    "expected_error": 0,
+    "passed": true,
+    "output": "00-environment.txt"
+  },
+  {
+    "step": "01-source-before",
+    "database": "ShiguangBookstoreWeek3",
+    "script": "checks/legacy-snapshot.sql",
+    "query": "",
+    "exit_code": 0,
+    "expected_error": 0,
+    "passed": true,
+    "output": "01-source-before.txt"
+  },
+  {
+    "step": "02-backup",
+    "database": "ShiguangBookstoreWeek6Final20261021220913",
+    "script": "",
+    "query": "BACKUP DATABASE [ShiguangBookstoreWeek3] TO DISK=N'C:\\Program Files\\Microsoft SQL Server\\MSSQL17.MSSQLSERVER\\MSSQL\\Backup\\ShiguangBookstoreWeek6Final20261021220913.bak' WITH COPY_ONLY,CHECKSUM; RESTORE VERIFYONLY FROM DISK=N'C:\\Program Files\\Microsoft SQL Server\\MSSQL17.MSSQLSERVER\\MSSQL\\Backup\\ShiguangBookstoreWeek6Final20261021220913.bak' WITH CHECKSUM;",
+    "exit_code": 0,
+    "expected_error": 0,
+    "passed": true,
+    "output": "02-backup.txt"
+  },
+  {
+    "step": "03-restore",
+    "database": "ShiguangBookstoreWeek6Final20261021220913",
+    "script": "",
+    "query": "IF DB_ID(N'ShiguangBookstoreWeek6Final20261021220913') IS NOT NULL THROW 51990,N'禁止覆盖已有库。',1; RESTORE DATABASE [ShiguangBookstoreWeek6Final20261021220913] FROM DISK=N'C:\\Program Files\\Microsoft SQL Server\\MSSQL17.MSSQLSERVER\\MSSQL\\Backup\\ShiguangBookstoreWeek6Final20261021220913.bak' WITH MOVE N'ShiguangBookstoreWeek3' TO N'C:\\Program Files\\Microsoft SQL Server\\MSSQL17.MSSQLSERVER\\MSSQL\\DATA\\ShiguangBookstoreWeek6Final20261021220913.mdf', MOVE N'ShiguangBookstoreWeek3_log' TO N'C:\\Program Files\\Microsoft SQL Server\\MSSQL17.MSSQLSERVER\\MSSQL\\DATA\\ShiguangBookstoreWeek6Final20261021220913_log.ldf', CHECKSUM;",
+    "exit_code": 0,
+    "expected_error": 0,
+    "passed": true,
+    "output": "03-restore.txt"
+  },
+  {
+    "step": "04-restored-snapshot",
+    "database": "ShiguangBookstoreWeek6Final20261021220913",
+    "script": "checks/legacy-snapshot.sql",
+    "query": "",
+    "exit_code": 0,
+    "expected_error": 0,
+    "passed": true,
+    "output": "04-restored-snapshot.txt"
+  },
+  {
+    "step": "05-baseline",
+    "database": "ShiguangBookstoreWeek6Final20261021220913",
+    "script": "checks/verify.sql",
+    "query": "",
+    "exit_code": 0,
+    "expected_error": 0,
+    "passed": true,
+    "output": "05-baseline.txt"
+  },
+  {
+    "step": "06-query-before",
+    "database": "ShiguangBookstoreWeek6Final20261021220913",
+    "script": "query.sql",
+    "query": "",
+    "exit_code": 0,
+    "expected_error": 0,
+    "passed": true,
+    "output": "06-query-before.txt"
+  },
+  {
+    "step": "07-constraint",
+    "database": "ShiguangBookstoreWeek6Final20261021220913",
+    "script": "constraint.sql",
+    "query": "",
+    "exit_code": 0,
+    "expected_error": 0,
+    "passed": true,
+    "output": "07-constraint.txt"
+  },
+  {
+    "step": "08-migration",
+    "database": "ShiguangBookstoreWeek6Final20261021220913",
+    "script": "migration.sql",
+    "query": "",
+    "exit_code": 0,
+    "expected_error": 0,
+    "passed": true,
+    "output": "08-migration.txt"
+  },
+  {
+    "step": "09-migration-check",
+    "database": "ShiguangBookstoreWeek6Final20261021220913",
+    "script": "checks/migration-check.sql",
+    "query": "",
+    "exit_code": 0,
+    "expected_error": 0,
+    "passed": true,
+    "output": "09-migration-check.txt"
+  },
+  {
+    "step": "10-migrated-snapshot",
+    "database": "ShiguangBookstoreWeek6Final20261021220913",
+    "script": "checks/legacy-snapshot.sql",
+    "query": "",
+    "exit_code": 0,
+    "expected_error": 0,
+    "passed": true,
+    "output": "10-migrated-snapshot.txt"
+  },
+  {
+    "step": "11-query-after",
+    "database": "ShiguangBookstoreWeek6Final20261021220913",
+    "script": "query.sql",
+    "query": "",
+    "exit_code": 0,
+    "expected_error": 0,
+    "passed": true,
+    "output": "11-query-after.txt"
+  },
+  {
+    "step": "12-migration-repeat",
+    "database": "ShiguangBookstoreWeek6Final20261021220913",
+    "script": "migration.sql",
+    "query": "",
+    "exit_code": 0,
+    "expected_error": 0,
+    "passed": true,
+    "output": "12-migration-repeat.txt"
+  },
+  {
+    "step": "13-sample",
+    "database": "ShiguangBookstoreWeek6Final20261021220913",
+    "script": "sample-data-week-6.sql",
+    "query": "",
+    "exit_code": 0,
+    "expected_error": 0,
+    "passed": true,
+    "output": "13-sample.txt"
+  },
+  {
+    "step": "14-regression",
+    "database": "ShiguangBookstoreWeek6Final20261021220913",
+    "script": "regression.sql",
+    "query": "",
+    "exit_code": 0,
+    "expected_error": 0,
+    "passed": true,
+    "output": "14-regression.txt"
+  },
+  {
+    "step": "15-expanded-before-tests",
+    "database": "ShiguangBookstoreWeek6Final20261021220913",
+    "script": "checks/legacy-snapshot.sql",
+    "query": "",
+    "exit_code": 0,
+    "expected_error": 0,
+    "passed": true,
+    "output": "15-expanded-before-tests.txt"
+  },
+  {
+    "step": "16-regression-negative",
+    "database": "ShiguangBookstoreWeek6Final20261021220913",
+    "script": "tests/regression-negative.sql",
+    "query": "",
+    "exit_code": 0,
+    "expected_error": 0,
+    "passed": true,
+    "output": "16-regression-negative.txt"
+  },
+  {
+    "step": "17-role",
+    "database": "ShiguangBookstoreWeek6Final20261021220913",
+    "script": "role.sql",
+    "query": "",
+    "exit_code": 0,
+    "expected_error": 0,
+    "passed": true,
+    "output": "17-role.txt"
+  },
+  {
+    "step": "18-transaction-week-6",
+    "database": "ShiguangBookstoreWeek6Final20261021220913",
+    "script": "tests/transaction-week-6.sql",
+    "query": "",
+    "exit_code": 0,
+    "expected_error": 0,
+    "passed": true,
+    "output": "18-transaction-week-6.txt"
+  },
+  {
+    "step": "19-price-snapshot-week-6",
+    "database": "ShiguangBookstoreWeek6Final20261021220913",
+    "script": "tests/price-snapshot-week-6.sql",
+    "query": "",
+    "exit_code": 0,
+    "expected_error": 0,
+    "passed": true,
+    "output": "19-price-snapshot-week-6.txt"
+  },
+  {
+    "step": "20-supplier-audit-week-6",
+    "database": "ShiguangBookstoreWeek6Final20261021220913",
+    "script": "tests/supplier-audit-week-6.sql",
+    "query": "",
+    "exit_code": 0,
+    "expected_error": 0,
+    "passed": true,
+    "output": "20-supplier-audit-week-6.txt"
+  },
+  {
+    "step": "21-unique-index-week-6",
+    "database": "ShiguangBookstoreWeek6Final20261021220913",
+    "script": "tests/unique-index-week-6.sql",
+    "query": "",
+    "exit_code": 0,
+    "expected_error": 0,
+    "passed": true,
+    "output": "21-unique-index-week-6.txt"
+  },
+  {
+    "step": "22-sales-statistics-week-6",
+    "database": "ShiguangBookstoreWeek6Final20261021220913",
+    "script": "tests/sales-statistics-week-6.sql",
+    "query": "",
+    "exit_code": 0,
+    "expected_error": 0,
+    "passed": true,
+    "output": "22-sales-statistics-week-6.txt"
+  },
+  {
+    "step": "23-inventory-query-week-6",
+    "database": "ShiguangBookstoreWeek6Final20261021220913",
+    "script": "tests/inventory-query-week-6.sql",
+    "query": "",
+    "exit_code": 0,
+    "expected_error": 0,
+    "passed": true,
+    "output": "23-inventory-query-week-6.txt"
+  },
+  {
+    "step": "24-supplier-cost-week-6",
+    "database": "ShiguangBookstoreWeek6Final20261021220913",
+    "script": "tests/supplier-cost-week-6.sql",
+    "query": "",
+    "exit_code": 0,
+    "expected_error": 0,
+    "passed": true,
+    "output": "24-supplier-cost-week-6.txt"
+  },
+  {
+    "step": "25-member-validity-week-6",
+    "database": "ShiguangBookstoreWeek6Final20261021220913",
+    "script": "tests/member-validity-week-6.sql",
+    "query": "",
+    "exit_code": 0,
+    "expected_error": 0,
+    "passed": true,
+    "output": "25-member-validity-week-6.txt"
+  },
+  {
+    "step": "26-duplicate-cancel-boundary-check",
+    "database": "ShiguangBookstoreWeek6Final20261021220913",
+    "script": "tests/duplicate-cancel-boundary-check.sql",
+    "query": "",
+    "exit_code": 0,
+    "expected_error": 0,
+    "passed": true,
+    "output": "26-duplicate-cancel-boundary-check.txt"
+  },
+  {
+    "step": "27-auto-expiry-boundary-check",
+    "database": "ShiguangBookstoreWeek6Final20261021220913",
+    "script": "tests/auto-expiry-boundary-check.sql",
+    "query": "",
+    "exit_code": 0,
+    "expected_error": 0,
+    "passed": true,
+    "output": "27-auto-expiry-boundary-check.txt"
+  },
+  {
+    "step": "28-sample-repeat",
+    "database": "ShiguangBookstoreWeek6Final20261021220913",
+    "script": "sample-data-week-6.sql",
+    "query": "",
+    "exit_code": 0,
+    "expected_error": 0,
+    "passed": true,
+    "output": "28-sample-repeat.txt"
+  },
+  {
+    "step": "29-final-regression",
+    "database": "ShiguangBookstoreWeek6Final20261021220913",
+    "script": "regression.sql",
+    "query": "",
+    "exit_code": 0,
+    "expected_error": 0,
+    "passed": true,
+    "output": "29-final-regression.txt"
+  },
+  {
+    "step": "30-expanded-after-tests",
+    "database": "ShiguangBookstoreWeek6Final20261021220913",
+    "script": "checks/legacy-snapshot.sql",
+    "query": "",
+    "exit_code": 0,
+    "expected_error": 0,
+    "passed": true,
+    "output": "30-expanded-after-tests.txt"
+  },
+  {
+    "step": "31-failure-restore",
+    "database": "ShiguangBookstoreWeek6Final20261021220913Failure",
+    "script": "",
+    "query": "IF DB_ID(N'ShiguangBookstoreWeek6Final20261021220913Failure') IS NOT NULL THROW 51990,N'禁止覆盖已有库。',1; RESTORE DATABASE [ShiguangBookstoreWeek6Final20261021220913Failure] FROM DISK=N'C:\\Program Files\\Microsoft SQL Server\\MSSQL17.MSSQLSERVER\\MSSQL\\Backup\\ShiguangBookstoreWeek6Final20261021220913.bak' WITH MOVE N'ShiguangBookstoreWeek3' TO N'C:\\Program Files\\Microsoft SQL Server\\MSSQL17.MSSQLSERVER\\MSSQL\\DATA\\ShiguangBookstoreWeek6Final20261021220913Failure.mdf', MOVE N'ShiguangBookstoreWeek3_log' TO N'C:\\Program Files\\Microsoft SQL Server\\MSSQL17.MSSQLSERVER\\MSSQL\\DATA\\ShiguangBookstoreWeek6Final20261021220913Failure_log.ldf', CHECKSUM;",
+    "exit_code": 0,
+    "expected_error": 0,
+    "passed": true,
+    "output": "31-failure-restore.txt"
+  },
+  {
+    "step": "32-failure-snapshot-before",
+    "database": "ShiguangBookstoreWeek6Final20261021220913Failure",
+    "script": "checks/legacy-snapshot.sql",
+    "query": "",
+    "exit_code": 0,
+    "expected_error": 0,
+    "passed": true,
+    "output": "32-failure-snapshot-before.txt"
+  },
+  {
+    "step": "33-inject-index-conflict",
+    "database": "ShiguangBookstoreWeek6Final20261021220913Failure",
+    "script": "",
+    "query": "USE [ShiguangBookstoreWeek6Final20261021220913Failure]; CREATE INDEX UX_point_movement_return ON dbo.point_movement(member_phone);",
+    "exit_code": 0,
+    "expected_error": 0,
+    "passed": true,
+    "output": "33-inject-index-conflict.txt"
+  },
+  {
+    "step": "34-migration-rollback",
+    "database": "ShiguangBookstoreWeek6Final20261021220913Failure",
+    "script": "migration.sql",
+    "query": "",
+    "exit_code": 1,
+    "expected_error": 1913,
+    "passed": true,
+    "output": "34-migration-rollback.txt"
+  },
+  {
+    "step": "35-rollback-assertions",
+    "database": "ShiguangBookstoreWeek6Final20261021220913Failure",
+    "script": "",
+    "query": "USE [ShiguangBookstoreWeek6Final20261021220913Failure]; SET NOCOUNT ON; IF (SELECT COUNT(*) FROM sys.tables WHERE is_ms_shipped=0)<>19 OR (SELECT COUNT(*) FROM sys.foreign_keys)<>47 OR OBJECT_ID(N'dbo.schema_migration',N'U') IS NOT NULL OR COL_LENGTH(N'dbo.supplier',N'updated_by') IS NOT NULL OR EXISTS(SELECT 1 FROM sys.indexes WHERE name IN(N'UX_goods_book_isbn',N'UX_goods_toy_code',N'UX_sale_reservation_id',N'UX_point_movement_earn',N'UX_point_movement_use')) THROW 51992,N'迁移失败后存在部分结构。',1; SELECT N'PASS: migration DDL rolled back' AS result;",
+    "exit_code": 0,
+    "expected_error": 0,
+    "passed": true,
+    "output": "35-rollback-assertions.txt"
+  },
+  {
+    "step": "36-failure-snapshot-after",
+    "database": "ShiguangBookstoreWeek6Final20261021220913Failure",
+    "script": "checks/legacy-snapshot.sql",
+    "query": "",
+    "exit_code": 0,
+    "expected_error": 0,
+    "passed": true,
+    "output": "36-failure-snapshot-after.txt"
+  },
+  {
+    "step": "37-role-rejects-unexpected-error",
+    "database": "ShiguangBookstoreWeek6Final20261021220913Failure",
+    "script": "results\\week-6\\acceptance\\final-check\\role-unexpected-error.sql",
+    "query": "",
+    "exit_code": 1,
+    "expected_error": 51039,
+    "passed": true,
+    "output": "37-role-rejects-unexpected-error.txt"
+  },
+  {
+    "step": "38-source-after",
+    "database": "ShiguangBookstoreWeek3",
+    "script": "checks/legacy-snapshot.sql",
+    "query": "",
+    "exit_code": 0,
+    "expected_error": 0,
+    "passed": true,
+    "output": "38-source-after.txt"
+  },
+  {
+    "step": "39-backup-metadata",
+    "database": "ShiguangBookstoreWeek6Final20261021220913",
+    "script": "",
+    "query": "SET NOCOUNT ON; SELECT bs.database_name,bs.is_copy_only,bs.has_backup_checksums,bs.backup_size,bs.backup_finish_date,bmf.physical_device_name FROM msdb.dbo.backupset bs JOIN msdb.dbo.backupmediafamily bmf ON bmf.media_set_id=bs.media_set_id WHERE bmf.physical_device_name=N'C:\\Program Files\\Microsoft SQL Server\\MSSQL17.MSSQLSERVER\\MSSQL\\Backup\\ShiguangBookstoreWeek6Final20261021220913.bak';",
+    "exit_code": 0,
+    "expected_error": 0,
+    "passed": true,
+    "output": "39-backup-metadata.txt"
+  },
+  {
+    "step": "40-original-target-rejected",
+    "database": "ShiguangBookstoreWeek3",
+    "script": "migration.sql",
+    "query": "",
+    "exit_code": 1,
+    "expected_error": 51040,
+    "passed": true,
+    "output": "40-original-target-rejected.txt"
+  },
+  {
+    "step": "41-inject-permission-leak",
+    "database": "ShiguangBookstoreWeek6Final20261021220913Failure",
+    "script": "",
+    "query": "USE [ShiguangBookstoreWeek6Final20261021220913Failure]; GRANT UPDATE(price) ON dbo.goods TO bookstore_cashier;",
+    "exit_code": 0,
+    "expected_error": 0,
+    "passed": true,
+    "output": "41-inject-permission-leak.txt"
+  },
+  {
+    "step": "42-role-rejects-permission-leak",
+    "database": "ShiguangBookstoreWeek6Final20261021220913Failure",
+    "script": "role.sql",
+    "query": "",
+    "exit_code": 1,
+    "expected_error": 51030,
+    "passed": true,
+    "output": "42-role-rejects-permission-leak.txt"
+  },
+  {
+    "step": "43-remove-injected-permission",
+    "database": "ShiguangBookstoreWeek6Final20261021220913Failure",
+    "script": "",
+    "query": "USE [ShiguangBookstoreWeek6Final20261021220913Failure]; REVOKE UPDATE(price) ON dbo.goods FROM bookstore_cashier;",
+    "exit_code": 0,
+    "expected_error": 0,
+    "passed": true,
+    "output": "43-remove-injected-permission.txt"
+  },
+  {
+    "step": "44-source-final",
+    "database": "ShiguangBookstoreWeek3",
+    "script": "checks/legacy-snapshot.sql",
+    "query": "",
+    "exit_code": 0,
+    "expected_error": 0,
+    "passed": true,
+    "output": "44-source-final.txt"
+  }
+]

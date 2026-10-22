@@ -1,8 +1,8 @@
 # 第 3 周工作汇报草案（plan-week-3）
 
-> **性质**：过程汇报草案，不替代 `docs/task-week-3.md` 的验收结论。
+> **性质**：过程汇报草案，不替代 `docs/tasks/task-week-3.md` 的验收结论。
 > 本稿面向组员，说明 Week 3 已完成的脚本、实际执行结果、人工核对和仍需组内配合的复现工作。
-> 正式规则以 `docs/spec-*.md` 和 `docs/task-week-3.md` 为准。
+> 正式规则以 `docs/specs/spec-*.md` 和 `docs/tasks/task-week-3.md` 为准。
 
 ## 1. 本周目标与当前状态
 
@@ -12,11 +12,11 @@
 |---|---|---|
 | 建库与建表 | 已完成并实际执行 | `db/schema.sql` |
 | 样例数据装载 | 已完成并实际执行 | `db/sample-data.sql` |
-| 结构、约束与基线校验 | 已完成并实际执行 | `db/verify.sql`、`db/results/week-3-verify.txt` |
-| 商品、库存、销售单 CRUD | 已完成并实际执行，事务回滚 | `db/crud.sql`、`db/results/week-3-crud.txt` |
-| 空库 Replay | 当前执行者已完成两次 | `db/results/week-3-replay.txt` |
-| 冲突样例保护 | 已验证 | `db/results/week-3-conflict-guard.txt` |
-| 复现说明与结果记录 | 已补充 | `db/README.md`、`db/results/week-3.md` |
+| 结构、约束与基线校验 | 已完成并实际执行 | `db/checks/verify.sql`、`db/results/week-3/week-3-verify.txt` |
+| 商品、库存、销售单 CRUD | 已完成并实际执行，事务回滚 | `db/tests/crud.sql`、`db/results/week-3/week-3-crud.txt` |
+| 空库 Replay | 当前执行者已完成两次 | `db/results/week-3/week-3-replay.txt` |
+| 冲突样例保护 | 已验证 | `db/results/week-3/week-3-conflict-guard.txt` |
+| 复现说明与结果记录 | 已补充 | `db/README.md`、`db/results/week-3/week-3.md` |
 | 非作者组员独立复现 | 待组员完成 | 需要补录执行人、环境、命令和结果 |
 | 现场解释与课程验收 | 待组员完成 | 需要说明表结构、约束、CRUD 和失败反例 |
 
@@ -45,7 +45,7 @@
 
 样例脚本具有保护逻辑：空表插入基线；已有内容与基线完全一致时不重复插入；内容不一致时返回错误并回滚，不覆盖已有数据。冲突样例保护已单独验证，错误码为 `51001`。
 
-### 2.3 结构、对账与反例：`db/verify.sql`
+### 2.3 结构、对账与反例：`db/checks/verify.sql`
 
 脚本检查表数、字段类型、可空性、默认值、自增属性、主键、唯一约束、外键和字段说明，并核对跨表数据：
 
@@ -60,7 +60,7 @@
 
 脚本还运行默认值正例和 16 个非法数据反例，实际得到预期的主键 / 唯一约束、外键 / 检查约束和非空错误，并在每个用例后回滚。
 
-### 2.4 CRUD 演示：`db/crud.sql`
+### 2.4 CRUD 演示：`db/tests/crud.sql`
 
 CRUD 脚本在一个事务中创建演示商品，完成采购草稿、审批、付款、入库、销售、退货及对应查询，再按外键依赖顺序执行删除。每次 `UPDATE` / `DELETE` 前先用相同条件 `SELECT` 确认目标；最终回滚，原样例基线保持不变。
 

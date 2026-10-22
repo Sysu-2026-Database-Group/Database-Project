@@ -1,0 +1,10 @@
+﻿已将数据库上下文更改为 "ShiguangBookstoreWeek6ReviewSubagent20261021"。
+scenario|price_during_test|price_after_rollback|gold_fee_during_test|gold_fee_after_rollback|gold_rate_during_test|gold_rate_after_rollback|open_transactions
+--------|-----------------|--------------------|--------------------|-----------------------|---------------------|------------------------|-----------------
+W6-S08|80.00|75.00|55.00|50.00|.88|.90|0
+check_name|observed_result
+----------|---------------
+S08-PRICE|PASS: current price changed; all historical sale rows unchanged
+S08-CARD|PASS: card parameters changed; all historical sale rows unchanged
+S08-ROLLBACK|PASS: goods, card_type, sale and sale_item fully restored
+price-snapshot-week-6.sql PASS: price/card changes preserve historical sales; all test changes rolled back.

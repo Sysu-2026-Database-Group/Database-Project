@@ -1,0 +1,3 @@
+﻿已将数据库上下文更改为 "ShiguangBookstoreWeek6ReviewSubagent20261021Failure"。
+消息 1913，级别 16，状态 1，服务器 DESKTOP-IJTRRN8，第 169 行
+操作失败，因为在 表 'dbo.point_movement' 上已存在名称为 'UX_point_movement_return' 的索引或统计信息。

@@ -1,0 +1,27 @@
+﻿已将数据库上下文更改为 "ShiguangBookstoreWeek6Final20261021220913"。
+check_name|database_name|user_tables|foreign_keys|goods_count|member_count|purchase_request_count|reservation_count|sale_count|return_count|stock_movement_count|point_movement_count|fund_flow_count|legacy_cash_balance|legacy_operating_result|cash_balance|operating_result
+----------|-------------|-----------|------------|-----------|------------|----------------------|-----------------|----------|------------|--------------------|--------------------|---------------|-------------------|-----------------------|------------|----------------
+week-6-regression-readonly|ShiguangBookstoreWeek6Final20261021220913|20|49|10|6|10|8|9|5|31|13|29|1430.30|-69.70|555.30|-944.70
+object_name|row_count
+-----------|---------
+book|5
+card_type|2
+employee|4
+fund_flow|29
+goods|10
+goods_return|5
+goods_return_item|7
+member|6
+point_movement|13
+purchase_request|10
+purchase_request_item|14
+reservation|8
+reservation_item|10
+sale|9
+sale_item|13
+schema_migration|1
+stock_movement|31
+supplier|5
+supplier_quote|12
+toy|5
+regression.sql READONLY PASS: W6 sample snapshot, legacy preservation and cross-table reconciliation passed.
