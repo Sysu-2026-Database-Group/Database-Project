@@ -1,0 +1,31 @@
+{
+  "command": "doctor",
+  "run_id": "20261023T031839Z85a89c",
+  "status": "PASS",
+  "config": {
+    "server": "localhost",
+    "driver": "ODBC Driver 17 for SQL Server",
+    "database": "ShiguangBookstoreWeek7EntryYourRun",
+    "login_prefix": "bookstore_w7_yourrun",
+    "port": 5000,
+    "settings_directory": "app"
+  },
+  "resources": [],
+  "steps": [
+    {
+      "name": "dependencies",
+      "log": "00-dependencies.log",
+      "status": "PASS"
+    },
+    {
+      "name": "instance",
+      "log": "01-instance.log",
+      "status": "PASS"
+    },
+    {
+      "name": "runtime",
+      "log": "02-runtime.log",
+      "status": "PASS"
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="zh-CN">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>门店销售 · 拾光书店</title>
+<main>
+  <h1>门店销售</h1>
+  <p>收银员：{{ actor.name }}。选择商品数量，预览金额后确认收款。</p>
+  <form method="post" action="{{ url_for('sale_preview') }}">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <input type="hidden" name="request_key" value="{{ request_key }}">
+    <table>
+      <caption>当前商品及可售量</caption>
+      <thead><tr><th>商品</th><th>售价（元）</th><th>在架</th><th>已订</th><th>可售</th><th>购买数量</th></tr></thead>
+      <tbody>{% for item in goods %}<tr>
+        <td>{{ item.name }}{% if not item.on_shelf %}（未上架）{% endif %}</td>
+        <td>{{ item.price if item.price is not none else '待定价' }}</td>
+        <td>{{ item.stock_total }}</td><td>{{ item.reserved_qty }}</td><td>{{ item.available_qty }}</td>
+        <td>{% if item.on_shelf and item.available_qty > 0 %}<input aria-label="{{ item.name }}购买数量" type="number" name="quantity_{{ item.id }}" min="0" max="{{ [item.available_qty,1000]|min }}" step="1" value="0">{% else %}暂无可售数量{% endif %}</td>
+      </tr>{% endfor %}</tbody>
+    </table>
+    <p><label>会员手机号（非会员留空）<input name="member_phone" type="tel" pattern="[0-9]{11}" maxlength="11"></label></p>
+    <p><label>使用积分 <input name="used_points" type="number" min="0" max="2147483647" step="1" value="0" required></label></p>
+    <button type="submit">预览结算</button>
+  </form>
+  <p><a href="{{ url_for('home') }}">返回工作台</a></p>
+</main>
+</html>

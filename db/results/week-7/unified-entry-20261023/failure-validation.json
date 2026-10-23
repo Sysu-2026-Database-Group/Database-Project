@@ -1,0 +1,23 @@
+{
+  "setup-existing": {
+    "exit_code": 1,
+    "passed": true
+  },
+  "wrong-database": {
+    "exit_code": 1,
+    "passed": true
+  },
+  "invalid-options": {
+    "exit_code": 1,
+    "passed": true
+  },
+  "missing-test-config": {
+    "exit_code": 1,
+    "passed": true
+  },
+  "occupied-port": {
+    "exit_code": 1,
+    "passed": true
+  },
+  "runtime-configuration-preserved": true
+}

@@ -13,3 +13,16 @@ Thumbs.db
 # 课堂练习（本地临时练习，不纳入版本控制）
 课堂练习/
 
+# Python 应用及本机配置
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.env
+.env.*
+!.env.example
+*.local.json
+*.local.ps1
+*.local.log
+.runner/
+

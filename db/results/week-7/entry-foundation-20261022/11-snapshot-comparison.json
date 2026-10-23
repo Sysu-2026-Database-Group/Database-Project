@@ -1,0 +1,6 @@
+{
+  "tables_compared": 19,
+  "source_before_equals_after": true,
+  "source_equals_target": true,
+  "scope": "Legacy columns; supplier updated_by/updated_at are separately included in final-state.sql full-column comparison"
+}

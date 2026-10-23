@@ -1,0 +1,11 @@
+﻿已将数据库上下文更改为 "master"。
+已为数据库 'ShiguangBookstoreWeek6Work'，文件 'ShiguangBookstoreWeek3' (位于文件 1 上)处理了 992 页。
+已为数据库 'ShiguangBookstoreWeek6Work'，文件 'ShiguangBookstoreWeek3_log' (位于文件 1 上)处理了 2 页。
+BACKUP DATABASE 成功处理了 994 页，花费 0.051 秒(152.190 MB/秒)。
+文件 1 上的备份集有效。
+已为数据库 'ShiguangBookstoreWeek7SaleTests20261023'，文件 'ShiguangBookstoreWeek3' (位于文件 1 上)处理了 992 页。
+已为数据库 'ShiguangBookstoreWeek7SaleTests20261023'，文件 'ShiguangBookstoreWeek3_log' (位于文件 1 上)处理了 2 页。
+RESTORE DATABASE 成功处理了 994 页，花费 0.032 秒(242.553 MB/秒)。
+source_database|test_database|copy_only_backup
+---------------|-------------|----------------
+ShiguangBookstoreWeek6Work|ShiguangBookstoreWeek7SaleTests20261023|C:\Program Files\Microsoft SQL Server\MSSQL16.MSSQLSERVER\MSSQL\Backup\ShiguangBookstoreWeek7SaleTests20261023.bak

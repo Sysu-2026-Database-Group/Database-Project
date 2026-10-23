@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="zh-CN">
+<meta charset="utf-8">
+<title>结算提示 · 拾光书店</title>
+<main>
+  <h1>结算提示</h1><p role="alert">{{ error }}</p>
+  {% if retry_token %}
+  <p>请用原结算确认重试，以便核对是否已生成销售单。</p>
+  <form method="post" action="{{ url_for('sale_create') }}">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <input type="hidden" name="quote_token" value="{{ retry_token }}">
+    <button type="submit">重试原结算</button>
+  </form>
+  {% endif %}
+  <p><a href="{{ url_for('sale_form') }}">返回商品选择</a> · <a href="{{ url_for('home') }}">返回工作台</a></p>
+</main>
+</html>

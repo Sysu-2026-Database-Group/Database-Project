@@ -1,0 +1,104 @@
+{
+  "command": "setup",
+  "run_id": "20261023T031824Zcdfbbf",
+  "status": "PASS",
+  "config": {
+    "server": "localhost",
+    "driver": "ODBC Driver 17 for SQL Server",
+    "database": "ShiguangBookstoreWeek7RunnerSetup20261023",
+    "login_prefix": "bookstore_runner_setup20261023",
+    "port": 5057,
+    "settings_directory": ".runner/setup-validation/app"
+  },
+  "resources": [
+    {
+      "kind": "baseline_database",
+      "name": "ShiguangBookstoreWeek6Runner20261023031824cdfbbf"
+    },
+    {
+      "kind": "runtime_database",
+      "name": "ShiguangBookstoreWeek7RunnerSetup20261023"
+    },
+    {
+      "kind": "service_login_prefix",
+      "name": "bookstore_runner_setup20261023"
+    }
+  ],
+  "steps": [
+    {
+      "name": "dependencies",
+      "log": "00-dependencies.log",
+      "status": "PASS"
+    },
+    {
+      "name": "instance",
+      "log": "01-instance.log",
+      "status": "PASS"
+    },
+    {
+      "name": "schema",
+      "log": "02-schema.log",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "name": "seed",
+      "log": "03-seed.log",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "name": "baseline-check",
+      "log": "04-baseline-check.log",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "name": "migration",
+      "log": "05-migration.log",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "name": "migration-check",
+      "log": "06-migration-check.log",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "name": "expanded-seed",
+      "log": "07-expanded-seed.log",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "name": "regression",
+      "log": "08-regression.log",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "name": "runtime-copy",
+      "log": "09-runtime-copy.log",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "name": "runtime-auth-schema",
+      "log": "10-runtime-auth-schema.log",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "name": "runtime-sales-schema",
+      "log": "11-runtime-sales-schema.log",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "name": "provision",
+      "log": "12-provision.log",
+      "status": "PASS"
+    }
+  ]
+}

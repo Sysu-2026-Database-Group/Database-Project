@@ -1,0 +1,9 @@
+﻿已将数据库上下文更改为 "ShiguangBookstoreWeek7SaleTests20261023"。
+test_database|user_tables|foreign_keys|api_procedures
+-------------|-----------|------------|--------------
+ShiguangBookstoreWeek7SaleTests20261023|22|52|10
+已将数据库上下文更改为 "ShiguangBookstoreWeek7EntryYourRun"。
+runtime_database|user_tables|foreign_keys|api_procedures|sale_requests
+----------------|-----------|------------|--------------|-------------
+ShiguangBookstoreWeek7EntryYourRun|22|52|10|0
+final-state.sql PASS: test data and fault injection cleaned; runtime has no test sales; employee credentials retained.

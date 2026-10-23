@@ -1,5 +1,9 @@
 # 文档与课程交付索引
 
+应用的首次准备、启动和验收见[统一入口说明](design/unified-entry.md)，根目录 `run.ps1` 提供 setup、doctor、start、test 和 verify。
+
+接下来的开发顺序、review问题现状、角色动作覆盖及分步验收见[后续开发与验收操作指南](design/next-steps-guide.md)。其中未决实现选择不作为新的业务口径。
+
 课程原始要求以 [homework](../homework/) 内 DOCX 为准。第7—9周第二阶段作业要求保留第5—6周全部成果，不能只交应用。
 
 当前 ER 使用：[v1.4 用户调整修订图](../ER/er-diagram-v1.4.drawio)、[PNG](../ER/er-diagram-v1.4.drawio.png)、[逐表审查与检查](../ER/review-v1.4.md)。保持原整体布局及19实体尺寸，4框微调对齐，单页展示137个业务属性；此前v1.4/v1.5重排稿已撤下，当前v1.4沿用用户调整的布局。人工验收已于2026-10-22由梁宇聪确认通过，旧阶段签收不沿用到本修订稿。
@@ -25,10 +29,10 @@
 | 第5周：可编辑 ER 与清晰导出、基数/参与/条件/FK/实现映射、问题证据和取舍、三组设计比较 | [ER 图源](../ER/er-diagram-v1.0.drawio)、[PNG](../ER/er-diagram-v1.0.png)、[映射](design/er-mapping-v1.0.md)、[问题清单](design/issues-v0.1.md)、[设计说明](design/design-notes-v1.0.md) | 保留完整19表与规则；ER 全图人工验收已于2026-10-22由梁宇聪确认通过 |
 | 第6周：逐表码/FD/三类异常/范式；分解、无损与依赖保持、冗余理由和维护 | [规范化说明](design/design-normalization-v1.0.md)、[数据字典增量](specs/spec-data-dictionary.md)、[ER](../ER/) | 保留完整分析；四张表明确保留非3NF冗余，有限样例通过不等于一般性无损证明 |
 | 第6周：六项迁移、旧表保留、重复/冲突检查、备份与失败恢复；旧场景回归及前后差异 | [migration.sql](../db/migration.sql)、[regression.sql](../db/regression.sql)、[验收入口](../db/accept-week-6.ps1)、[最新独立审核](reviews/review-week-6.md)、[原始输出](../db/results/week-6/acceptance/) | 正式入口和所用测试全部保留；报告已合并为[第六周报告](reports/report-week-6.md) |
-| 第7—9周 v1.0：包含第5—6周成果，并交应用、操作手册、分层/参数SQL/事务/后端权限/统一错误、多角色完整流程及正确/错误测试、阶段报告和分工 | [课程原件](../homework/第7-9周任务讲解.docx)、[当前业务待办](design/issues-v0.1.md) | 应用及其手册和测试尚未实现；现有 Week6 验收不能替代这些交付 |
+| 第7—9周 v1.0：包含第5—6周成果，并交应用、操作手册、分层/参数SQL/事务/后端权限/统一错误、多角色完整流程及正确/错误测试、阶段报告和分工 | [课程原件](../homework/第7-9周任务讲解.docx)、[应用手册](../app/README.md)、[入口权限](design/entry-permissions.md)、[销售设计](design/sale-entry.md)、[销售验收](../db/results/week-7/sale-entry-20261023/README.md) | 已完成员工登录、受限服务连接和门店销售，48项测试通过；预订、取货、退款、采购等完整流程和本阶段报告/分工待继续，现有 Week6 验收不能替代 |
 
 ## 整理范围
 
-保留24份 SQL：根目录9份课程交付与装载脚本，`checks/` 3份辅助核对，`tests/` 12份演示、反例及专项测试。`migration.sql` 虽按版本执行一次，仍是必交成果，不能删。删除的3份 `i04-*` 是早期探测脚本，历史发现及证据限制留在规范化说明 §23。
+第3—6周保留24份 SQL：根目录9份课程交付与装载脚本，`checks/` 3份辅助核对，`tests/` 12份演示、反例及专项测试。第7周另增练习副本准备、登录基础、运行身份配置及销售入口脚本，执行证据保存于 `db/results/week-7/`。`migration.sql` 虽按版本执行一次，仍是必交成果，不能删。删除的3份 `i04-*` 是早期探测脚本，历史发现及证据限制留在规范化说明 §23。
 
 第六周工作报告合并入正式周报告，剩余事项合并入问题清单。结果按 Week3、Week4、Week6 保存，第六周 `records/` 为逐项反馈，`acceptance/` 为唯一最新独立审核；原始输出、历史命令、课程原件、ER 图源和截图不改写。

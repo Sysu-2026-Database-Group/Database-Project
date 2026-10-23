@@ -1,6 +1,12 @@
 # 数据库脚本执行与复现说明
 
+应用阶段的跨电脑复现统一使用根目录 `run.ps1`，见[统一入口说明](../docs/design/unified-entry.md)。setup/test 从仓库脚本建立独立基线，再调用 `prepare-entry-copy.sql` 创建新Week7副本，不依赖本机已有的Week6Work。下面第3/4/6周的复现及历史验收说明继续保留。
+
 本目录保存拾光书店数据库项目的 Week 3、Week 4 和 Week 6 SQL 脚本。
+
+第七周新增入口基础见 [`entry-foundation.sql`](entry-foundation.sql)、[应用使用说明](../app/README.md)及[入口与权限方案](../docs/design/entry-permissions.md)。它仅向新的 Week7 副本部署，不替换本页第4/6周的基线及固定截面验收。
+
+门店销售在入口基础之后部署 [`sale-entry.sql`](sale-entry.sql)，提供结算预览、事务销售、请求幂等及本人凭证查询；执行结果见[销售验收记录](results/week-7/sale-entry-20261023/README.md)。
 
 **验证环境（数据库引擎与客户端工具的版本、以及实例名，一律以本地为准）**：
 

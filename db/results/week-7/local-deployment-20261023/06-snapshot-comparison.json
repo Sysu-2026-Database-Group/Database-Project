@@ -1,0 +1,6 @@
+{
+  "tables_compared": 19,
+  "source_before_equals_after": true,
+  "source_equals_runtime_copy": true,
+  "scope": "Legacy columns; supplier updated_by/updated_at excluded by historical snapshot script"
+}

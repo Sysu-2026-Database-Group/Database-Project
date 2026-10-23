@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="zh-CN">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>员工登录 · 拾光书店</title>
+<main>
+  <h1>拾光书店员工登录</h1>
+  {% if error %}<p role="alert">{{ error }}</p>{% endif %}
+  <form method="post" action="{{ url_for('login') }}">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <p><label>员工账号 <input name="phone" type="tel" pattern="[0-9]{11}" maxlength="11" autocomplete="username" required></label></p>
+    <p><label>密码 <input name="password" type="password" maxlength="256" autocomplete="current-password" required></label></p>
+    <button type="submit">登录</button>
+  </form>
+</main>
+</html>

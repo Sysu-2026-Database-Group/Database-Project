@@ -1,0 +1,2 @@
+﻿已将数据库上下文更改为 "ShiguangBookstoreWeek7SaleTests20261023"。
+sale-entry.sql PASS: cashier sale preview, atomic creation, idempotency and own receipt installed.

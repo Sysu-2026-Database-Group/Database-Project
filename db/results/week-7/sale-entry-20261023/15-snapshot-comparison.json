@@ -1,0 +1,11 @@
+{
+  "tables_per_snapshot": 19,
+  "all_snapshots_match_original_source": true,
+  "compared_files": [
+    "08-runtime-before.txt",
+    "12-runtime-after.txt",
+    "13-tests-after.txt",
+    "14-source-after.txt"
+  ],
+  "scope": "Legacy columns; supplier updated_by/updated_at excluded"
+}

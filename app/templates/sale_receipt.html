@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="zh-CN">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>销售凭证 · 拾光书店</title>
+<main>
+  <h1>销售完成</h1>
+  <p>单号：<strong>{{ sale.no }}</strong>；状态：{{ sale.status }}</p>
+  <p>收银员账号：{{ sale.cashier_by }}；成交时间：{{ sale.sold_at }}</p>
+  <table><thead><tr><th>商品</th><th>数量</th><th>成交单价（元）</th></tr></thead>
+    <tbody>{% for item in sale['items'] %}<tr><td>{{ item.name }}</td><td>{{ item.quantity }}</td><td>{{ '%.2f'|format(item.unit_price) }}</td></tr>{% endfor %}</tbody>
+  </table>
+  <p>会员：{{ sale.member_phone or '非会员' }}；本次卡档位：{{ sale.card_level or '无会员权益' }}</p>
+  <p>原价小计：{{ '%.2f'|format(sale.subtotal_amount) }} 元；折扣率：{{ sale.discount_rate }}；积分抵扣：{{ '%.2f'|format(sale.point_deduction_amount) }} 元。</p>
+  <p><strong>实收：{{ '%.2f'|format(sale.paid_amount) }} 元</strong>；获得 {{ sale.earned_points }} 积分。</p>
+  <p>请将销售单号交给顾客，作为核对及退货凭证。</p>
+  <p><a href="{{ url_for('sale_form') }}">继续销售</a> · <a href="{{ url_for('home') }}">返回工作台</a></p>
+</main>
+</html>

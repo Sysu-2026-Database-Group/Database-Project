@@ -1,0 +1,378 @@
+test_anonymous_cannot_read_identity (test_auth.AuthenticationTests.test_anonymous_cannot_read_identity) ... ok
+test_changed_role_requires_login_again (test_auth.AuthenticationTests.test_changed_role_requires_login_again) ... ok
+test_database_failure_does_not_expose_internal_details (test_auth.AuthenticationTests.test_database_failure_does_not_expose_internal_details) ... ok
+test_disabling_employee_invalidates_old_session (test_auth.AuthenticationTests.test_disabling_employee_invalidates_old_session) ... ok
+test_forged_cookie_rejected (test_auth.AuthenticationTests.test_forged_cookie_rejected) ... ok
+test_injected_phone_is_not_used_for_current_identity (test_auth.AuthenticationTests.test_injected_phone_is_not_used_for_current_identity) ... ok
+test_login_and_logout_require_csrf (test_auth.AuthenticationTests.test_login_and_logout_require_csrf) ... ok
+test_login_uses_server_role_and_rotates_csrf (test_auth.AuthenticationTests.test_login_uses_server_role_and_rotates_csrf) ... ok
+test_password_reset_invalidates_old_session (test_auth.AuthenticationTests.test_password_reset_invalidates_old_session) ... ok
+test_secret_required (test_auth.AuthenticationTests.test_secret_required) ... ok
+test_wrong_password_unknown_account_and_disabled_have_same_response (test_auth.AuthenticationTests.test_wrong_password_unknown_account_and_disabled_have_same_response) ... ok
+test_all_roles_can_login_and_read_own_context_through_procedures (test_entry_database.EntryDatabaseTests.test_all_roles_can_login_and_read_own_context_through_procedures) ... 
+  test_all_roles_can_login_and_read_own_context_through_procedures (test_entry_database.EntryDatabaseTests.test_all_roles_can_login_and_read_own_context_through_procedures) (role='店长', phone='13800000001') ... ERROR
+  test_all_roles_can_login_and_read_own_context_through_procedures (test_entry_database.EntryDatabaseTests.test_all_roles_can_login_and_read_own_context_through_procedures) (role='库管', phone='13800000002') ... FAIL
+  test_all_roles_can_login_and_read_own_context_through_procedures (test_entry_database.EntryDatabaseTests.test_all_roles_can_login_and_read_own_context_through_procedures) (role='收银员', phone='13800000003') ... ERROR
+  test_all_roles_can_login_and_read_own_context_through_procedures (test_entry_database.EntryDatabaseTests.test_all_roles_can_login_and_read_own_context_through_procedures) (role='收银员', phone='13800000004') ... FAIL
+test_all_runtime_roles_cannot_directly_read_credentials (test_entry_database.EntryDatabaseTests.test_all_runtime_roles_cannot_directly_read_credentials) ... 
+  test_all_runtime_roles_cannot_directly_read_credentials (test_entry_database.EntryDatabaseTests.test_all_runtime_roles_cannot_directly_read_credentials) (role='auth') ... ERROR
+  test_all_runtime_roles_cannot_directly_read_credentials (test_entry_database.EntryDatabaseTests.test_all_runtime_roles_cannot_directly_read_credentials) (role='cashier') ... ERROR
+  test_all_runtime_roles_cannot_directly_read_credentials (test_entry_database.EntryDatabaseTests.test_all_runtime_roles_cannot_directly_read_credentials) (role='inventory') ... ERROR
+  test_all_runtime_roles_cannot_directly_read_credentials (test_entry_database.EntryDatabaseTests.test_all_runtime_roles_cannot_directly_read_credentials) (role='manager') ... ERROR
+test_auth_role_cannot_call_business_context (test_entry_database.EntryDatabaseTests.test_auth_role_cannot_call_business_context) ... ERROR
+test_cashier_cannot_read_other_cashiers_sales_directly (test_entry_database.EntryDatabaseTests.test_cashier_cannot_read_other_cashiers_sales_directly) ... ERROR
+test_database_owner_cannot_be_used_as_runtime_connection (test_entry_database.EntryDatabaseTests.test_database_owner_cannot_be_used_as_runtime_connection) ... ok
+test_disabled_employee_rejected_inside_database (test_entry_database.EntryDatabaseTests.test_disabled_employee_rejected_inside_database) ... ERROR
+test_helper_cannot_be_called_directly (test_entry_database.EntryDatabaseTests.test_helper_cannot_be_called_directly) ... ERROR
+test_multiple_application_roles_are_rejected (test_entry_database.EntryDatabaseTests.test_multiple_application_roles_are_rejected) ... ERROR
+test_runtime_role_cannot_fetch_password_hash_via_auth_procedure (test_entry_database.EntryDatabaseTests.test_runtime_role_cannot_fetch_password_hash_via_auth_procedure) ... ERROR
+test_runtime_roles_cannot_write_business_tables (test_entry_database.EntryDatabaseTests.test_runtime_roles_cannot_write_business_tables) ... 
+  test_runtime_roles_cannot_write_business_tables (test_entry_database.EntryDatabaseTests.test_runtime_roles_cannot_write_business_tables) (role='auth') ... ERROR
+  test_runtime_roles_cannot_write_business_tables (test_entry_database.EntryDatabaseTests.test_runtime_roles_cannot_write_business_tables) (role='cashier') ... ERROR
+  test_runtime_roles_cannot_write_business_tables (test_entry_database.EntryDatabaseTests.test_runtime_roles_cannot_write_business_tables) (role='inventory') ... ERROR
+  test_runtime_roles_cannot_write_business_tables (test_entry_database.EntryDatabaseTests.test_runtime_roles_cannot_write_business_tables) (role='manager') ... ERROR
+test_stale_session_rejected_inside_database (test_entry_database.EntryDatabaseTests.test_stale_session_rejected_inside_database) ... ERROR
+test_wrong_employee_role_rejected_inside_database (test_entry_database.EntryDatabaseTests.test_wrong_employee_role_rejected_inside_database) ... ERROR
+
+======================================================================
+ERROR: test_all_roles_can_login_and_read_own_context_through_procedures (test_entry_database.EntryDatabaseTests.test_all_roles_can_login_and_read_own_context_through_procedures) (role='店长', phone='13800000001')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\18192\Desktop\Database-Project\tests\test_entry_database.py", line 92, in test_all_roles_can_login_and_read_own_context_through_procedures
+    self.assertEqual(self.login(phone).status_code, 302)
+                     ^^^^^^^^^^^^^^^^^
+  File "C:\Users\18192\Desktop\Database-Project\tests\test_entry_database.py", line 86, in login
+    return self.client.post('/auth/login', data=dict(phone=phone, password=self.password, csrf_token=token))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 1171, in post
+    return self.open(*args, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\testing.py", line 235, in open
+    response = super().open(
+               ^^^^^^^^^^^^^
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 1120, in open
+    response_parts = self.run_wsgi_app(request.environ, buffered=buffered)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 992, in run_wsgi_app
+    rv = run_wsgi_app(self.application, environ, buffered=buffered)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 1268, in run_wsgi_app
+    app_rv = app(environ, start_response)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 1536, in __call__
+    return self.wsgi_app(environ, start_response)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 1514, in wsgi_app
+    response = self.handle_exception(e)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\18192\Desktop\Database-Project\app\__init__.py", line 72, in login
+    actor = service.login(request.form.get('phone'), request.form.get('password'))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\18192\Desktop\Database-Project\app\services.py", line 19, in login
+    employee = self.dao.credentials(phone)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\18192\Desktop\Database-Project\app\dao.py", line 60, in credentials
+    return self._one('auth', 'EXEC api.usp_employee_login_lookup @employee_phone=?', (phone,))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\18192\Desktop\Database-Project\app\dao.py", line 54, in _one
+    with self.connection(key) as connection:
+  File "C:\Users\18192\AppData\Local\Programs\Python\Python312\Lib\contextlib.py", line 144, in __exit__
+    next(self.gen)
+  File "C:\Users\18192\Desktop\Database-Project\app\dao.py", line 51, in connection
+    connection.close()
+  File "C:\Users\18192\Desktop\Database-Project\tests\test_entry_database.py", line 69, in close
+    connection.cursor().execute('REVERT;')
+pyodbc.Error: ('HY000', '[HY000] [Microsoft][ODBC Driver 17 for SQL Server]Connection is busy with results for another command (0) (SQLExecDirectW)')
+
+======================================================================
+ERROR: test_all_roles_can_login_and_read_own_context_through_procedures (test_entry_database.EntryDatabaseTests.test_all_roles_can_login_and_read_own_context_through_procedures) (role='收银员', phone='13800000003')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\18192\Desktop\Database-Project\tests\test_entry_database.py", line 92, in test_all_roles_can_login_and_read_own_context_through_procedures
+    self.assertEqual(self.login(phone).status_code, 302)
+                     ^^^^^^^^^^^^^^^^^
+  File "C:\Users\18192\Desktop\Database-Project\tests\test_entry_database.py", line 86, in login
+    return self.client.post('/auth/login', data=dict(phone=phone, password=self.password, csrf_token=token))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 1171, in post
+    return self.open(*args, **kw)
+           ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\testing.py", line 235, in open
+    response = super().open(
+               ^^^^^^^^^^^^^
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 1120, in open
+    response_parts = self.run_wsgi_app(request.environ, buffered=buffered)
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 992, in run_wsgi_app
+    rv = run_wsgi_app(self.application, environ, buffered=buffered)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 1268, in run_wsgi_app
+    app_rv = app(environ, start_response)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 1536, in __call__
+    return self.wsgi_app(environ, start_response)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 1514, in wsgi_app
+    response = self.handle_exception(e)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 919, in full_dispatch_request
+    rv = self.handle_user_exception(e)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 917, in full_dispatch_request
+    rv = self.dispatch_request()
+         ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 902, in dispatch_request
+    return self.ensure_sync(self.view_functions[rule.endpoint])(**view_args)  # type: ignore[no-any-return]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\18192\Desktop\Database-Project\app\__init__.py", line 72, in login
+    actor = service.login(request.form.get('phone'), request.form.get('password'))
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\18192\Desktop\Database-Project\app\services.py", line 19, in login
+    employee = self.dao.credentials(phone)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\18192\Desktop\Database-Project\app\dao.py", line 60, in credentials
+    return self._one('auth', 'EXEC api.usp_employee_login_lookup @employee_phone=?', (phone,))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\18192\Desktop\Database-Project\app\dao.py", line 54, in _one
+    with self.connection(key) as connection:
+  File "C:\Users\18192\AppData\Local\Programs\Python\Python312\Lib\contextlib.py", line 144, in __exit__
+    next(self.gen)
+  File "C:\Users\18192\Desktop\Database-Project\app\dao.py", line 51, in connection
+    connection.close()
+  File "C:\Users\18192\Desktop\Database-Project\tests\test_entry_database.py", line 69, in close
+    connection.cursor().execute('REVERT;')
+pyodbc.Error: ('HY000', '[HY000] [Microsoft][ODBC Driver 17 for SQL Server]Connection is busy with results for another command (0) (SQLExecDirectW)')
+
+======================================================================
+ERROR: test_all_runtime_roles_cannot_directly_read_credentials (test_entry_database.EntryDatabaseTests.test_all_runtime_roles_cannot_directly_read_credentials) (role='auth')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\18192\Desktop\Database-Project\tests\test_entry_database.py", line 101, in test_all_runtime_roles_cannot_directly_read_credentials
+    self.assert_sql_denied(key, 'SELECT password_hash FROM auth.employee_credential')
+  File "C:\Users\18192\Desktop\Database-Project\tests\test_entry_database.py", line 74, in assert_sql_denied
+    borrowed = self.connect_as(key)
+               ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\18192\Desktop\Database-Project\tests\test_entry_database.py", line 60, in connect_as
+    connection.cursor().execute(f'EXECUTE AS USER=N\'{user}\';')
+pyodbc.Error: ('HY000', '[HY000] [Microsoft][ODBC Driver 17 for SQL Server]Connection is busy with results for another command (0) (SQLExecDirectW)')
+
+======================================================================
+ERROR: test_all_runtime_roles_cannot_directly_read_credentials (test_entry_database.EntryDatabaseTests.test_all_runtime_roles_cannot_directly_read_credentials) (role='cashier')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\18192\Desktop\Database-Project\tests\test_entry_database.py", line 101, in test_all_runtime_roles_cannot_directly_read_credentials
+    self.assert_sql_denied(key, 'SELECT password_hash FROM auth.employee_credential')
+  File "C:\Users\18192\Desktop\Database-Project\tests\test_entry_database.py", line 74, in assert_sql_denied
+    borrowed = self.connect_as(key)
+               ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\18192\Desktop\Database-Project\tests\test_entry_database.py", line 60, in connect_as
+    connection.cursor().execute(f'EXECUTE AS USER=N\'{user}\';')
+pyodbc.Error: ('HY000', '[HY000] [Microsoft][ODBC Driver 17 for SQL Server]Connection is busy with results for another command (0) (SQLExecDirectW)')
+
+======================================================================
+ERROR: test_all_runtime_roles_cannot_directly_read_credentials (test_entry_database.EntryDatabaseTests.test_all_runtime_roles_cannot_directly_read_credentials) (role='inventory')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\18192\Desktop\Database-Project\tests\test_entry_database.py", line 101, in test_all_runtime_roles_cannot_directly_read_credentials
+    self.assert_sql_denied(key, 'SELECT password_hash FROM auth.employee_credential')
+  File "C:\Users\18192\Desktop\Database-Project\tests\test_entry_database.py", line 74, in assert_sql_denied
+    borrowed = self.connect_as(key)
+               ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\18192\Desktop\Database-Project\tests\test_entry_database.py", line 60, in connect_as
+    connection.cursor().execute(f'EXECUTE AS USER=N\'{user}\';')
+pyodbc.Error: ('HY000', '[HY000] [Microsoft][ODBC Driver 17 for SQL Server]Connection is busy with results for another command (0) (SQLExecDirectW)')
+
+======================================================================
+ERROR: test_all_runtime_roles_cannot_directly_read_credentials (test_entry_database.EntryDatabaseTests.test_all_runtime_roles_cannot_directly_read_credentials) (role='manager')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\18192\Desktop\Database-Project\tests\test_entry_database.py", line 101, in test_all_runtime_roles_cannot_directly_read_credentials
+    self.assert_sql_denied(key, 'SELECT password_hash FROM auth.employee_credential')
+  File "C:\Users\18192\Desktop\Database-Project\tests\test_entry_database.py", line 74, in assert_sql_denied
+    borrowed = self.connect_as(key)
+               ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\18192\Desktop\Database-Project\tests\test_entry_database.py", line 60, in connect_as
+    connection.cursor().execute(f'EXECUTE AS USER=N\'{user}\';')
+pyodbc.Error: ('HY000', '[HY000] [Microsoft][ODBC Driver 17 for SQL Server]Connection is busy with results for another command (0) (SQLExecDirectW)')
+
+======================================================================
+ERROR: test_auth_role_cannot_call_business_context (test_entry_database.EntryDatabaseTests.test_auth_role_cannot_call_business_context)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\18192\Desktop\Database-Project\tests\test_entry_database.py", line 116, in test_auth_role_cannot_call_business_context
+    self.assert_sql_denied('auth', "EXEC api.usp_employee_context '13800000003',1")
+  File "C:\Users\18192\Desktop\Database-Project\tests\test_entry_database.py", line 74, in assert_sql_denied
+    borrowed = self.connect_as(key)
+               ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\18192\Desktop\Database-Project\tests\test_entry_database.py", line 60, in connect_as
+    connection.cursor().execute(f'EXECUTE AS USER=N\'{user}\';')
+pyodbc.Error: ('HY000', '[HY000] [Microsoft][ODBC Driver 17 for SQL Server]Connection is busy with results for another command (0) (SQLExecDirectW)')
+
+======================================================================
+ERROR: test_cashier_cannot_read_other_cashiers_sales_directly (test_entry_database.EntryDatabaseTests.test_cashier_cannot_read_other_cashiers_sales_directly)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\18192\Desktop\Database-Project\tests\test_entry_database.py", line 110, in test_cashier_cannot_read_other_cashiers_sales_directly
+    self.assert_sql_denied('cashier', 'SELECT * FROM dbo.sale')
+  File "C:\Users\18192\Desktop\Database-Project\tests\test_entry_database.py", line 74, in assert_sql_denied
+    borrowed = self.connect_as(key)
+               ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\18192\Desktop\Database-Project\tests\test_entry_database.py", line 60, in connect_as
+    connection.cursor().execute(f'EXECUTE AS USER=N\'{user}\';')
+pyodbc.Error: ('HY000', '[HY000] [Microsoft][ODBC Driver 17 for SQL Server]Connection is busy with results for another command (0) (SQLExecDirectW)')
+
+======================================================================
+ERROR: test_disabled_employee_rejected_inside_database (test_entry_database.EntryDatabaseTests.test_disabled_employee_rejected_inside_database)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\18192\Desktop\Database-Project\tests\test_entry_database.py", line 128, in test_disabled_employee_rejected_inside_database
+    self.connection.cursor().execute("UPDATE auth.employee_credential SET enabled=0 WHERE employee_phone='13800000003'")
+pyodbc.Error: ('HY000', '[HY000] [Microsoft][ODBC Driver 17 for SQL Server]Connection is busy with results for another command (0) (SQLExecDirectW)')
+
+======================================================================
+ERROR: test_helper_cannot_be_called_directly (test_entry_database.EntryDatabaseTests.test_helper_cannot_be_called_directly)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\18192\Desktop\Database-Project\tests\test_entry_database.py", line 119, in test_helper_cannot_be_called_directly
+    self.assert_sql_denied('cashier', "EXEC api.usp_require_employee '13800000003',1,N'收银员'")
+  File "C:\Users\18192\Desktop\Database-Project\tests\test_entry_database.py", line 74, in assert_sql_denied
+    borrowed = self.connect_as(key)
+               ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\18192\Desktop\Database-Project\tests\test_entry_database.py", line 60, in connect_as
+    connection.cursor().execute(f'EXECUTE AS USER=N\'{user}\';')
+pyodbc.Error: ('HY000', '[HY000] [Microsoft][ODBC Driver 17 for SQL Server]Connection is busy with results for another command (0) (SQLExecDirectW)')
+
+======================================================================
+ERROR: test_multiple_application_roles_are_rejected (test_entry_database.EntryDatabaseTests.test_multiple_application_roles_are_rejected)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\18192\Desktop\Database-Project\tests\test_entry_database.py", line 150, in test_multiple_application_roles_are_rejected
+    self.connection.cursor().execute(f'ALTER ROLE bookstore_app_manager ADD MEMBER [{user}]')
+pyodbc.Error: ('HY000', '[HY000] [Microsoft][ODBC Driver 17 for SQL Server]Connection is busy with results for another command (0) (SQLExecDirectW)')
+
+======================================================================
+ERROR: test_runtime_role_cannot_fetch_password_hash_via_auth_procedure (test_entry_database.EntryDatabaseTests.test_runtime_role_cannot_fetch_password_hash_via_auth_procedure)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\18192\Desktop\Database-Project\tests\test_entry_database.py", line 113, in test_runtime_role_cannot_fetch_password_hash_via_auth_procedure
+    self.assert_sql_denied('cashier', "EXEC api.usp_employee_login_lookup '13800000003'")
+  File "C:\Users\18192\Desktop\Database-Project\tests\test_entry_database.py", line 74, in assert_sql_denied
+    borrowed = self.connect_as(key)
+               ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\18192\Desktop\Database-Project\tests\test_entry_database.py", line 60, in connect_as
+    connection.cursor().execute(f'EXECUTE AS USER=N\'{user}\';')
+pyodbc.Error: ('HY000', '[HY000] [Microsoft][ODBC Driver 17 for SQL Server]Connection is busy with results for another command (0) (SQLExecDirectW)')
+
+======================================================================
+ERROR: test_runtime_roles_cannot_write_business_tables (test_entry_database.EntryDatabaseTests.test_runtime_roles_cannot_write_business_tables) (role='auth')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\18192\Desktop\Database-Project\tests\test_entry_database.py", line 106, in test_runtime_roles_cannot_write_business_tables
+    self.assert_sql_denied(key, 'UPDATE dbo.goods SET stock_total=stock_total WHERE id=1')
+  File "C:\Users\18192\Desktop\Database-Project\tests\test_entry_database.py", line 74, in assert_sql_denied
+    borrowed = self.connect_as(key)
+               ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\18192\Desktop\Database-Project\tests\test_entry_database.py", line 60, in connect_as
+    connection.cursor().execute(f'EXECUTE AS USER=N\'{user}\';')
+pyodbc.Error: ('HY000', '[HY000] [Microsoft][ODBC Driver 17 for SQL Server]Connection is busy with results for another command (0) (SQLExecDirectW)')
+
+======================================================================
+ERROR: test_runtime_roles_cannot_write_business_tables (test_entry_database.EntryDatabaseTests.test_runtime_roles_cannot_write_business_tables) (role='cashier')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\18192\Desktop\Database-Project\tests\test_entry_database.py", line 106, in test_runtime_roles_cannot_write_business_tables
+    self.assert_sql_denied(key, 'UPDATE dbo.goods SET stock_total=stock_total WHERE id=1')
+  File "C:\Users\18192\Desktop\Database-Project\tests\test_entry_database.py", line 74, in assert_sql_denied
+    borrowed = self.connect_as(key)
+               ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\18192\Desktop\Database-Project\tests\test_entry_database.py", line 60, in connect_as
+    connection.cursor().execute(f'EXECUTE AS USER=N\'{user}\';')
+pyodbc.Error: ('HY000', '[HY000] [Microsoft][ODBC Driver 17 for SQL Server]Connection is busy with results for another command (0) (SQLExecDirectW)')
+
+======================================================================
+ERROR: test_runtime_roles_cannot_write_business_tables (test_entry_database.EntryDatabaseTests.test_runtime_roles_cannot_write_business_tables) (role='inventory')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\18192\Desktop\Database-Project\tests\test_entry_database.py", line 106, in test_runtime_roles_cannot_write_business_tables
+    self.assert_sql_denied(key, 'UPDATE dbo.goods SET stock_total=stock_total WHERE id=1')
+  File "C:\Users\18192\Desktop\Database-Project\tests\test_entry_database.py", line 74, in assert_sql_denied
+    borrowed = self.connect_as(key)
+               ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\18192\Desktop\Database-Project\tests\test_entry_database.py", line 60, in connect_as
+    connection.cursor().execute(f'EXECUTE AS USER=N\'{user}\';')
+pyodbc.Error: ('HY000', '[HY000] [Microsoft][ODBC Driver 17 for SQL Server]Connection is busy with results for another command (0) (SQLExecDirectW)')
+
+======================================================================
+ERROR: test_runtime_roles_cannot_write_business_tables (test_entry_database.EntryDatabaseTests.test_runtime_roles_cannot_write_business_tables) (role='manager')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\18192\Desktop\Database-Project\tests\test_entry_database.py", line 106, in test_runtime_roles_cannot_write_business_tables
+    self.assert_sql_denied(key, 'UPDATE dbo.goods SET stock_total=stock_total WHERE id=1')
+  File "C:\Users\18192\Desktop\Database-Project\tests\test_entry_database.py", line 74, in assert_sql_denied
+    borrowed = self.connect_as(key)
+               ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\18192\Desktop\Database-Project\tests\test_entry_database.py", line 60, in connect_as
+    connection.cursor().execute(f'EXECUTE AS USER=N\'{user}\';')
+pyodbc.Error: ('HY000', '[HY000] [Microsoft][ODBC Driver 17 for SQL Server]Connection is busy with results for another command (0) (SQLExecDirectW)')
+
+======================================================================
+ERROR: test_stale_session_rejected_inside_database (test_entry_database.EntryDatabaseTests.test_stale_session_rejected_inside_database)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\18192\Desktop\Database-Project\tests\test_entry_database.py", line 125, in test_stale_session_rejected_inside_database
+    self.assert_sql_denied('cashier', "EXEC api.usp_employee_context '13800000003',2", expected=52001)
+  File "C:\Users\18192\Desktop\Database-Project\tests\test_entry_database.py", line 74, in assert_sql_denied
+    borrowed = self.connect_as(key)
+               ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\18192\Desktop\Database-Project\tests\test_entry_database.py", line 60, in connect_as
+    connection.cursor().execute(f'EXECUTE AS USER=N\'{user}\';')
+pyodbc.Error: ('HY000', '[HY000] [Microsoft][ODBC Driver 17 for SQL Server]Connection is busy with results for another command (0) (SQLExecDirectW)')
+
+======================================================================
+ERROR: test_wrong_employee_role_rejected_inside_database (test_entry_database.EntryDatabaseTests.test_wrong_employee_role_rejected_inside_database)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\18192\Desktop\Database-Project\tests\test_entry_database.py", line 122, in test_wrong_employee_role_rejected_inside_database
+    self.assert_sql_denied('cashier', "EXEC api.usp_employee_context '13800000001',1", expected=52001)
+  File "C:\Users\18192\Desktop\Database-Project\tests\test_entry_database.py", line 74, in assert_sql_denied
+    borrowed = self.connect_as(key)
+               ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\18192\Desktop\Database-Project\tests\test_entry_database.py", line 60, in connect_as
+    connection.cursor().execute(f'EXECUTE AS USER=N\'{user}\';')
+pyodbc.ProgrammingError: ('42000', '[42000] [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]无法作为数据库主体执行，因为主体 "entry_test_cashier_9d5b3b3f" 不存在、无法模拟这种类型的主体，或您没有所需的权限。 (15517) (SQLExecDirectW)')
+
+======================================================================
+FAIL: test_all_roles_can_login_and_read_own_context_through_procedures (test_entry_database.EntryDatabaseTests.test_all_roles_can_login_and_read_own_context_through_procedures) (role='库管', phone='13800000002')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\18192\Desktop\Database-Project\tests\test_entry_database.py", line 92, in test_all_roles_can_login_and_read_own_context_through_procedures
+    self.assertEqual(self.login(phone).status_code, 302)
+AssertionError: 503 != 302
+
+======================================================================
+FAIL: test_all_roles_can_login_and_read_own_context_through_procedures (test_entry_database.EntryDatabaseTests.test_all_roles_can_login_and_read_own_context_through_procedures) (role='收银员', phone='13800000004')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "C:\Users\18192\Desktop\Database-Project\tests\test_entry_database.py", line 92, in test_all_roles_can_login_and_read_own_context_through_procedures
+    self.assertEqual(self.login(phone).status_code, 302)
+AssertionError: 503 != 302
+
+----------------------------------------------------------------------
+Ran 23 tests in 2.725s
+
+FAILED (failures=2, errors=18)

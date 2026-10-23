@@ -1,0 +1,25 @@
+﻿已将数据库上下文更改为 "ShiguangBookstoreWeek7EntryYourRun"。
+windows_only|configured_database
+------------|-------------------
+0|ShiguangBookstoreWeek7EntryYourRun
+name|is_disabled|sysadmin_member
+----|-----------|---------------
+bookstore_w7_yourrun_auth|0|0
+bookstore_w7_yourrun_cashier|0|0
+bookstore_w7_yourrun_inventory|0|0
+bookstore_w7_yourrun_manager|0|0
+service_user|database_role
+------------|-------------
+bookstore_w7_yourrun_auth|bookstore_app_auth
+bookstore_w7_yourrun_cashier|bookstore_app_cashier
+bookstore_w7_yourrun_inventory|bookstore_app_inventory
+bookstore_w7_yourrun_manager|bookstore_app_manager
+phone|role|enabled|session_version
+-----|----|-------|---------------
+13800000001|店长|1|1
+13800000002|库管|1|1
+13800000003|收银员|1|1
+13800000004|收银员|1|1
+user_tables|foreign_keys|source_tables|source_foreign_keys
+-----------|------------|-------------|-------------------
+21|50|20|49

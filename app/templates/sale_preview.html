@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="zh-CN">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>确认收款 · 拾光书店</title>
+<main>
+  <h1>确认收款</h1>
+  <table><thead><tr><th>商品</th><th>数量</th><th>成交单价（元）</th></tr></thead>
+    <tbody>{% for item in quote['items'] %}<tr><td>{{ item.name }}</td><td>{{ item.quantity }}</td><td>{{ '%.2f'|format(item.unit_price) }}</td></tr>{% endfor %}</tbody>
+  </table>
+  <p>会员：{{ quote.member_phone or '非会员' }}；本次权益：{{ quote.card_level or '无折扣、无积分权益' }}</p>
+  <p>原价小计：{{ '%.2f'|format(quote.subtotal_amount) }} 元；折后金额：{{ '%.2f'|format(quote.discounted_amount) }} 元。</p>
+  <p>使用 {{ quote.used_points }} 积分，抵扣 {{ '%.2f'|format(quote.point_deduction_amount) }} 元；本次获得 {{ quote.earned_points }} 积分。</p>
+  <p><strong>应收：{{ '%.2f'|format(quote.paid_amount) }} 元</strong></p>
+  <p>请核对商品及金额，收款完成后确认。页面预览不预留库存。</p>
+  <form method="post" action="{{ url_for('sale_create') }}">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <input type="hidden" name="quote_token" value="{{ quote_token }}">
+    <button type="submit">确认已收款并生成销售单</button>
+  </form>
+  <p><a href="{{ url_for('sale_form') }}">重新选择商品</a></p>
+</main>
+</html>

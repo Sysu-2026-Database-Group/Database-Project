@@ -1,0 +1,1 @@
+Week6 artifact audit PASS: both 45-step runs, 11 date examples, 2 rejected mutants, 19 tables / 137 ER fields.
