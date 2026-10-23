@@ -137,5 +137,15 @@
         "reason": "Reviewer B 2026-10-22 修订（文档 / 死分支 / 清单登记），未重跑数据库"
       }
     ]
+  },
+  "reviewer_b_2026_10_23": {
+    "entries": [
+      {
+        "file": "README.md",
+        "previous_sha256": "249b0dffe56a534edd6da5d9068d44e79ae883f0a0ed66b3fe84f0900843d6a2",
+        "current_sha256": "0b0e1d41f35ac8ebe70eafcfd93cbac777e8c8488162271fd7c8def238d2cb5e",
+        "reason": "追加第六周归档入口口径（仅 PS7 + 默认实例；跨机复现走 run.ps1），未改任何证据内容"
+      }
+    ]
   }
 }

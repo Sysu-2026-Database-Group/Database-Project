@@ -163,42 +163,21 @@ COMMIT;
 
 ## B. 验收链与工具（4）
 
-### B1. 官方两个入口在本机无法执行，Reviewer B 用的是自写 runner 🟡
+### B1. 新入口已实测跨 PS 版本与实例名，旧 Week6 脚本仍绑 PS7 🟡
 
-**Location:** `db/accept-week-6.ps1#L1`、`db/results/week-6/acceptance/independent-audit.ps1#L1`、`db/accept-week-6.ps1#L29`
+**2026-10-23 本机实测**（PowerShell 5.1.26100.9711 + 命名实例 `Moony\SQLEXPRESS` + ODBC Driver 18）：
 
-#### 环境差异（造成无法验收官方脚本的直接原因）
+| 步骤 | 结果 |
+|---|---|
+| `run.ps1`（`#requires 5.1`） | 正常运行，`help` 完整 |
+| `doctor -Server 'localhost\SQLEXPRESS'` | `[dependencies] PASS`（Python 3.14.3 / Flask 3.1.3 / pyodbc 5.3.0） |
+| 实例连通 | **`[instance]` 打印「Moony\SQLEXPRESS；SQL Server 17.0.1000.7；ODBC Driver 18」**，说明命名实例的 ODBC 连接已成功 |
+| 失败点 | `IsIntegratedSecurityOnly = 1`：未启用混合认证，runner 拒绝继续且不自动改实例 |
+| 证据 | `.runner/doctor-20261023T104840Z4ed314/summary.json`、`00-dependencies.log`、`01-instance.log` |
 
-| 项目 | 作者（Reviewer A） | Reviewer B（本轮） | 后果 |
-| --- | --- | --- | --- |
-| 主机 / 账户 | `DESKTOP-IJTRRN8\lyclyc_NSP` | `MOONY\38499` | 非同一台机器 |
-| PowerShell | 7.6.5 | **5.1.26100.9711**（`pwsh` 不存在） | 两个脚本的 `#requires -Version 7.0` 直接拒绝执行 |
-| SQL Server 实例 | `localhost`（默认实例 MSSQLSERVER） | `Moony\SQLEXPRESS`（命名实例） | `accept-week-6.ps1#L29` 的 `$Server -notin @('localhost','.', $env:COMPUTERNAME)` 只认默认实例 |
-| 引擎版本 | 2025 Express 17.0.1000.7 | 2025 Express 17.0.1000.7 | 相同 |
-| 源库 | `ShiguangBookstoreWeek3` | `ShiguangBookstoreVerify2`（迁移前 `verify.sql` 已证 19/47/77/1430.30/−69.70 与作者快照哈希逐表相同） | 内容等价，名字不同 |
-| sqlcmd | 17.0.1000.7 | 同（ODBC 180 Tools） | — |
+**结论**：原先"写死 PowerShell 7 + 只认默认实例"的两点，在新入口上已被实测排除；剩余的是**环境前置**（需管理员启用 SQL Server 混合认证并重启），以及旧的两个脚本 `db/accept-week-6.ps1`、`db/results/week-6/acceptance/independent-audit.ps1` 仍为 `#requires -Version 7.0`、未改。
 
-实测报错（两个脚本相同）：
-
-```text
-The script 'accept-week-6.ps1' cannot be run because it contained a "#requires"
-statement for Windows PowerShell 7.0. The version of Windows PowerShell that is
-required by the script does not match the currently running version of
-Windows PowerShell 5.1.26100.9711.
-```
-
-**因此：官方两个 `.ps1` 入口一次都没有执行。** `.ps1` 外壳里的断言（读 `steps.json`、比对 19 表快照、比对清单哈希）我只做了等价重实现，不等于原样跑通；作者证据目录的实质校验由纯 Python 的 `db/checks/audit-week-6-artifacts.py` 完成（该脚本与本机 PS 版本无关，实测 `PASS`）。
-
-#### 本轮实际使用的验收脚本
-
-| 脚本 | 路径（仓库相对） | 版本要求 | 步数 | 与官方入口的差异 |
-| --- | --- | --- | --- | --- |
-| `run-b.ps1` | `db/results/week-6/acceptance-b-20261022/run-b.ps1` | PowerShell 5.1 | 40（00—39） | 与官方 45 步同序同断言；支持 `host\instance`；未实现官方 37/39/41—43；每步用 `sqlcmd -v DatabaseName=…` 原样调用同一批 `.sql` |
-| `run-b-supplement.ps1` | `db/results/week-6/acceptance-b-20261022/run-b-supplement.ps1` | PowerShell 5.1 | 6 | 补官方 37（非权限异常 51039）、39（`msdb.backupset`）、41—43（越权注入 → 51030 → 撤销），另加一次撤销后复跑 |
-
-产出与证据同目录：`db/results/week-6/acceptance-b-20261022/`（`steps.json` 46 条、`summary.json`、`manifest.json`、`source-manifest.json`、46 份步骤输出 `.txt`、`README.md`）。
-
-**建议:** `#requires` 降到 5.1 或提供兼容分支；`$Server` 允许 `host\instance`；并在 README 写明"入口需要什么环境才可复跑"，避免下一位复核人重复踩。
+**建议**：README 把"混合认证 + 重启实例"列为换机复现的第一前提；旧两个脚本要么降到 5.1，要么显式标注"仅限已具备 PS7 的历史环境"。
 
 ### B2. 审计脚本把自己写进自己校验的清单 🟡
 

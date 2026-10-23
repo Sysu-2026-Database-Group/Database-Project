@@ -168,6 +168,39 @@ def check_instance(config):
         connection.close()
 
 
+BASELINE_TRIGGER = 'tr_card_type_cross_row'
+BASELINE_VIEWS = ('v_sale_detail', 'v_goods_sales_summary', 'v_inventory_status')
+
+
+def check_objects(config, database):
+    """从零建库必须装齐的对象：跨行约束触发器、Week4 三个视图、六个筛选唯一索引。"""
+    connection = admin_connection(config, database)
+    try:
+        cursor = connection.cursor()
+        try:
+            trigger, views, filtered = cursor.execute(
+                "SELECT (SELECT COUNT(*) FROM sys.triggers WHERE name=? AND is_disabled=0),"
+                "       (SELECT COUNT(*) FROM sys.views WHERE schema_id=SCHEMA_ID('dbo') AND name IN (?,?,?)),"
+                "       (SELECT COUNT(*) FROM sys.indexes WHERE is_unique=1 AND has_filter=1)",
+                BASELINE_TRIGGER, *BASELINE_VIEWS).fetchone()
+            problems = []
+            if trigger != 1:
+                problems.append('跨行约束触发器 tr_card_type_cross_row 缺失或被禁用')
+            if views != len(BASELINE_VIEWS):
+                problems.append(f'Week4 视图缺失（{views}/{len(BASELINE_VIEWS)}）')
+            if filtered != 6:
+                problems.append(f'筛选唯一索引数量不符（{filtered}/6）')
+            if problems:
+                raise RuntimeError('；'.join(problems) + '。请使用新的 -DatabaseName 重新 setup，不要复用旧运行库。')
+            for view in BASELINE_VIEWS:
+                cursor.execute('SELECT TOP (0) * FROM dbo.[' + view + ']').fetchall()
+            print(f'基础对象 PASS：触发器 1、视图 3、筛选唯一索引 6（库={database}）')
+        finally:
+            cursor.close()
+    finally:
+        connection.close()
+
+
 def sql_script(report, config, name, script, database, **variables):
     arguments = [shutil.which('sqlcmd'), '-S', config['server'], '-E', '-C', '-b', '-f', '65001',
                  '-l', '10', '-t', '180', '-i', str(ROOT / 'db' / script), '-v', 'DatabaseName=' + database]
@@ -185,10 +218,12 @@ def prepare_source(report, config):
         connection.close()
     report.resource('baseline_database', source)
     scripts = [('schema', 'schema.sql'), ('seed', 'sample-data.sql'), ('baseline-check', 'checks/verify.sql'),
+               ('constraint-ddl', 'constraint-ddl.sql'), ('views', 'view.sql'),
                ('migration', 'migration.sql'), ('migration-check', 'checks/migration-check.sql'),
                ('expanded-seed', 'sample-data-week-6.sql'), ('regression', 'regression.sql')]
     for name, script in scripts:
         sql_script(report, config, name, script, source)
+    report.action('objects-baseline', lambda: check_objects(config, source))
     return source
 
 
@@ -280,6 +315,7 @@ def setup(report, config, config_path):
         connection.close()
     source = prepare_source(report, config)
     prepare_target(report, config, source, config['database'], 'runtime')
+    report.action('objects-runtime', lambda: check_objects(config, config['database']))
     report.resource('service_login_prefix', config['login_prefix'])
     report.action('provision', lambda: provision(database=config['database'], server=config['server'],
                   driver=config['driver'], login_prefix=config['login_prefix'], directory=directory))
@@ -440,6 +476,7 @@ def main():
             setup(report, config, config_path)
         elif args.command == 'doctor':
             report.action('runtime', lambda: validate_runtime(config))
+            report.action('objects', lambda: check_objects(config, config['database']))
         elif args.command == 'start':
             report.action('runtime', lambda: validate_runtime(config))
             env = clean_test_environment()

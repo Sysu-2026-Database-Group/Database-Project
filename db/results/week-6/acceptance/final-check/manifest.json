@@ -252,7 +252,7 @@
   {
     "file": "metadata-updates.json",
     "bytes": 1147,
-    "sha256": "78309f0db0f56ff5ab204dae200dffa8e6bab493146ad2f63951f297b00dc567"
+    "sha256": "be88711148f70402b6f6075918d20bf3decf92c74c01cdfe06dd6553f34e3b23"
   },
   {
     "file": "role-unexpected-error.sql",

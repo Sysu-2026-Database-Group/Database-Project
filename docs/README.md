@@ -28,7 +28,7 @@
 | 第4周及 v0.1：查询、视图、约束、角色授权与拒绝、正确/错误结果及截图 | [query.sql](../db/query.sql)、[view.sql](../db/view.sql)、[constraint.sql](../db/constraint.sql)、[role.sql](../db/role.sql)、[结果及截图](../db/results/week-4/)、[证据索引](reports/evidence-v0.1.md) | 全部保留，包括前几周成果、[阶段报告](reports/report-v0.1.md)、[分工](reports/team-division-v0.1.md)与 AI 记录 |
 | 第5周：可编辑 ER 与清晰导出、基数/参与/条件/FK/实现映射、问题证据和取舍、三组设计比较 | [ER 图源](../ER/er-diagram-v1.0.drawio)、[PNG](../ER/er-diagram-v1.0.png)、[映射](design/er-mapping-v1.0.md)、[问题清单](design/issues-v0.1.md)、[设计说明](design/design-notes-v1.0.md) | 保留完整19表与规则；ER 全图人工验收已于2026-10-22由梁宇聪确认通过 |
 | 第6周：逐表码/FD/三类异常/范式；分解、无损与依赖保持、冗余理由和维护 | [规范化说明](design/design-normalization-v1.0.md)、[数据字典增量](specs/spec-data-dictionary.md)、[ER](../ER/) | 保留完整分析；四张表明确保留非3NF冗余，有限样例通过不等于一般性无损证明 |
-| 第6周：六项迁移、旧表保留、重复/冲突检查、备份与失败恢复；旧场景回归及前后差异 | [migration.sql](../db/migration.sql)、[regression.sql](../db/regression.sql)、[验收入口](../db/accept-week-6.ps1)、[最新独立审核](reviews/review-week-6.md)、[原始输出](../db/results/week-6/acceptance/) | 正式入口和所用测试全部保留；报告已合并为[第六周报告](reports/report-week-6.md) |
+| 第6周：六项迁移、旧表保留、重复/冲突检查、备份与失败恢复；旧场景回归及前后差异 | [migration.sql](../db/migration.sql)、[regression.sql](../db/regression.sql)、[归档入口](../db/accept-week-6.ps1)、[最新独立审核](reviews/review-week-6.md)、[原始输出](../db/results/week-6/acceptance/) | 正式入口和所用测试全部保留；**第六周两脚本为归档入口（仅 PS7 + 默认实例）**，跨机复现改用根目录 `run.ps1`；报告已合并为[第六周报告](reports/report-week-6.md) |
 | 第7—9周 v1.0：包含第5—6周成果，并交应用、操作手册、分层/参数SQL/事务/后端权限/统一错误、多角色完整流程及正确/错误测试、阶段报告和分工 | [课程原件](../homework/第7-9周任务讲解.docx)、[应用手册](../app/README.md)、[入口权限](design/entry-permissions.md)、[销售设计](design/sale-entry.md)、[销售验收](../db/results/week-7/sale-entry-20261023/README.md) | 已完成员工登录、受限服务连接和门店销售，48项测试通过；预订、取货、退款、采购等完整流程和本阶段报告/分工待继续，现有 Week6 验收不能替代 |
 
 ## 整理范围

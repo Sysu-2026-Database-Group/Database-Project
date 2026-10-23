@@ -482,12 +482,12 @@
   {
     "file": "final-check/manifest.json",
     "bytes": 8259,
-    "sha256": "33b7b4cda8317804351ae2a58978fdc4ecca9ab92bf3861bff87afb8c46cbce5"
+    "sha256": "7252396305a4a7642291ab3c654d7c9f9cb2f604a5006f77488a8658a4e7ec67"
   },
   {
     "file": "final-check/metadata-updates.json",
     "bytes": 1147,
-    "sha256": "78309f0db0f56ff5ab204dae200dffa8e6bab493146ad2f63951f297b00dc567"
+    "sha256": "be88711148f70402b6f6075918d20bf3decf92c74c01cdfe06dd6553f34e3b23"
   },
   {
     "file": "final-check/role-unexpected-error.sql",
@@ -537,7 +537,7 @@
   {
     "file": "README.md",
     "bytes": 1474,
-    "sha256": "249b0dffe56a534edd6da5d9068d44e79ae883f0a0ed66b3fe84f0900843d6a2"
+    "sha256": "0b0e1d41f35ac8ebe70eafcfd93cbac777e8c8488162271fd7c8def238d2cb5e"
   },
   {
     "file": "reviewer-findings.md",

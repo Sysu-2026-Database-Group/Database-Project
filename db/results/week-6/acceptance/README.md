@@ -11,4 +11,6 @@
 
 只读复查：`./db/results/week-6/acceptance/independent-audit.ps1`。重跑数据库使用 `db/accept-week-6.ps1`，必须指定全新库名和结果目录。旧库、备份和原始文本没有删除/覆盖。
 
+> **归档口径（2026-10-23 用户确认）**：本目录的 `independent-audit.ps1` 与 `db/accept-week-6.ps1` 均为**第六周归档入口**，仅支持 PowerShell 7 + 本机默认实例，不再修改；跨机复现走根目录 `run.ps1`（PS 5.1、支持命名实例）。本机（PS 5.1 + 命名实例）的等价复现证据在 `../acceptance-b-20261022/`；纯 Python 的 `db/checks/audit-week-6-artifacts.py` 不受 PS 版本影响，仍可执行。
+
 2026-10-22补录的人工通过记录绑定当前v1.4文件指纹；`final-check/summary.json`中的pending是2026-10-21运行时状态，保留原样，不覆盖为事后人工结果。当前人工状态以 `er-consistency.json` 和正式验收§5为准。

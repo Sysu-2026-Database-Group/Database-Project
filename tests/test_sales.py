@@ -179,8 +179,15 @@ class SaleDatabaseTests(unittest.TestCase):
                 cursor.execute('UPDATE dbo.goods SET price=?,stock_total=?,reserved_qty=?,on_shelf=? WHERE id=?', (price,stock,reserved,on_shelf,goods))
             for phone, expires, points in self.members:
                 cursor.execute('UPDATE dbo.member SET expires_at=?,points_balance=? WHERE phone=?', (expires,points,phone))
-            for level, rate in self.cards:
-                cursor.execute('UPDATE dbo.card_type SET discount_rate=? WHERE level=?',(rate,level))
+            # 卡档跨行顺序由触发器 tr_card_type_cross_row 强制（R-17）；逐行恢复会在中间态违反
+            # “金卡费率不高于银卡”，因此必须用单条集合更新，让触发器只在最终状态上判定。
+            if self.cards:
+                values = ','.join('(?,?)' for _ in self.cards)
+                parameters = [value for row in self.cards for value in row]
+                cursor.execute(
+                    f'UPDATE c SET c.discount_rate = v.rate FROM dbo.card_type AS c '
+                    f'JOIN (VALUES {values}) AS v(level, rate) ON v.level = c.level',
+                    parameters)
         finally:
             cursor.close()
         self.assertEqual(self.snapshot(), self.baseline, '测试后业务数据未恢复为基线')

@@ -232,7 +232,9 @@ sqlcmd -S localhost\SQLEXPRESS -E -C -b -f 65001 -W -s "|" `
 `ShiguangBookstoreWeek6Work` 上执行。原始库只用于保留 v0.1 基线，不能作为迁移或样例装载目标。
 2026-10-21 起，第六周 SQL 统一用 `$(DatabaseName)` 选择目标，调用者须显式指定以 `ShiguangBookstoreWeek6` 开头的专用副本名；脚本不再用内置 `:setvar` 覆盖命令行 `-v`。所有本周脚本须在 SQLCMD 模式执行，`:On Error exit` 保证目标选择失败后停止；筛选索引要求的 SET 选项已在脚本中明确设置。
 
-推荐用 PowerShell 7 执行完整验收（**每次换新库名和新结果目录**）：
+> **归档口径（2026-10-23 用户确认）**：`accept-week-6.ps1` 与 `acceptance/independent-audit.ps1` 是**第六周归档入口**：仅支持 PowerShell 7 + 本机默认实例，**不再修改、不作为跨机复现路径**。跨机复现使用根目录 `run.ps1`（PowerShell 5.1，支持命名实例）。"统一版本"指新工作不再依赖 PS7，不要求历史脚本降到 5.1。
+
+归档入口的原始用法（保留原样，供复核历史证据；**每次换新库名和新结果目录**）：
 
 ```powershell
 ./db/accept-week-6.ps1 -Server localhost `
@@ -240,7 +242,7 @@ sqlcmd -S localhost\SQLEXPRESS -E -C -b -f 65001 -W -s "|" `
   -EvidenceDirectory db/results/week-6/acceptance-new
 ```
 
-入口只支持本机默认实例及 Windows 身份验证。从现有 Week3 库 COPY_ONLY 备份并还原两个新副本，逐项保存 SQLCMD 原始输出、退出码和哈希；不存在删库、覆盖还原、自动清理或全局配置变更。SQL Server 服务账号须能访问默认数据 / 备份目录。备份校验使用 BACKUP CHECKSUM 和 RESTORE VERIFYONLY CHECKSUM；不要求终端账号能读取备份文件做文件哈希。
+该入口只支持本机默认实例及 Windows 身份验证（这是脚本内写死的限制，不随版本改变）。从现有 Week3 库 COPY_ONLY 备份并还原两个新副本，逐项保存 SQLCMD 原始输出、退出码和哈希；不存在删库、覆盖还原、自动清理或全局配置变更。SQL Server 服务账号须能访问默认数据 / 备份目录。备份校验使用 BACKUP CHECKSUM 和 RESTORE VERIFYONLY CHECKSUM；不要求终端账号能读取备份文件做文件哈希。
 
 仅手动执行一项时：
 
@@ -269,7 +271,7 @@ SSMS 中需启用“查询 → SQLCMD 模式”，在调用脚本之前单独定
 
 | 文件 | 用途 |
 |---|---|
-| `accept-week-6.ps1` | 自动备份 / 还原新副本并运行完整验收、故障注入和原始证据归档 |
+| `accept-week-6.ps1` | **归档入口（仅 PS7 + 本机默认实例，不再维护）**：自动备份 / 还原新副本并运行完整验收、故障注入和原始证据归档；跨机复现改用根目录 `run.ps1` |
 | `checks/legacy-snapshot.sql` | 按主键排序，核对 19 张旧业务表完整旧列的行数与 SHA-256 |
 | `migration.sql` | 从 v0.1 副本迁移到第六周目标结构 |
 | `checks/migration-check.sql` | 迁移后元数据、旧场景和约束只读核对 |
