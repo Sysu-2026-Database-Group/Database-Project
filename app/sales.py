@@ -1,5 +1,10 @@
 import json
 import re
+import copy
+import secrets
+import threading
+import time
+from collections import OrderedDict
 from uuid import UUID, uuid4
 
 from itsdangerous import BadData, URLSafeSerializer
@@ -18,11 +23,11 @@ class SalesService:
         self.signer = URLSafeSerializer(secret_key, salt='bookstore-sale-confirmation-v1')
 
     @staticmethod
-    def validate(payload):
+    def validate(payload, *, allow_empty=False):
         if not isinstance(payload, dict):
             raise AppError('invalid_sale', '请填写销售内容。', 400)
         items = payload.get('items')
-        if not isinstance(items, list) or not 1 <= len(items) <= 50:
+        if not isinstance(items, list) or not (0 if allow_empty else 1) <= len(items) <= 50:
             raise AppError('invalid_sale', '请选择1至50种商品。', 400)
         seen = set()
         for item in items:
@@ -62,6 +67,10 @@ class SalesService:
             confirmation = self.signer.loads(token)
         except BadData:
             raise AppError('invalid_confirmation', '结算确认无效，请重新预览。', 400) from None
+        if (not isinstance(confirmation, dict)
+                or set(confirmation) != {'phone', 'version', 'request_key', 'payload', 'quote'}
+                or not isinstance(confirmation['quote'], str)):
+            raise AppError('invalid_confirmation', '结算确认无效，请重新预览。', 400)
         if confirmation['phone'] != actor['phone'] or confirmation['version'] != actor['session_version']:
             raise AppError('invalid_confirmation', '这份结算确认不属于当前登录，请重新预览。', 403)
         return self.dao.sale_create(actor, confirmation['request_key'], confirmation['payload'], confirmation['quote'])
@@ -90,3 +99,46 @@ def form_payload(form):
 
 def new_request_key():
     return str(uuid4())
+
+
+class SaleDraftStore:
+    """Bounded, transient server-side carts for the single-process local demo.
+
+    Only a random handle is stored in Flask's signed cookie. Restarting the Web
+    process discards uncommitted carts; committed receipts remain in SQL Server.
+    """
+    def __init__(self, *, capacity=1000, lifetime=8*3600):
+        self.entries = OrderedDict()
+        self.lock = threading.Lock()
+        self.capacity = capacity
+        self.lifetime = lifetime
+
+    def get(self, handle, owner):
+        with self.lock:
+            now = time.monotonic()
+            for key in list(self.entries):
+                if now-self.entries[key][0] >= self.lifetime:
+                    del self.entries[key]
+            value = self.entries.get(handle)
+            if value is None or value[1] != owner:
+                handle = secrets.token_urlsafe(32)
+                value = (now, copy.deepcopy(owner), dict(request_key=new_request_key(), items=[], member_phone=None, used_points=0))
+                self.entries[handle] = value
+                while len(self.entries) > self.capacity:
+                    self.entries.popitem(last=False)
+            return handle, copy.deepcopy(value[2])
+
+    def save(self, handle, owner, payload):
+        with self.lock:
+            value = self.entries.get(handle)
+            now = time.monotonic()
+            if value is None or value[1] != owner or now-value[0] >= self.lifetime:
+                raise AppError('draft_expired', '清单已过期，请重新打开销售页面。', 409)
+            if payload.get('request_key') != value[2]['request_key']:
+                raise AppError('request_conflict', '清单请求标识已变化，请重新打开销售页面。', 409)
+            self.entries[handle] = (now, copy.deepcopy(owner), copy.deepcopy(payload))
+            self.entries.move_to_end(handle)
+
+    def discard(self, handle):
+        with self.lock:
+            self.entries.pop(handle, None)

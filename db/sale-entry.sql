@@ -37,7 +37,7 @@ DENY SELECT,INSERT,UPDATE,DELETE ON SCHEMA::api TO bookstore_app_auth,bookstore_
 GO
 -- 内部计算过程；仅供同所有者过程调用。调用者须已开启事务。
 CREATE OR ALTER PROCEDURE api.usp_sale_calculate
-    @items nvarchar(max),@member_phone varchar(11),@used_points int,@quote nvarchar(max) OUTPUT
+    @items nvarchar(max),@member_phone varchar(11),@used_points int,@quote nvarchar(max) OUTPUT,@reservation_id bigint=NULL
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -63,6 +63,8 @@ BEGIN
     DECLARE @card nvarchar(10)=NULL,@rate decimal(3,2)=1,@balance int=0,@expires date,@active bit=0;
     IF @member_phone IS NOT NULL
     BEGIN
+        -- New contact numbers resolve to the stable historical member identity.
+        SELECT @member_phone=member_phone FROM auth.member_contact WHERE contact_phone=@member_phone;
         SELECT @card=card_level,@balance=points_balance,@expires=expires_at FROM dbo.member WITH(UPDLOCK,HOLDLOCK) WHERE phone=@member_phone;
         IF @expires IS NULL THROW 52102,N'会员不存在；非会员请留空会员手机号。',1;
         -- 门店日期固定采用中国标准时间，不接受客户端传入成交日期。
@@ -83,6 +85,8 @@ BEGIN
         SET @price=NULL; SET @on_shelf=0;
         SELECT @price=price,@name=name,@available=stock_total-reserved_qty,@on_shelf=on_shelf
         FROM dbo.goods WITH(UPDLOCK,HOLDLOCK) WHERE id=@goods;
+        IF @reservation_id IS NOT NULL
+            SET @available=@available+ISNULL((SELECT quantity FROM dbo.reservation_item WHERE reservation_id=@reservation_id AND goods_id=@goods),0);
         IF @on_shelf<>1 OR @price IS NULL THROW 52103,N'商品不存在、未上架或未定价。',1;
         IF @available<@quantity THROW 52104,N'商品可售量不足，请调整数量后重新预览。',1;
         UPDATE @lines SET unit_price=@price,name=@name WHERE goods_id=@goods;
@@ -126,6 +130,7 @@ BEGIN
         EXEC api.usp_require_employee @employee_phone,@session_version,N'收银员';
         DECLARE @quote nvarchar(max);
         EXEC api.usp_sale_calculate @items,@member_phone,@used_points,@quote OUTPUT;
+        SET @quote=JSON_MODIFY(@quote,'$.confirmation_expires_at',CONVERT(varchar(33),DATEADD(minute,10,SYSUTCDATETIME()),126));
         COMMIT;
         SELECT @quote AS quote_json;
     END TRY
@@ -147,14 +152,13 @@ BEGIN
         FROM dbo.sale s WHERE s.id=@sale_id FOR JSON PATH,INCLUDE_NULL_VALUES,WITHOUT_ARRAY_WRAPPER);
 END;
 GO
-CREATE OR ALTER PROCEDURE api.usp_sale_create
+CREATE OR ALTER PROCEDURE api.usp_sale_commit
     @employee_phone varchar(11),@session_version int,@request_key uniqueidentifier,
-    @items nvarchar(max),@member_phone varchar(11),@used_points int,@expected_quote nvarchar(max)
+    @items nvarchar(max),@member_phone varchar(11),@used_points int,@expected_quote nvarchar(max),@reservation_id bigint=NULL
 AS
 BEGIN
     SET NOCOUNT ON; SET XACT_ABORT ON;
     SET ANSI_WARNINGS ON; SET ANSI_PADDING ON; SET CONCAT_NULL_YIELDS_NULL ON; SET ARITHABORT ON; SET NUMERIC_ROUNDABORT OFF;
-    IF @@TRANCOUNT<>0 THROW 52100,N'销售入口不得存在外层事务。',1;
     BEGIN TRY
         BEGIN TRANSACTION;
         EXEC api.usp_require_employee @employee_phone,@session_version,N'收银员';
@@ -163,6 +167,7 @@ BEGIN
         DECLARE @payload nvarchar(max)=(SELECT @member_phone AS member_phone,@used_points AS used_points,
             JSON_QUERY((SELECT goods_id,quantity FROM OPENJSON(@items) WITH(goods_id bigint '$.goods_id',quantity int '$.quantity') ORDER BY goods_id FOR JSON PATH)) AS items
             FOR JSON PATH,INCLUDE_NULL_VALUES,WITHOUT_ARRAY_WRAPPER);
+        IF @reservation_id IS NOT NULL SET @payload=JSON_MODIFY(@payload,'$.reservation_id',@reservation_id);
         DECLARE @hash binary(32)=HASHBYTES('SHA2_256',@payload),@oldhash binary(32),@result nvarchar(max);
         SELECT @oldhash=payload_hash,@result=result_json FROM api.sale_request WITH(UPDLOCK,HOLDLOCK)
         WHERE employee_phone=@employee_phone AND request_key=@request_key;
@@ -173,22 +178,34 @@ BEGIN
             SELECT @result AS result_json;
             RETURN;
         END;
+        IF @reservation_id IS NOT NULL
+        BEGIN
+            DECLARE @reservation_status nvarchar(10),@reservation_expiry datetime2;
+            SELECT @reservation_status=status,@reservation_expiry=expires_at FROM dbo.reservation WITH(UPDLOCK,HOLDLOCK) WHERE id=@reservation_id;
+            IF @reservation_status IS NULL OR @reservation_status<>N'有效' OR @reservation_expiry<=CONVERT(datetime2,SYSUTCDATETIME() AT TIME ZONE 'UTC' AT TIME ZONE 'China Standard Time')
+                THROW 52502,N'Reservation is no longer available for pickup.',1;
+        END;
         DECLARE @quote nvarchar(max);
-        EXEC api.usp_sale_calculate @items,@member_phone,@used_points,@quote OUTPUT;
-        IF @expected_quote IS NULL OR HASHBYTES('SHA2_256',@quote)<>HASHBYTES('SHA2_256',@expected_quote)
+        EXEC api.usp_sale_calculate @items,@member_phone,@used_points,@quote OUTPUT,@reservation_id;
+        IF TRY_CONVERT(datetime2,JSON_VALUE(@expected_quote,'$.confirmation_expires_at')) IS NULL
+            OR TRY_CONVERT(datetime2,JSON_VALUE(@expected_quote,'$.confirmation_expires_at'))<=SYSUTCDATETIME()
+            THROW 52107,N'Confirmation expired; preview again.',1;
+        IF @expected_quote IS NULL OR HASHBYTES('SHA2_256',@quote)<>HASHBYTES('SHA2_256',JSON_MODIFY(@expected_quote,'$.confirmation_expires_at',NULL))
             THROW 52107,N'价格或会员结算条件已变化，请重新预览并确认收款。',1;
         DECLARE @now datetime2=CONVERT(datetime2,SYSUTCDATETIME() AT TIME ZONE 'UTC' AT TIME ZONE 'China Standard Time');
         DECLARE @no varchar(20)='W7S'+RIGHT(REPLICATE('0',17)+CONVERT(varchar(17),NEXT VALUE FOR api.sale_number),17),@sale bigint;
         DECLARE @subtotal decimal(10,2),@rate decimal(3,2),@deduction decimal(10,2),@paid decimal(10,2),@earned int,@card nvarchar(10);
         SELECT @subtotal=subtotal_amount,@rate=discount_rate,@deduction=point_deduction_amount,@paid=paid_amount,@earned=earned_points,@card=card_level
         FROM OPENJSON(@quote) WITH(subtotal_amount decimal(10,2),discount_rate decimal(3,2),point_deduction_amount decimal(10,2),paid_amount decimal(10,2),earned_points int,card_level nvarchar(10));
-        INSERT dbo.sale(no,cashier_by,sold_at,member_phone,card_level,subtotal_amount,discount_rate,point_deduction_amount,paid_amount)
-        VALUES(@no,@employee_phone,@now,@member_phone,@card,@subtotal,@rate,@deduction,@paid);
+        SET @member_phone=JSON_VALUE(@quote,'$.member_phone');
+        INSERT dbo.sale(no,cashier_by,sold_at,member_phone,card_level,subtotal_amount,discount_rate,point_deduction_amount,paid_amount,reservation_id)
+        VALUES(@no,@employee_phone,@now,@member_phone,@card,@subtotal,@rate,@deduction,@paid,@reservation_id);
         SET @sale=SCOPE_IDENTITY();
         INSERT dbo.sale_item(sale_id,goods_id,quantity,unit_price)
         SELECT @sale,goods_id,quantity,unit_price FROM OPENJSON(@quote,'$.items') WITH(goods_id bigint,quantity int,unit_price decimal(10,2));
-        UPDATE g SET stock_total=stock_total-i.quantity FROM dbo.goods g
+        UPDATE g SET stock_total=stock_total-i.quantity,reserved_qty=reserved_qty-CASE WHEN @reservation_id IS NULL THEN 0 ELSE i.quantity END FROM dbo.goods g
         JOIN dbo.sale_item i ON i.goods_id=g.id AND i.sale_id=@sale;
+        IF @reservation_id IS NOT NULL UPDATE dbo.reservation SET status=N'已取' WHERE id=@reservation_id;
         INSERT dbo.stock_movement(goods_id,change_type,quantity,changed_by,changed_at,sale_id)
         SELECT goods_id,N'卖出',-quantity,@employee_phone,@now,@sale FROM dbo.sale_item WHERE sale_id=@sale;
         IF @used_points>0
@@ -217,6 +234,16 @@ BEGIN
         IF XACT_STATE()<>0 ROLLBACK;
         THROW;
     END CATCH;
+END;
+GO
+CREATE OR ALTER PROCEDURE api.usp_sale_create
+    @employee_phone varchar(11),@session_version int,@request_key uniqueidentifier,
+    @items nvarchar(max),@member_phone varchar(11),@used_points int,@expected_quote nvarchar(max)
+AS
+BEGIN
+    SET NOCOUNT ON;
+    IF @@TRANCOUNT<>0 THROW 52100,N'Sale entry requires a new transaction.',1;
+    EXEC api.usp_sale_commit @employee_phone,@session_version,@request_key,@items,@member_phone,@used_points,@expected_quote,NULL;
 END;
 GO
 CREATE OR ALTER PROCEDURE api.usp_sale_get

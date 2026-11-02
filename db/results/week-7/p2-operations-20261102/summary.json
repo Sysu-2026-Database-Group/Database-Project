@@ -1,0 +1,234 @@
+{
+  "command": "test",
+  "run_id": "20261102T141438Z1a0f63",
+  "status": "PASS",
+  "config": {
+    "server": "localhost",
+    "driver": "ODBC Driver 17 for SQL Server",
+    "database": "ShiguangBookstoreWeek7EntryYourRun",
+    "login_prefix": "bookstore_w7_yourrun",
+    "port": 5000,
+    "settings_directory": "app"
+  },
+  "resources": [
+    {
+      "kind": "baseline_database",
+      "name": "ShiguangBookstoreWeek6Runner202611021414381a0f63"
+    },
+    {
+      "kind": "auth-test_database",
+      "name": "ShiguangBookstoreWeek7AuthTests202611021414381a0f63"
+    },
+    {
+      "kind": "sale-test_database",
+      "name": "ShiguangBookstoreWeek7SaleTests202611021414381a0f63"
+    },
+    {
+      "kind": "temporary_login",
+      "name": "bookstore_test_ee17e70ff30355e4_auth"
+    },
+    {
+      "kind": "temporary_login",
+      "name": "bookstore_test_ee17e70ff30355e4_cashier"
+    },
+    {
+      "kind": "temporary_login",
+      "name": "bookstore_test_ee17e70ff30355e4_inventory"
+    },
+    {
+      "kind": "temporary_login",
+      "name": "bookstore_test_ee17e70ff30355e4_manager"
+    }
+  ],
+  "steps": [
+    {
+      "name": "dependencies",
+      "log": "00-dependencies.log",
+      "status": "PASS"
+    },
+    {
+      "name": "instance",
+      "log": "01-instance.log",
+      "status": "PASS"
+    },
+    {
+      "name": "schema",
+      "log": "02-schema.log",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "name": "seed",
+      "log": "03-seed.log",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "name": "baseline-check",
+      "log": "04-baseline-check.log",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "name": "migration",
+      "log": "05-migration.log",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "name": "migration-check",
+      "log": "06-migration-check.log",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "name": "application-baseline",
+      "log": "07-application-baseline.log",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "name": "application-baseline-check",
+      "log": "08-application-baseline-check.log",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "name": "application-rule-tests",
+      "log": "09-application-rule-tests.log",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "name": "expanded-seed",
+      "log": "10-expanded-seed.log",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "name": "regression",
+      "log": "11-regression.log",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "name": "auth-test-copy",
+      "log": "12-auth-test-copy.log",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "name": "auth-test-auth-schema",
+      "log": "13-auth-test-auth-schema.log",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "name": "auth-test-sales-schema",
+      "log": "14-auth-test-sales-schema.log",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "name": "auth-test-workspace-schema",
+      "log": "15-auth-test-workspace-schema.log",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "name": "auth-test-operations-schema",
+      "log": "16-auth-test-operations-schema.log",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "name": "auth-test-baseline-check",
+      "log": "17-auth-test-baseline-check.log",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "name": "auth-test-permissions-check",
+      "log": "18-auth-test-permissions-check.log",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "name": "sale-test-copy",
+      "log": "19-sale-test-copy.log",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "name": "sale-test-auth-schema",
+      "log": "20-sale-test-auth-schema.log",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "name": "sale-test-sales-schema",
+      "log": "21-sale-test-sales-schema.log",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "name": "sale-test-workspace-schema",
+      "log": "22-sale-test-workspace-schema.log",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "name": "sale-test-operations-schema",
+      "log": "23-sale-test-operations-schema.log",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "name": "sale-test-baseline-check",
+      "log": "24-sale-test-baseline-check.log",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "name": "sale-test-permissions-check",
+      "log": "25-sale-test-permissions-check.log",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "name": "business-baseline",
+      "log": "26-business-baseline.log",
+      "status": "PASS"
+    },
+    {
+      "name": "full-tests",
+      "log": "27-full-tests.log",
+      "status": "PASS",
+      "exit_code": 0
+    },
+    {
+      "name": "test-state-restored",
+      "log": "28-test-state-restored.log",
+      "status": "PASS"
+    },
+    {
+      "name": "cleanup-test-logins",
+      "log": "29-cleanup-test-logins.log",
+      "status": "PASS"
+    },
+    {
+      "name": "week6-artifact-audit",
+      "log": "30-week6-artifact-audit.log",
+      "status": "PASS",
+      "exit_code": 0
+    }
+  ],
+  "tests": {
+    "run": 90,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "mode": "full",
+    "successful": true
+  }
+}

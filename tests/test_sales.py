@@ -77,6 +77,13 @@ class SaleValidationTests(unittest.TestCase):
                 self.service.preview(dict(self.actor, role=role), self.payload)
             self.assertEqual(error.exception.status, 403)
 
+    def test_signed_but_incomplete_confirmation_is_rejected_cleanly(self):
+        for value in (None, [], {}, dict(phone=self.actor['phone'], version=1)):
+            with self.subTest(value=value), self.assertRaises(AppError) as caught:
+                self.service.create(self.actor, self.service.signer.dumps(value))
+            self.assertEqual(caught.exception.status, 400)
+        self.assertEqual(self.dao.created, [])
+
 
 TEST_DATABASE = os.environ.get('BOOKSTORE_SALE_TEST_DATABASE', 'ShiguangBookstoreWeek7SaleTests20261023')
 
@@ -92,7 +99,7 @@ class SaleDatabaseTests(unittest.TestCase):
             raise RuntimeError('无效的测试登录前缀。')
         # 专用配置必须显式提供；绝不从运行连接进行字符串替换或回退。
         cls.connections = {role: os.environ['BOOKSTORE_SALE_TEST_DB_' + role.upper()]
-                           for role in ('auth', 'cashier', 'inventory', 'manager')}
+                           for role in ('auth', 'cashier', 'inventory', 'manager', 'guest', 'task')}
         cls.admin = pyodbc.connect(os.environ['BOOKSTORE_SALE_TEST_ADMIN_CONNECTION'], autocommit=True, timeout=5)
         cls.addClassCleanup(cls.admin.close)
         cursor = cls.admin.cursor()
@@ -106,7 +113,7 @@ class SaleDatabaseTests(unittest.TestCase):
         cls.inserted_credentials = False
         cls.original_expiries = []
         cls.addClassCleanup(cls.cleanup_class)
-        for role in ('auth','cashier','inventory','manager'):
+        for role in ('auth','cashier','inventory','manager','guest','task'):
             login = cls.login_prefix + '_' + role
             if cursor.execute('SELECT DATABASE_PRINCIPAL_ID(?)', (login,)).fetchval() is not None:
                 raise RuntimeError('测试数据库中服务用户已存在，请核对前次清理。')
@@ -133,6 +140,7 @@ class SaleDatabaseTests(unittest.TestCase):
         cls.goods = [tuple(row) for row in cursor.execute('SELECT id,price,stock_total,reserved_qty,on_shelf FROM dbo.goods').fetchall()]
         cls.members = [tuple(row) for row in cursor.execute('SELECT phone,expires_at,points_balance FROM dbo.member').fetchall()]
         cls.cards = [tuple(row) for row in cursor.execute('SELECT level,discount_rate FROM dbo.card_type').fetchall()]
+        cls.reservation_states = [tuple(row) for row in cursor.execute('SELECT id,status,cancelled_by_employee,cancelled_at FROM dbo.reservation').fetchall()]
         cls.service = SalesService(cls.dao, 'real-sales-test-secret-' * 3)
         cls.actor = dict(phone='13800000003', role='收银员', session_version=1)
         cls.app = create_app({'TESTING':True, 'SECRET_KEY':'real-sales-test-secret-' * 3}, dao=cls.dao)
@@ -167,6 +175,15 @@ class SaleDatabaseTests(unittest.TestCase):
         cursor = self.admin.cursor()
         try:
             cursor.execute("IF OBJECT_ID('dbo.sale_test_fail_fund','TR') IS NOT NULL DROP TRIGGER dbo.sale_test_fail_fund")
+            cursor.execute('''DELETE f FROM dbo.fund_flow f JOIN api.operation_request r
+                ON f.id=TRY_CONVERT(bigint,JSON_VALUE(r.result_json,'$.id')) WHERE r.action='inject';
+                DELETE api.operation_request;''')
+            cursor.execute('''
+                DELETE f FROM dbo.fund_flow f JOIN dbo.purchase_request p ON p.id=f.request_id WHERE p.no LIKE 'W7P%';
+                DELETE m FROM dbo.stock_movement m JOIN dbo.purchase_request p ON p.id=m.request_id WHERE p.no LIKE 'W7P%';
+                DELETE i FROM dbo.purchase_request_item i JOIN dbo.purchase_request p ON p.id=i.request_id WHERE p.no LIKE 'W7P%';
+                DELETE dbo.purchase_request WHERE no LIKE 'W7P%';
+            ''')
             cursor.execute('''
                 DELETE r FROM api.sale_request r JOIN dbo.sale s ON s.id=r.sale_id WHERE s.no LIKE 'W7S%';
                 DELETE f FROM dbo.fund_flow f JOIN dbo.sale s ON s.id=f.sale_id WHERE s.no LIKE 'W7S%';
@@ -175,12 +192,25 @@ class SaleDatabaseTests(unittest.TestCase):
                 DELETE i FROM dbo.sale_item i JOIN dbo.sale s ON s.id=i.sale_id WHERE s.no LIKE 'W7S%';
                 DELETE dbo.sale WHERE no LIKE 'W7S%';
             ''')
+            cursor.execute('''DECLARE @reservations TABLE(id bigint);
+                INSERT @reservations SELECT reservation_id FROM api.reservation_request;
+                DELETE i FROM dbo.reservation_item i JOIN @reservations r ON r.id=i.reservation_id;
+                DELETE api.reservation_request;
+                DELETE api.reservation_cancellation;
+                DELETE x FROM dbo.reservation x JOIN @reservations r ON r.id=x.id;''')
             for goods, price, stock, reserved, on_shelf in self.goods:
                 cursor.execute('UPDATE dbo.goods SET price=?,stock_total=?,reserved_qty=?,on_shelf=? WHERE id=?', (price,stock,reserved,on_shelf,goods))
+            for identifier,status,cancelled_by,cancelled_at in self.reservation_states:
+                cursor.execute('UPDATE dbo.reservation SET status=?,cancelled_by_employee=?,cancelled_at=? WHERE id=?',
+                               (status,cancelled_by,cancelled_at,identifier))
             for phone, expires, points in self.members:
                 cursor.execute('UPDATE dbo.member SET expires_at=?,points_balance=? WHERE phone=?', (expires,points,phone))
-            for level, rate in self.cards:
-                cursor.execute('UPDATE dbo.card_type SET discount_rate=? WHERE level=?',(rate,level))
+            # Both tiers must be restored in one statement: an intermediate
+            # per-tier update can violate the cross-row relation enforced by P0.
+            cursor.execute('''UPDATE c SET discount_rate=j.discount_rate
+                FROM dbo.card_type c JOIN OPENJSON(?)
+                WITH(level nvarchar(10),discount_rate decimal(3,2)) j ON j.level=c.level''',
+                (json.dumps([dict(level=level,discount_rate=str(rate)) for level,rate in self.cards]),))
         finally:
             cursor.close()
         self.assertEqual(self.snapshot(), self.baseline, '测试后业务数据未恢复为基线')
@@ -212,6 +242,219 @@ class SaleDatabaseTests(unittest.TestCase):
         self.assertEqual(self.sql('SELECT quantity,changed_by FROM dbo.stock_movement WHERE sale_id=?',(result['id'],)),[(-1,self.actor['phone'])])
         self.assertEqual(self.sql('SELECT fund_before,fund_after,amount,recorded_by FROM dbo.fund_flow WHERE sale_id=?',(result['id'],)),[(Decimal('555.30'),Decimal('574.30'),19,self.actor['phone'])])
         self.assertEqual(self.sql('SELECT COUNT(*) FROM dbo.point_movement WHERE sale_id=?',(result['id'],)),[(0,)])
+
+    def test_concurrent_manager_injection_and_cashier_sale_keep_fund_chain(self):
+        from app.operations import OperationsService
+        operations = OperationsService(self.dao, 'p2-concurrent-secret' * 3)
+        manager = dict(phone='13800000001', role='店长', session_version=1)
+        envelope = dict(request_key=str(uuid4()), payload=dict(amount='50.00'))
+        injection = operations.preview(manager, 'inject', envelope)
+        sale = self.service.preview(self.actor, self.payload())
+        barrier = threading.Barrier(3)
+
+        def inject():
+            barrier.wait(timeout=10)
+            return operations.confirm(manager, injection['quote_token'])
+
+        def sell():
+            barrier.wait(timeout=10)
+            return self.service.create(self.actor, sale['quote_token'])
+
+        before = self.sql('SELECT TOP(1) fund_after FROM dbo.fund_flow ORDER BY id DESC')[0][0]
+        with ThreadPoolExecutor(max_workers=3) as pool:
+            futures = [pool.submit(inject), pool.submit(inject), pool.submit(sell)]
+            results = [future.result(timeout=25) for future in futures]
+        self.assertEqual(results[0], results[1])
+        self.assertEqual(self.sql('SELECT COUNT(*) FROM api.operation_request'), [(1,)])
+        self.assertEqual(self.sql('SELECT TOP(1) fund_after FROM dbo.fund_flow ORDER BY id DESC')[0][0],
+                         before + Decimal('50.00') + Decimal(str(results[2]['paid_amount'])))
+        self.assertEqual(self.sql('''SELECT id FROM (
+            SELECT id,fund_before,LAG(fund_after) OVER(ORDER BY id) previous FROM dbo.fund_flow
+            ) f WHERE previous IS NOT NULL AND previous<>fund_before'''), [])
+
+    def purchase_fixture(self, *, submitted=True):
+        from app.operations import OperationsService
+        operations = OperationsService(self.dao, 'p2-concurrent-secret' * 3)
+        inventory = dict(phone='13800000002', role='库管', session_version=1)
+        manager = dict(phone='13800000001', role='店长', session_version=1)
+        supplier, goods, cost = self.sql('SELECT TOP(1) supplier_id,goods_id,quote_amount FROM dbo.supplier_quote ORDER BY supplier_id,goods_id')[0]
+        payload = dict(supplier_id=supplier, items=[dict(goods_id=goods, quantity=3, unit_cost=str(cost))])
+        def write(actor, action, value, key=None):
+            return operations.write(actor, action, dict(request_key=key or str(uuid4()), payload=value))
+        purchase = write(inventory, 'draft', payload)['id']
+        if submitted:
+            write(inventory, 'submit', dict(id=purchase))
+        return operations, inventory, manager, purchase, goods, cost, write
+
+    def race_operations(self, *actions):
+        barrier = threading.Barrier(len(actions))
+        def call(action):
+            barrier.wait(timeout=10)
+            # SQL can choose a deadlock victim when distinct request ranges and
+            # one document compete. Retry the SAME key after the victim rolls back.
+            for attempt in range(3):
+                try:
+                    return action()
+                except AppError as error:
+                    if error.code == 'sale_busy' and attempt < 2:
+                        continue
+                    return error
+        with ThreadPoolExecutor(max_workers=len(actions)) as pool:
+            return [future.result(timeout=40) for future in [pool.submit(call, action) for action in actions]]
+
+    def test_concurrent_payment_and_receipt_each_happen_once(self):
+        operations, inventory, manager, purchase, goods, cost, write = self.purchase_fixture()
+        write(manager, 'approve', dict(id=purchase))
+        amount = cost * 3
+        stock = self.sql('SELECT stock_total FROM dbo.goods WHERE id=?', (goods,))[0][0]
+        balance = self.sql('SELECT TOP(1) fund_after FROM dbo.fund_flow ORDER BY id DESC')[0][0]
+        previews = [operations.preview(manager, 'pay', dict(request_key=str(uuid4()), payload=dict(id=purchase))) for _ in range(2)]
+        payments = self.race_operations(*(lambda p=p: operations.confirm(manager, p['quote_token']) for p in previews))
+        self.assertEqual(sum(isinstance(result, dict) for result in payments), 1)
+        self.assertEqual([result.code for result in payments if isinstance(result, AppError)], ['operation_conflict'])
+        self.assertEqual(self.sql('SELECT amount,fund_after FROM dbo.fund_flow WHERE request_id=?', (purchase,)), [(amount, balance-amount)])
+        keys = [str(uuid4()), str(uuid4())]
+        receipts = self.race_operations(*(lambda key=key: write(inventory, 'receive', dict(id=purchase), key) for key in keys))
+        self.assertEqual(sum(isinstance(result, dict) for result in receipts), 1)
+        self.assertEqual([result.code for result in receipts if isinstance(result, AppError)], ['operation_conflict'])
+        self.assertEqual(self.sql('SELECT stock_total FROM dbo.goods WHERE id=?', (goods,)), [(stock+3,)])
+        self.assertEqual(self.sql('SELECT SUM(quantity),COUNT(*) FROM dbo.stock_movement WHERE request_id=?', (purchase,)), [(3,1)])
+        self.assertEqual(self.sql('SELECT COUNT(*) FROM dbo.fund_flow WHERE request_id=?', (purchase,)), [(1,)])
+
+    def test_concurrent_approval_and_cancel_produce_one_terminal_decision(self):
+        operations, inventory, manager, purchase, goods, cost, write = self.purchase_fixture()
+        approve_key, cancel_key = str(uuid4()), str(uuid4())
+        results = self.race_operations(lambda: write(manager, 'approve', dict(id=purchase), approve_key),
+                                       lambda: write(inventory, 'cancel', dict(id=purchase), cancel_key))
+        self.assertEqual(sum(isinstance(result, dict) for result in results), 1)
+        self.assertEqual([result.code for result in results if isinstance(result, AppError)], ['operation_conflict'])
+        state = self.sql('SELECT status,approved_by,cancelled_by FROM dbo.purchase_request WHERE id=?', (purchase,))[0]
+        self.assertIn(state, [('已审批', manager['phone'], None), ('已取消', None, inventory['phone'])])
+        self.assertEqual(self.sql('SELECT COUNT(*) FROM dbo.fund_flow WHERE request_id=?', (purchase,)), [(0,)])
+
+    def test_successful_request_conflict_and_submitted_content_are_immutable(self):
+        operations, inventory, manager, purchase, goods, cost, write = self.purchase_fixture()
+        before = self.sql('SELECT goods_id,request_qty,unit_cost FROM dbo.purchase_request_item WHERE request_id=?', (purchase,))
+        supplier = self.sql('SELECT supplier_id FROM dbo.purchase_request WHERE id=?', (purchase,))[0][0]
+        with self.assertRaises(AppError) as frozen:
+            write(inventory, 'draft', dict(id=purchase, supplier_id=supplier, items=[]))
+        self.assertEqual(frozen.exception.code, 'operation_conflict')
+        self.assertEqual(self.sql('SELECT goods_id,request_qty,unit_cost FROM dbo.purchase_request_item WHERE request_id=?', (purchase,)), before)
+        key = str(uuid4())
+        first = operations.preview(manager, 'inject', dict(request_key=key, payload=dict(amount='1')))
+        result = operations.confirm(manager, first['quote_token'])
+        changed = operations.preview(manager, 'inject', dict(request_key=key, payload=dict(amount='2')))
+        with self.assertRaises(AppError) as conflict:
+            operations.confirm(manager, changed['quote_token'])
+        self.assertEqual(conflict.exception.code, 'request_conflict')
+        self.assertEqual(operations.confirm(manager, first['quote_token']), result)
+        self.assertEqual(self.sql('SELECT amount FROM dbo.fund_flow WHERE id=?', (result['id'],)), [(Decimal('1'),)])
+
+    def test_public_catalog_hides_internal_data_and_unlisted_goods(self):
+        listing = self.dao.shop_catalog(page_size=100)
+        expected = {row[0] for row in self.sql('SELECT id FROM dbo.goods WHERE on_shelf=1 AND price IS NOT NULL')}
+        self.assertEqual({row['id'] for row in listing['records']}, expected)
+        prohibited = {'stock_total','reserved_qty','available_qty','created_by','updated_by','unit_cost','quote_amount'}
+        for row in listing['records']:
+            self.assertFalse(set(row) & prohibited)
+            self.assertIsInstance(row['price'], str)
+            self.assertIsInstance(row['available'], bool)
+        self.sql('UPDATE dbo.goods SET on_shelf=0 WHERE id=3')
+        with self.assertRaises(AppError) as missing:
+            self.dao.shop_catalog(id=3)
+        self.assertEqual(missing.exception.status, 404)
+        self.assertEqual(self.dao.shop_catalog(page=1000000)['records'], [])
+
+    def test_reservation_pickup_consumes_only_own_reserved_stock_and_replays(self):
+        from app.reservations import ReservationService
+        reservations=ReservationService(self.dao,'reservation-test-secret-'*3)
+        before=self.sql('SELECT stock_total,reserved_qty FROM dbo.goods WHERE id=3')[0]
+        request=dict(request_key=str(uuid4()),phone='13912345678',items=[dict(goods_id=3,quantity=2)])
+        receipt=reservations.create(request)
+        self.assertEqual(reservations.create(request),receipt)
+        self.assertEqual(self.sql('SELECT stock_total,reserved_qty FROM dbo.goods WHERE id=3'),[(before[0],before[1]+2)])
+        preview=reservations.preview(self.actor,dict(phone=receipt['phone'],code=receipt['code'],request_key=str(uuid4())))
+        result=reservations.confirm(self.actor,preview['quote_token'])
+        self.assertEqual(reservations.confirm(self.actor,preview['quote_token']),result)
+        self.assertEqual(self.sql('SELECT stock_total,reserved_qty FROM dbo.goods WHERE id=3'),[(before[0]-2,before[1])])
+        self.assertEqual(self.dao.reservation_lookup(receipt['phone'],receipt['code'])['status'],'已取')
+        self.assertEqual(self.sql('SELECT COUNT(*) FROM dbo.sale WHERE reservation_id=(SELECT id FROM dbo.reservation WHERE code=?)',(receipt['code'],)),[(1,)])
+
+    def test_reservation_cancel_and_real_expiry_release_once(self):
+        from app.reservations import ReservationService
+        reservations=ReservationService(self.dao,'reservation-test-secret-'*3)
+        before=self.sql('SELECT stock_total,reserved_qty FROM dbo.goods WHERE id=3')[0]
+        receipt=reservations.create(dict(request_key=str(uuid4()),phone='13912345678',items=[dict(goods_id=3,quantity=2)]))
+        cancel_key=str(uuid4())
+        first=self.dao.reservation_cancel(receipt['phone'],receipt['code'],request_key=cancel_key)
+        self.assertEqual(self.dao.reservation_cancel(receipt['phone'],receipt['code'],request_key=cancel_key),first)
+        with self.assertRaises(AppError):
+            self.dao.reservation_cancel(receipt['phone'],receipt['code'],request_key=str(uuid4()))
+        self.assertEqual(first['status'],'已取消')
+        receipt=reservations.create(dict(request_key=str(uuid4()),phone='13912345678',items=[dict(goods_id=3,quantity=2)]))
+        self.sql('UPDATE dbo.reservation SET created_at=DATEADD(day,-4,created_at),expires_at=DATEADD(day,-4,expires_at) WHERE code=?',(receipt['code'],))
+        self.assertGreaterEqual(self.dao.reservations_expire(),1)
+        self.assertEqual(self.dao.reservations_expire(),0)
+        self.assertEqual(self.dao.reservation_lookup(receipt['phone'],receipt['code'])['status'],'已过期')
+        self.assertEqual(self.sql('SELECT stock_total,reserved_qty FROM dbo.goods WHERE id=3'),[before])
+
+    def test_reservation_and_sale_compete_for_last_available_unit(self):
+        from app.reservations import ReservationService
+        reservations=ReservationService(self.dao,'reservation-test-secret-'*3)
+        self.sql('UPDATE dbo.goods SET stock_total=reserved_qty+1 WHERE id=3')
+        preview=self.service.preview(self.actor,self.payload())
+        request=dict(request_key=str(uuid4()),phone='13912345678',items=[dict(goods_id=3,quantity=1)])
+        results=self.race_operations(lambda:reservations.create(request),lambda:self.service.create(self.actor,preview['quote_token']))
+        self.assertEqual(sum(not isinstance(result,AppError) for result in results),1)
+        self.assertEqual(self.sql('SELECT stock_total-reserved_qty FROM dbo.goods WHERE id=3'),[(0,)])
+
+    def test_pickup_and_cancel_compete_without_double_release(self):
+        from app.reservations import ReservationService
+        reservations=ReservationService(self.dao,'reservation-test-secret-'*3)
+        before=self.sql('SELECT stock_total,reserved_qty FROM dbo.goods WHERE id=3')[0]
+        receipt=reservations.create(dict(request_key=str(uuid4()),phone='13912345678',items=[dict(goods_id=3,quantity=1)]))
+        preview=reservations.preview(self.actor,dict(phone=receipt['phone'],code=receipt['code'],request_key=str(uuid4())))
+        key=str(uuid4())
+        results=self.race_operations(lambda:reservations.confirm(self.actor,preview['quote_token']),
+                                    lambda:self.dao.reservation_cancel(receipt['phone'],receipt['code'],request_key=key))
+        self.assertEqual(sum(not isinstance(result,AppError) for result in results),1)
+        state=self.dao.reservation_lookup(receipt['phone'],receipt['code'])['status']
+        self.assertIn(state,('已取','已取消'))
+        self.assertEqual(self.sql('SELECT stock_total,reserved_qty FROM dbo.goods WHERE id=3'),
+                         [(before[0]-(1 if state=='已取' else 0),before[1])])
+
+    def test_expired_sale_preview_rejects_new_write_but_successful_request_replays(self):
+        preview=self.service.preview(self.actor,self.payload())
+        value=self.service.signer.loads(preview['quote_token'])
+        quote=json.loads(value['quote']); quote['confirmation_expires_at']='2000-01-01T00:00:00'
+        value['quote']=json.dumps(quote)
+        with self.assertRaises(AppError) as caught:
+            self.service.create(self.actor,self.service.signer.dumps(value))
+        self.assertEqual(caught.exception.code,'quote_changed')
+        result=self.service.create(self.actor,preview['quote_token'])
+        self.assertEqual(self.service.create(self.actor,self.service.signer.dumps(value)),result)
+
+    def test_guest_login_cannot_access_employee_or_business_tables(self):
+        with self.dao.connection('guest') as connection:
+            cursor = connection.cursor()
+            try:
+                for sql in ('SELECT * FROM dbo.goods', 'SELECT * FROM auth.employee_credential',
+                            "EXEC api.usp_employee_login_lookup '13800000001'",
+                            "EXEC api.usp_operation_read '13800000001',1,'finance'"):
+                    with self.subTest(sql=sql), self.assertRaises(pyodbc.Error) as caught:
+                        cursor.execute(sql)
+                    self.assertIn('(229)', str(caught.exception))
+            finally:
+                cursor.close()
+        for role in ('auth','cashier','inventory','manager'):
+            with self.dao.connection(role) as connection:
+                cursor = connection.cursor()
+                try:
+                    with self.assertRaises(pyodbc.Error) as denied:
+                        cursor.execute('EXEC api.usp_shop_catalog')
+                    self.assertIn('(229)', str(denied.exception))
+                finally:
+                    cursor.close()
 
     def test_member_discount_points_and_three_ledgers_reconcile(self):
         result = self.create_sale(self.payload(member='13900000003',points=100))

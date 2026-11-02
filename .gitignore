@@ -26,3 +26,5 @@ __pycache__/
 *.local.log
 .runner/
 
+**/settings.guest.local.ps1
+**/settings.task.local.ps1

@@ -1,0 +1,9 @@
+{% extends 'base.html' %}{% block title %}全店单据{% endblock %}{% block content %}
+<h1>全店{{ {'sales':'销售','returns':'退货','reservations':'预订'}[kind] }}单据</h1>
+<p><a href="/management/sales">销售单</a> · <a href="/management/returns">退货与回收</a> · <a href="/management/reservations">预订单</a></p>
+<section class="panel"><p>共 {{ data.total }} 条，第 {{ data.page }} 页。预定码属于顾客凭证，不在管理列表展示。</p>
+{% for row in data.records %}<details><summary>{{ row.no or ('预订 #' ~ row.id) }} · {{ row.status or '已退款' }} · {{ row.paid_amount or row.refund_amount or '' }}</summary>
+{% set labels={'id':'编号','no':'单号','status':'状态','cashier_by':'收银员','member_phone':'会员编号','reservation_id':'原预订编号','sold_at':'销售时间','paid_amount':'实收金额','sale_no':'原销售单号','refund_amount':'退款金额','handled_by':'退货受理人','handled_at':'受理时间','phone':'预订手机号','created_at':'创建时间','expires_at':'到期时间','picked_by':'取货经办','picked_at':'取货时间','cancelled_by_employee':'代取消员工','cancelled_at':'取消时间','goods_id':'商品编号','name':'商品','quantity':'数量','unit_price':'成交单价','sale_item_id':'原销售明细编号','recovered':'已回收'} %}
+<dl>{% for key,value in row.items() if key != 'items' %}<dt>{{ labels.get(key,key) }}</dt><dd>{{ value if value is not none else '—' }}</dd>{% endfor %}</dl>
+<div class="table-scroll"><table><tbody>{% for item in row['items'] %}<tr>{% for key,value in item.items() %}<td>{{ labels.get(key,key) }}: {{ ('是' if value else '否') if key == 'recovered' else value }}</td>{% endfor %}</tr>{% endfor %}</tbody></table></div></details>{% else %}<p>暂无记录。</p>{% endfor %}
+<nav>{% if data.page>1 %}<a href="?page={{ data.page-1 }}&page_size={{ data.page_size }}">上一页</a>{% endif %} {% if data.page*data.page_size<data.total %}<a href="?page={{ data.page+1 }}&page_size={{ data.page_size }}">下一页</a>{% endif %}</nav></section>{% endblock %}

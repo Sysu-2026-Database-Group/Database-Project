@@ -19,7 +19,7 @@ import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
-ROLES = ('auth', 'cashier', 'inventory', 'manager')
+ROLES = ('auth', 'cashier', 'inventory', 'manager', 'guest', 'task')
 DEFAULTS = dict(server='localhost', driver='', database='ShiguangBookstoreWeek7EntryYourRun',
                 login_prefix='bookstore_w7_yourrun', port=5000, settings_directory='app')
 
@@ -125,8 +125,12 @@ class Report:
             self.data['error'] = safe_error(error)
         self.save()
         sources = sorted(set([ROOT / 'run.ps1', ROOT / 'scripts/project_runner.py', ROOT / 'requirements.txt']
-                             + list((ROOT / 'app').glob('*.py')) + list((ROOT / 'tests').glob('test_*.py'))
-                             + list((ROOT / 'db').glob('*.sql'))))
+                             + list((ROOT / 'app').rglob('*.py')) + list((ROOT / 'tests').glob('test_*.py'))
+                             + list((ROOT / 'app/templates').rglob('*.html'))
+                             + list((ROOT / 'app/static').rglob('*.css')) + list((ROOT / 'app/static').rglob('*.js'))
+                             + list((ROOT / 'db').glob('*.sql'))
+                             + list((ROOT / 'db/checks').glob('application-*.sql'))
+                             + [ROOT / 'db/tests/application-baseline.sql']))
         manifest = {str(path.relative_to(ROOT)): hashlib.sha256(path.read_bytes()).hexdigest() for path in sources}
         (self.directory / 'source-hashes.json').write_text(json.dumps(manifest, indent=2) + '\n', encoding='utf-8')
         print(f'{status}: {self.directory / "summary.json"}', flush=True)
@@ -186,6 +190,9 @@ def prepare_source(report, config):
     report.resource('baseline_database', source)
     scripts = [('schema', 'schema.sql'), ('seed', 'sample-data.sql'), ('baseline-check', 'checks/verify.sql'),
                ('migration', 'migration.sql'), ('migration-check', 'checks/migration-check.sql'),
+               ('application-baseline', 'application-baseline.sql'),
+               ('application-baseline-check', 'checks/application-baseline-check.sql'),
+               ('application-rule-tests', 'tests/application-baseline.sql'),
                ('expanded-seed', 'sample-data-week-6.sql'), ('regression', 'regression.sql')]
     for name, script in scripts:
         sql_script(report, config, name, script, source)
@@ -197,6 +204,15 @@ def prepare_target(report, config, source, target, label):
     sql_script(report, config, label + '-copy', 'prepare-entry-copy.sql', target, SourceDatabaseName=source)
     sql_script(report, config, label + '-auth-schema', 'entry-foundation.sql', target)
     sql_script(report, config, label + '-sales-schema', 'sale-entry.sql', target)
+    sql_script(report, config, label + '-workspace-schema', 'workspace-entry.sql', target)
+    sql_script(report, config, label + '-operations-schema', 'operations-entry.sql', target)
+    sql_script(report, config, label + '-shop-schema', 'shop-entry.sql', target)
+    sql_script(report, config, label + '-reservation-schema', 'reservation-entry.sql', target)
+    sql_script(report, config, label + '-management-schema', 'management-entry.sql', target)
+    sql_script(report, config, label + '-member-schema', 'member-entry.sql', target)
+    sql_script(report, config, label + '-return-schema', 'return-entry.sql', target)
+    sql_script(report, config, label + '-baseline-check', 'checks/application-baseline-check.sql', target)
+    sql_script(report, config, label + '-permissions-check', 'checks/application-permissions-check.sql', target)
 
 
 def settings_directory(config):
@@ -209,8 +225,13 @@ def business_fingerprints(config, database):
         cursor = connection.cursor()
         try:
             tables = [row[0] for row in cursor.execute("SELECT name FROM sys.tables WHERE schema_id=SCHEMA_ID('dbo') AND name<>'schema_migration' ORDER BY name").fetchall()]
-            if len(tables) != 19:
-                raise RuntimeError('业务表数量不符，无法确认测试后的数据恢复。')
+            expected = {'employee', 'book', 'toy', 'supplier', 'card_type', 'goods',
+                        'supplier_quote', 'member', 'purchase_request', 'purchase_request_item',
+                        'reservation', 'reservation_item', 'sale', 'sale_item', 'goods_return',
+                        'goods_return_item', 'stock_movement', 'point_movement', 'fund_flow',
+                        'member_service', 'member_contact_history'}
+            if set(tables) != expected:
+                raise RuntimeError('业务表清单不符，无法确认测试后的数据恢复。')
             result = {}
             quote = lambda value: '[' + value.replace(']', ']]') + ']'
             for table in tables:
@@ -235,7 +256,7 @@ def validate_runtime(config):
     from app import create_app
     connections = {role: os.environ.get('BOOKSTORE_DB_' + role.upper(), '') for role in ROLES}
     if not all(connections.values()):
-        raise RuntimeError('缺少四条服务连接；先完成 setup，或检查 settings.local.ps1。')
+        raise RuntimeError('缺少员工或顾客服务连接；请检查配置升级说明，不能覆盖既有口令。')
     dao = EmployeeDAO(connections, expected_database=config['database'])
     actual_server = None
     for role in ROLES:
@@ -248,8 +269,11 @@ def validate_runtime(config):
                     raise RuntimeError('服务连接登录或实例不一致；请检查配置，禁止使用管理连接启动应用。')
                 actual_server = row[2]
                 required = {'auth': ('usp_employee_login_lookup', 'usp_employee_session_lookup'),
-                            'cashier': ('usp_employee_context', 'usp_sale_catalog', 'usp_sale_quote', 'usp_sale_create', 'usp_sale_get'),
-                            'inventory': ('usp_employee_context',), 'manager': ('usp_employee_context',)}[role]
+                            'cashier': ('usp_employee_context', 'usp_sale_catalog', 'usp_sale_quote', 'usp_sale_create', 'usp_sale_get', 'usp_sale_list'),
+                            'inventory': ('usp_employee_context','usp_operation_read','usp_operation_write'),
+                            'manager': ('usp_employee_context','usp_operation_read','usp_operation_quote','usp_operation_write'),
+                            'guest': ('usp_shop_catalog','usp_reservation_create','usp_reservation_lookup','usp_reservation_cancel'),
+                            'task': ('usp_reservations_expire',)}[role]
                 for procedure in required:
                     if cursor.execute("SELECT OBJECT_ID(?, 'P')", 'api.' + procedure).fetchval() is None:
                         raise RuntimeError('缺少运行过程或执行授权，请检查入口基础与销售部署。')
@@ -321,7 +345,7 @@ def full_test(report, config):
     sale_database = 'ShiguangBookstoreWeek7SaleTests' + suffix
     prepare_target(report, config, source, auth_database, 'auth-test')
     prepare_target(report, config, source, sale_database, 'sale-test')
-    baseline = report.action('business-baseline', lambda: business_fingerprints(config, source))
+    baseline = report.action('business-baseline', lambda: business_fingerprints(config, auth_database))
     env = clean_test_environment()
     env.update(BOOKSTORE_TEST_ADMIN_CONNECTION=connection_string(config['server'], auth_database, config['driver']),
                BOOKSTORE_SALE_TEST_ADMIN_CONNECTION=connection_string(config['server'], sale_database, config['driver']),
@@ -345,7 +369,7 @@ def full_test(report, config):
             cursor.close()
         test_suite(report, environment=env)
         def verify_restored():
-            fingerprints = {source: baseline}
+            fingerprints = {'application-baseline': baseline}
             for database in (auth_database, sale_database):
                 fingerprints[database] = business_fingerprints(config, database)
                 if fingerprints[database] != baseline:
@@ -356,16 +380,21 @@ def full_test(report, config):
                     try:
                         row = check.execute('''SELECT (SELECT COUNT(*) FROM auth.employee_credential),
                             (SELECT COUNT(*) FROM api.sale_request),
-                            (SELECT COUNT(*) FROM sys.database_principals WHERE name LIKE 'bookstore[_]test[_]%'),
+                            (SELECT COUNT(*) FROM api.operation_request),
+                            (SELECT COUNT(*) FROM api.reservation_request),
+                            (SELECT COUNT(*) FROM api.reservation_cancellation),
+                            (SELECT COUNT(*) FROM auth.member_access),
+                            (SELECT COUNT(*) FROM auth.member_contact),
+                            (SELECT COUNT(*) FROM sys.database_principals WHERE name LIKE 'bookstore[_]test[_]%' OR name LIKE 'entry[_]test[_]%'),
                             OBJECT_ID('dbo.sale_test_fail_fund','TR')''').fetchone()
-                        if tuple(row) != (0, 0, 0, None):
+                        if tuple(row) != (0, 0, 0, 0, 0, 0, 0, 0, None):
                             raise RuntimeError('测试凭据、服务用户、请求或故障触发器未清理。')
                     finally:
                         check.close()
                 finally:
                     check_connection.close()
             (report.directory / 'business-fingerprints.json').write_text(json.dumps(fingerprints, indent=2) + '\n', encoding='utf-8')
-            print('两个测试库的19张业务表与基线逐表一致；测试技术数据和用户已清理。')
+            print('两个测试库全部业务表与迁移后的应用基线逐表一致；测试技术数据和用户已清理。')
         report.action('test-state-restored', verify_restored)
     finally:
         try:
@@ -392,7 +421,7 @@ def iter_tests(suite):
 
 def run_suite(args):
     tests = list(iter_tests(unittest.defaultTestLoader.discover(str(ROOT / 'tests'))))
-    required = {'EntryDatabaseTests', 'SaleDatabaseTests'}
+    required = {'EntryDatabaseTests', 'SaleDatabaseTests', 'ApplicationBaselineDatabaseTests', 'OperationsDatabaseTests', 'MemberDatabaseTests', 'ReturnDatabaseTests'}
     if args.unit:
         tests = [test for test in tests if type(test).__name__ not in required]
     elif not required <= {type(test).__name__ for test in tests}:
@@ -406,7 +435,7 @@ def run_suite(args):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('command', choices=('help', 'doctor', 'setup', 'start', 'test', 'verify', 'suite'))
+    parser.add_argument('command', choices=('help', 'doctor', 'setup', 'start', 'stop', 'status', 'test', 'verify', 'suite'))
     parser.add_argument('--config', default=str(ROOT / 'run.local.json'))
     parser.add_argument('--server')
     parser.add_argument('--driver')
@@ -432,10 +461,22 @@ def main():
         if args.unit and args.command != 'test' or args.http and args.command != 'verify':
             raise RuntimeError('-Unit 只适用于 test；-Http 只适用于 verify。')
         config, config_path = load_configuration(args)
+        control = ROOT / '.runner' / ('control-' + hashlib.sha256(str(config_path.resolve()).encode()).hexdigest()[:16])
+        if args.command in ('stop', 'status'):
+            state = json.loads((control / 'status.json').read_text(encoding='utf-8')) if (control / 'status.json').exists() else {'status':'not_started'}
+            if args.command == 'stop' and state.get('status') == 'running':
+                (control / 'stop').touch()
+                print('已请求停止此配置对应的 Web 与任务；最多一秒后进入清理。')
+            else:
+                print(json.dumps(state, ensure_ascii=False, indent=2))
+            return 0
         report = Report(args.command, config)
-        report.action('dependencies', lambda: require_dependencies(config, sql=not args.unit and args.command in ('doctor', 'setup', 'test')))
+        report.action('dependencies', lambda: require_dependencies(config, sql=not args.unit))
         if args.command in ('doctor', 'setup') or args.command == 'test' and not args.unit:
             report.action('instance', lambda: check_instance(config))
+        if args.command in ('doctor', 'start', 'verify'):
+            sql_script(report, config, 'application-baseline-check', 'checks/application-baseline-check.sql', config['database'])
+            sql_script(report, config, 'application-permissions-check', 'checks/application-permissions-check.sql', config['database'])
         if args.command == 'setup':
             setup(report, config, config_path)
         elif args.command == 'doctor':
@@ -447,8 +488,48 @@ def main():
                         if key in {'BOOKSTORE_SECRET_KEY', 'BOOKSTORE_COOKIE_SECURE', 'BOOKSTORE_DATABASE'}
                         or key in {'BOOKSTORE_DB_' + role.upper() for role in ROLES}})
             print(f'启动 http://127.0.0.1:{config["port"]}；Ctrl+C 停止。', flush=True)
-            code = subprocess.call([sys.executable, '-m', 'flask', '--app', 'app', 'run', '--host', '127.0.0.1',
+            control.mkdir(parents=True, exist_ok=True)
+            stop_file = control / 'stop'
+            stop_file.unlink(missing_ok=True)
+            task_log = (report.directory / 'expiry.log').open('a', encoding='utf-8')
+            task = subprocess.Popen([sys.executable, '-m', 'app.expiry'], cwd=ROOT, env=env,
+                                    stdout=task_log, stderr=task_log,
+                                    creationflags=subprocess.CREATE_NO_WINDOW if os.name == 'nt' else 0)
+            web = None
+            report.data['processes'] = dict(expiry=dict(pid=task.pid, status='running', log='expiry.log'))
+            report.save()
+            try:
+                web = subprocess.Popen([sys.executable, '-m', 'flask', '--app', 'app', 'run', '--host', '127.0.0.1',
                                     '--port', str(config['port']), '--no-reload'], cwd=ROOT, env=env)
+                report.data['processes']['web'] = dict(pid=web.pid, status='running')
+                report.save()
+                while True:
+                    (control / 'status.json').write_text(json.dumps(dict(status='running', checked_at=datetime.now(timezone.utc).isoformat(),
+                        run_id=report.run_id, processes=report.data['processes']),ensure_ascii=False),encoding='utf-8')
+                    if stop_file.exists():
+                        code = 0
+                        break
+                    try:
+                        code = web.wait(timeout=1)
+                        break
+                    except subprocess.TimeoutExpired:
+                        if task.poll() is not None:
+                            raise RuntimeError('预订到期任务提前退出，已停止本次 Web；检查本次 expiry.log。')
+            finally:
+                for process in (web, task):
+                    if process is not None and process.poll() is None:
+                        process.terminate()
+                        try:
+                            process.wait(timeout=5)
+                        except subprocess.TimeoutExpired:
+                            process.kill()
+                            process.wait(timeout=5)
+                task_log.close()
+                for state in report.data['processes'].values():
+                    state['status'] = 'stopped'
+                (control / 'status.json').write_text(json.dumps(dict(status='stopped', checked_at=datetime.now(timezone.utc).isoformat(),
+                    run_id=report.run_id,processes=report.data['processes']),ensure_ascii=False),encoding='utf-8')
+                report.save()
             if code:
                 raise RuntimeError(f'Flask 退出码为 {code}，检查端口是否占用。')
         elif args.command == 'verify':

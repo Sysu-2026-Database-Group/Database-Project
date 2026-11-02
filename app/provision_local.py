@@ -12,7 +12,7 @@ from .local_config import connection_string, restrict_local_file
 
 
 DATABASE = 'ShiguangBookstoreWeek7EntryYourRun'
-ROLES = ('auth', 'cashier', 'inventory', 'manager')
+ROLES = ('auth', 'cashier', 'inventory', 'manager', 'guest', 'task')
 LOGINS = {role: 'bookstore_w7_yourrun_' + role for role in ROLES}
 DIRECTORY = Path(__file__).resolve().parent
 SETTINGS = DIRECTORY / 'settings.local.ps1'
@@ -105,7 +105,7 @@ def provision(*, database=DATABASE, server='localhost', driver='ODBC Driver 17 f
         raise
     finally:
         connection.close()
-    print('已配置4个受限服务登录及员工练习凭据。')
+    print('已配置6个受限服务登录（含顾客及到期任务）及员工练习凭据。')
     print(f'本地设置：{settings}；员工口令：{credentials}（均不输出口令）。')
 
 

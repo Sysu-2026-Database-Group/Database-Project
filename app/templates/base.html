@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}拾光书店{% endblock %} · 拾光书店</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
+  <script src="{{ url_for('static', filename='js/app.js') }}" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#content">跳到主要内容</a>
+  <div class="app-shell">
+    <aside class="sidebar no-print">
+      <a class="brand" href="{{ url_for('workspace.home') }}"><span class="brand-mark" aria-hidden="true">拾</span><span>拾光书店<small>在书页之间，拾起好时光</small></span></a>
+      <details class="navigation" open>
+        <summary>工作导航</summary>
+        <nav aria-label="书店导航">
+          <a href="{{ url_for('shop.index') }}">逛逛书店</a>
+          <a href="{{ url_for('reservations.form') }}">预订商品</a>
+          <a href="{{ url_for('reservations.lookup_form') }}">查询或取消预订</a>
+          <a href="/shop/member">会员自助查询</a>
+          {% if session.get('actor') %}
+          <a href="{{ url_for('workspace.workspace') }}" {% if request.endpoint in ['workspace.home', 'workspace.workspace'] %}aria-current="page"{% endif %}>员工工作台</a>
+          {% if session.actor.role == '收银员' %}
+          <a href="{{ url_for('sales.sale_form') }}" {% if request.endpoint in ['sales.sale_form', 'sales.sale_preview'] %}aria-current="page"{% endif %}>门店销售</a>
+          <a href="{{ url_for('sales.sale_list') }}" {% if request.endpoint == 'sales.sale_list' %}aria-current="page"{% endif %}>本人销售单</a>
+          <a href="{{ url_for('reservations.pickup_form') }}">预订取货</a>
+          <a href="/members">会员服务</a>
+          <a href="/returns/new">退货退款</a>
+          {% endif %}
+          {% if session.actor.role in ['库管','店长'] %}
+          <a href="/goods">商品资料与库存</a>
+          <a href="/suppliers">供应商资料</a>
+          <a href="/supplier-quotes">供应商报价</a>
+          <a href="/purchases">采购与收货</a>
+          <a href="/inventory">库存变动{% if session.actor.role == '库管' %}与报损{% endif %}</a>
+          {% if session.actor.role == '库管' %}<a href="/return-recovery">退货回收</a>{% endif %}
+          {% endif %}
+          {% if session.actor.role == '店长' %}<a href="/management/finance">资金与注资</a>{% endif %}
+          {% if session.actor.role == '店长' %}<a href="/management/cards">会员卡参数</a><a href="/management/employees">员工账号</a><a href="/management/reports">经营报表</a><a href="/management/sales">全店单据</a>{% endif %}
+          {% else %}<a href="{{ url_for('auth.login_form') }}">员工登录</a>{% endif %}
+        </nav>
+      </details>
+      <p class="sidebar-note">一本好书，一段相遇。<br>让每一笔经营都有迹可循。</p>
+    </aside>
+    <div class="main-shell">
+      <header class="topbar no-print">
+        <span>{{ '门店业务工作台' if session.get('actor') else '拾光书店 · 阅读与生活' }}</span>
+        {% if session.get('actor') %}
+        <div class="identity"><span class="badge">{{ session.actor.role }}</span>
+          <form method="post" action="{{ url_for('auth.logout') }}"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="button-link" type="submit">退出登录</button></form>
+        </div>
+        {% else %}<span>员工入口</span>{% endif %}
+      </header>
+      <main id="content" tabindex="-1">{% block content %}{% endblock %}</main>
+      <footer class="no-print">拾光书店 · 单门店经营</footer>
+    </div>
+  </div>
+</body>
+</html>

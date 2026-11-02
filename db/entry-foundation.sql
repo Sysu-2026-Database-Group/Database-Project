@@ -73,7 +73,8 @@ BEGIN
     IF @db_role IS NULL OR ISNULL(IS_MEMBER(@db_role),0)<>1
         THROW 52003, N'数据库调用身份不具备该岗位权限。', 1;
     IF (ISNULL(IS_MEMBER(N'bookstore_app_cashier'),0)+ISNULL(IS_MEMBER(N'bookstore_app_inventory'),0)
-        +ISNULL(IS_MEMBER(N'bookstore_app_manager'),0)+ISNULL(IS_MEMBER(N'bookstore_app_auth'),0))<>1
+        +ISNULL(IS_MEMBER(N'bookstore_app_manager'),0)+ISNULL(IS_MEMBER(N'bookstore_app_auth'),0)
+        +ISNULL(IS_MEMBER(N'bookstore_app_guest'),0)+ISNULL(IS_MEMBER(N'bookstore_app_task'),0))<>1
         THROW 52003, N'应用数据库账号必须只属于一个应用角色。', 1;
     IF NOT EXISTS (SELECT 1 FROM dbo.employee e JOIN auth.employee_credential c ON c.employee_phone=e.phone
         WHERE e.phone=@employee_phone AND e.role=@required_role AND c.enabled=1 AND c.session_version=@session_version)

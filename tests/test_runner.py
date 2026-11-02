@@ -61,7 +61,7 @@ class RunnerSafetyTests(unittest.TestCase):
     def test_full_acceptance_with_skipped_required_suites_returns_failure(self):
         missing = lambda case: case.skipTest('missing database configuration')
         suite = unittest.TestSuite([type(name, (unittest.TestCase,), {'runTest': missing})()
-                                   for name in ('EntryDatabaseTests', 'SaleDatabaseTests')])
+                                   for name in ('EntryDatabaseTests', 'SaleDatabaseTests', 'ApplicationBaselineDatabaseTests', 'OperationsDatabaseTests', 'MemberDatabaseTests', 'ReturnDatabaseTests')])
         directory = runner.ROOT / '.runner'
         directory.mkdir(exist_ok=True)
         with tempfile.TemporaryDirectory(dir=directory) as temporary:
@@ -69,7 +69,7 @@ class RunnerSafetyTests(unittest.TestCase):
             with patch.object(unittest.defaultTestLoader, 'discover', return_value=suite), redirect_stderr(io.StringIO()):
                 self.assertEqual(runner.run_suite(argparse.Namespace(unit=False, results=str(result_path))), 1)
             result = json.loads(result_path.read_text(encoding='utf-8'))
-            self.assertEqual(result['skipped'], 2)
+            self.assertEqual(result['skipped'], 6)
             self.assertFalse(result['successful'])
 
     def test_full_acceptance_requires_both_database_suites(self):
@@ -98,3 +98,21 @@ class RunnerSafetyTests(unittest.TestCase):
         connection.rollback.assert_called_once()
         connection.commit.assert_not_called()
         connection.close.assert_called_once()
+
+    def test_guest_upgrade_file_permission_failure_rolls_back_without_touching_employee_settings(self):
+        from app.upgrade_guest import upgrade
+        connection = MagicMock()
+        connection.cursor.return_value.execute.return_value.fetchval.side_effect = [
+            'ShiguangBookstoreWeek7UpgradeTest', 123, None, None]
+        with tempfile.TemporaryDirectory(dir=runner.ROOT/'.runner') as temporary:
+            directory = Path(temporary)
+            existing = directory/'settings.local.ps1'
+            existing.write_text('existing employee configuration', encoding='utf-8')
+            with patch('app.upgrade_guest.pyodbc.connect', return_value=connection), \
+                 patch('app.upgrade_guest.restrict_local_file', side_effect=PermissionError('denied')):
+                with self.assertRaises(PermissionError):
+                    upgrade(database='ShiguangBookstoreWeek7UpgradeTest', login_prefix='upgrade_test', directory=directory)
+            self.assertEqual(existing.read_text(encoding='utf-8'), 'existing employee configuration')
+            self.assertFalse((directory/'settings.guest.local.ps1').exists())
+        connection.rollback.assert_called_once()
+        connection.commit.assert_not_called()

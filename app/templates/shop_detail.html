@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+{% block title %}{{ goods.name }}{% endblock %}
+{% block content %}
+<div class="page-heading"><p class="eyebrow">拾光 · {{ goods.category }}</p><h1>{{ goods.name }}</h1><a href="{{ url_for('shop.index') }}">返回商品列表</a></div>
+<section class="panel"><h2>¥{{ goods.price }}</h2><p><span class="badge">{{ '店内有货' if goods.available else '暂时无货' }}</span></p>
+{% if goods.category == '图书' %}<dl><dt>作者</dt><dd>{{ goods.author }}</dd><dt>出版社</dt><dd>{{ goods.publisher }}</dd><dt>ISBN</dt><dd>{{ goods.book_isbn }}</dd><dt>页数</dt><dd>{{ goods.page_count }}</dd></dl>{% else %}<dl><dt>规格</dt><dd>{{ goods.spec }}</dd><dt>商品编码</dt><dd>{{ goods.toy_code }}</dd></dl>{% endif %}
+<p>欢迎到店选购。商品与价格以办理时核对结果为准。</p></section>
+{% endblock %}

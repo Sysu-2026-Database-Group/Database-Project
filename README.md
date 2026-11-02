@@ -2,7 +2,9 @@
 
 一个以「单门店 + 线上预订自提」为背景的书店运营系统。
 
-当前应用提供员工登录、受限服务身份与门店销售入口。换电脑后的准备、启动和验收统一使用根目录 [`run.ps1`](run.ps1)：`setup` → `doctor` → `test` → `start`，另开终端执行 `verify -Http`。首次使用请阅读[统一入口说明](docs/design/unified-entry.md)，日常操作见[应用说明](app/README.md)。
+队友接手请先阅读 **[项目交接单](docs/team-handoff.md)**：包含换电脑运行、账号配置、119项完整验收证据、演示顺序及剩余交付事项。
+
+当前应用已提供顾客预订/取消/会员自助、收银销售/取货/会员/退款、库管商品/采购/收货/报损/退货回收及店长经营管理。准备、启动和验收统一使用根目录 [`run.ps1`](run.ps1)：`setup` → `doctor` → `test` → `start`，另开终端执行 `verify -Http`，结束时 `stop`。日常操作见[全角色手册](docs/design/web-operation-manual.md)。人工签收和跨机复现尚待完成，状态见[台账](docs/tasks/task-web-development.md)。
 
 项目目标不是做出一个网站，而是把「钱、书、人」在时间轴上的流动，
 落成 SQL Server 上一套**可审查、可对账、可回滚**的表、约束与事务。

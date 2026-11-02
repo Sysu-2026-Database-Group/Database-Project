@@ -1,15 +1,15 @@
-<!doctype html>
-<html lang="zh-CN">
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>员工工作台 · 拾光书店</title>
-<main>
-  <h1>员工工作台</h1>
-  <p>{{ actor.name }}，当前岗位：{{ actor.role }}</p>
-  {% if actor.role == '收银员' %}<p><a href="{{ url_for('sale_form') }}">办理门店销售</a></p>{% endif %}
-  <form method="post" action="{{ url_for('logout') }}">
-    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-    <button type="submit">退出登录</button>
-  </form>
-</main>
-</html>
+{% extends 'base.html' %}
+{% block title %}员工工作台{% endblock %}
+{% block content %}
+<div class="page-heading"><p class="eyebrow">拾光 · 门店日常</p><h1>员工工作台</h1><p class="muted">{{ actor.name }}，当前岗位：{{ actor.role }}</p></div>
+{% if actor.role == '收银员' %}
+<div class="cards">
+  <section class="panel"><span class="badge">收银服务</span><h2>门店销售</h2><p class="muted">选择商品、核对会员权益，确认收款并开具销售凭证。</p><a class="button" href="{{ url_for('sales.sale_form') }}">办理门店销售</a></section>
+  <section class="panel"><span class="badge">单据查询</span><h2>本人销售单</h2><p class="muted">查询自己经手的销售，查看和打印凭证。</p><a class="button secondary" href="{{ url_for('sales.sale_list') }}">查看销售记录</a></section>
+</div>
+{% elif actor.role == '库管' %}
+<section class="panel"><h2>库存管理员工作台</h2><p>建立商品资料与供应商报价，提交采购申请，付款后整单收货；通过库存流水核对数量与报损。</p><p><a class="button" href="/goods">维护商品</a> <a class="button secondary" href="/purchases">采购与收货</a> <a href="/inventory">库存与报损</a> <a href="/return-recovery">退货回收</a></p></section>
+{% elif actor.role == '店长' %}
+<section class="panel"><h2>店长工作台</h2><p>设置商品售价和上下架，审批支付采购，维护会员卡参数和员工账号，核对门店资金。</p><p><a class="button" href="/management/goods">定价与上下架</a> <a class="button secondary" href="/purchases">采购审批与付款</a> <a href="/management/finance">注资与提现</a> <a href="/management/cards">会员卡参数</a> <a href="/management/employees">员工账号</a> <a href="/management/reports">经营报表</a></p></section>
+{% endif %}
+{% endblock %}

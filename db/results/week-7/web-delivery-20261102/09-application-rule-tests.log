@@ -1,0 +1,5 @@
+已将数据库上下文更改为 "ShiguangBookstoreWeek6Runner20261102154529f4a747"。
+PASS: legal tier change
+PASS: equal gold fee rejected with 51025
+PASS: worse gold discount rejected with 51025
+application baseline rule tests PASS
