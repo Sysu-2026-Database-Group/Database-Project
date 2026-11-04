@@ -10,6 +10,21 @@ document.querySelectorAll('form[data-submit-once]').forEach(form => {
     });
   });
 });
+document.querySelectorAll('select[data-goods-category]').forEach(select => {
+  const form = select.closest('form');
+  const sync = () => {
+    form.querySelectorAll('[data-category-group]').forEach(group => {
+      const active = group.dataset.categoryGroup === select.value;
+      group.hidden = !active;
+      group.querySelectorAll('input').forEach(input => {
+        input.disabled = !active;
+        input.required = active;
+      });
+    });
+  };
+  select.addEventListener('change', sync);
+  sync();
+});
 document.querySelectorAll('[data-print]').forEach(button => {
   button.addEventListener('click', () => window.print());
 });

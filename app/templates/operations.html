@@ -10,12 +10,17 @@
 <section class="panel"><h2>{{ '编辑商品 #' ~ edit.id if edit else '建立商品档案' }}</h2><p>新商品库存为0，售价由店长设定。编辑时保留类别和业务编码。</p>
 <form method="post" action="/operations/goods_save">{{ hidden() }}<input type="hidden" name="id" value="{{ edit.id or '' }}">
 <label>商品名称<input name="name" value="{{ edit.name or '' }}" maxlength="100" required></label>
-<label>类别<select name="category"><option value="图书">图书</option><option value="文创" {% if edit.category == '文创' %}selected{% endif %}>文创</option></select></label>
+<label>类别<select name="category" data-goods-category><option value="图书">图书</option><option value="文创" {% if edit.category == '文创' %}selected{% endif %}>文创</option></select></label>
 <label>ISBN / 文创编码<input name="code" value="{{ edit.book_isbn or edit.toy_code or '' }}" maxlength="20" required></label>
-<label>图书作者<input name="author" value="{{ edit.author or '' }}" maxlength="100"></label>
-<label>出版社<input name="publisher" value="{{ edit.publisher or '' }}" maxlength="100"></label>
-<label>页数<input name="page_count" value="{{ edit.page_count or '' }}" type="number" min="1"></label>
-<label>文创规格<input name="spec" value="{{ edit.spec or '' }}" maxlength="100"></label><button>保存商品资料</button></form></section>
+<div data-category-group="图书">
+<label>图书作者<input name="author" value="{{ edit.author or '' }}" maxlength="100" required></label>
+<label>出版社<input name="publisher" value="{{ edit.publisher or '' }}" maxlength="100" required></label>
+<label>页数<input name="page_count" value="{{ edit.page_count or '' }}" type="number" min="1" required></label>
+</div>
+<div data-category-group="文创">
+<label>文创规格<input name="spec" value="{{ edit.spec or '' }}" maxlength="100" required></label>
+</div>
+<button>保存商品资料</button></form></section>
 {% elif kind == 'suppliers' and actor.role == '库管' %}
 <section class="panel"><h2>{{ '编辑供应商' if edit else '新增供应商' }}</h2><form method="post" action="/operations/supplier_save">{{ hidden() }}<input type="hidden" name="id" value="{{ edit.id or '' }}"><label>名称<input name="name" value="{{ edit.name or '' }}" maxlength="100" required></label><button>保存供应商</button></form></section>
 {% elif kind == 'quotes' and actor.role == '库管' %}
