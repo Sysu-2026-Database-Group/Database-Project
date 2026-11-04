@@ -2,6 +2,7 @@ import logging
 import os
 import secrets
 from datetime import timedelta
+from decimal import Decimal
 
 from flask import Flask, session
 
@@ -39,6 +40,30 @@ def create_app(config=None, *, dao=None):
         return session['csrf_token']
 
     app.jinja_env.globals['csrf_token'] = csrf_token
+
+    def money_filter(value):
+        if value in (None, ''):
+            return '0.00'
+        return f'{Decimal(str(value)):.2f}'
+
+    def rate_filter(value):
+        if value in (None, ''):
+            return '无折扣'
+        rate = Decimal(str(value))
+        if rate >= 1:
+            return '无折扣'
+        return f'{rate:.2f}'
+
+    def dt_filter(value):
+        if value in (None, ''):
+            return '—'
+        if isinstance(value, str):
+            return value.replace('T', ' ')[:16]
+        return value.strftime('%Y-%m-%d %H:%M')
+
+    app.jinja_env.filters['money'] = money_filter
+    app.jinja_env.filters['rate'] = rate_filter
+    app.jinja_env.filters['dt'] = dt_filter
 
     app.extensions['employees'] = service
     app.extensions['shop_dao'] = service.dao
