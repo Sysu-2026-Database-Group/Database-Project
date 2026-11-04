@@ -1,0 +1,86 @@
+[
+  {
+    "id": "F-07a",
+    "title": "新办会员结果页展示凭证",
+    "ok": true,
+    "detail": "token_len=43",
+    "shot": "E:\\CodeBuddy\\Database-Project\\drafts\\assets\\web-fix-20261105\\F07-member-receipt.png"
+  },
+  {
+    "id": "F-07b",
+    "title": "新凭证可自助查询",
+    "ok": true,
+    "detail": "url=http://localhost:5095/shop/member",
+    "shot": "E:\\CodeBuddy\\Database-Project\\drafts\\assets\\web-fix-20261105\\F07-member-self.png"
+  },
+  {
+    "id": "F-08a",
+    "title": "三无商品可删除",
+    "ok": true,
+    "detail": "gid=16 gone=True",
+    "shot": "E:\\CodeBuddy\\Database-Project\\drafts\\assets\\web-fix-20261105\\F08-delete-ok.png"
+  },
+  {
+    "id": "F-08b",
+    "title": "有库存拒绝删除",
+    "ok": true,
+    "detail": "status=409",
+    "shot": "E:\\CodeBuddy\\Database-Project\\drafts\\assets\\web-fix-20261105\\F08-stock-reject.png"
+  },
+  {
+    "id": "F-08c",
+    "title": "在架拒绝删除",
+    "ok": true,
+    "detail": "status=409",
+    "shot": "E:\\CodeBuddy\\Database-Project\\drafts\\assets\\web-fix-20261105\\F08-shelf-reject.png"
+  },
+  {
+    "id": "F-08d",
+    "title": "有引用拒绝删除",
+    "ok": true,
+    "detail": "status=409",
+    "shot": "E:\\CodeBuddy\\Database-Project\\drafts\\assets\\web-fix-20261105\\F08-ref-reject.png"
+  },
+  {
+    "id": "F-08e",
+    "title": "店长不能删除商品",
+    "ok": true,
+    "detail": "status=403",
+    "shot": "E:\\CodeBuddy\\Database-Project\\drafts\\assets\\web-fix-20261105\\F08-manager-forbidden.png"
+  },
+  {
+    "id": "F-02",
+    "title": "404 标题按状态变化",
+    "ok": true,
+    "detail": "title=页面或记录不存在",
+    "shot": "E:\\CodeBuddy\\Database-Project\\drafts\\assets\\web-fix-20261105\\F02-404-title.png"
+  },
+  {
+    "id": "F-03",
+    "title": "退货金额两位小数",
+    "ok": true,
+    "detail": "amount=6.00",
+    "shot": "E:\\CodeBuddy\\Database-Project\\drafts\\assets\\web-fix-20261105\\F03-return-money.png"
+  },
+  {
+    "id": "F-06",
+    "title": "预订时间格式化",
+    "ok": true,
+    "detail": "code=5IRCGCALZJUL634PNTQO",
+    "shot": "E:\\CodeBuddy\\Database-Project\\drafts\\assets\\web-fix-20261105\\F06-reservation-time.png"
+  },
+  {
+    "id": "F-04",
+    "title": "非会员显示无折扣",
+    "ok": true,
+    "detail": "paid=12.00",
+    "shot": "E:\\CodeBuddy\\Database-Project\\drafts\\assets\\web-fix-20261105\\F03-pickup-money.png"
+  },
+  {
+    "id": "F-11",
+    "title": "顾客页无 favicon 404",
+    "ok": true,
+    "detail": "errors=[]",
+    "shot": "E:\\CodeBuddy\\Database-Project\\drafts\\assets\\web-fix-20261105\\F11-shop-console.png"
+  }
+]

@@ -40,3 +40,26 @@
 写入未知结果时保留原请求与确认凭据重试，不换新键重新收款。已成交请求返回原凭证；过期预览首次提交应重新预览。资金不足、可售量不足、过量退货、权限拒绝和会话失效均应有可读错误及请求编号。GET 不写库，缺 CSRF 的 POST 应拒绝。
 
 验收需同时保留完整 SQL 报告、源码 SHA-256、恢复/清理结果、360px/1440px 页面证据和新环境 setup/doctor/start/verify 证据。截图与自动化操作不能记为人工审阅；本机新副本复现不能冒充另一台电脑实测。阶段报告中如实记录未验收差距。
+
+## 分角色入口
+
+| 角色 | 入口 | 主要页面 |
+|---|---|---|
+| 顾客（免登录） | `/shop` | 商品目录与详情、`/shop/reservations/new`、凭证查询、`/shop/member` |
+| 收银员 | `/auth/login` → `/workspace` | `/sales/new`、`/sales`、`/pickups`、`/returns/new`、`/members` |
+| 库管 | 同上 | `/goods`、`/suppliers`、`/supplier-quotes`、`/purchases`、`/inventory`、`/return-recovery` |
+| 店长 | 同上 | `/management/goods`、`/management/finance`、`/management/employees`、`/management/cards`、`/management/reports`、全店单据 |
+
+## 常见问题
+
+| 现象 | 原因与处理 |
+|---|---|
+| `start` 后终端没有输出、也不返回 | `start` 默认前台常驻，Ctrl+C 停止；自动化场景使用 `.\run.ps1 start -Detach`，日志在 `.runner/start-<id>/web.log` 与 `expiry.log` |
+| 端口已被占用 | 先 `.\run.ps1 stop`（会结束本配置记录的 Web 与任务），再重新 `start` |
+| `doctor` 报"缺少筛选唯一索引 X" | 目标库未装齐运行时对象；用新库名重新 `setup`，或按增量顺序补脚本 |
+| 403 | 岗位不足或 CSRF 失效；刷新页面后重试，不要跨角色直接访问管理页 |
+| 409 | 预览过期、状态变化或规则冲突；刷新并重新预览 |
+| 503 | 数据库连接不可用；检查实例与服务后重试，页面上的请求编号可用于定位 |
+| 开卡后没有拿到自助凭证 | 凭证只在结果页展示一次；丢失时由收银现场核验后"改联系方式/重发凭证" |
+| 删除商品失败 | 提示会区分"有库存 / 请先下架 / 已被单据引用"，按提示先处理依赖 |
+| 提交后页面报"请求标识冲突" | 同一请求键被用于不同内容；刷新重新提交，不要手改请求键 |
