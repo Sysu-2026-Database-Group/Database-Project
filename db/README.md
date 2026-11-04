@@ -232,6 +232,8 @@ sqlcmd -S localhost\SQLEXPRESS -E -C -b -f 65001 -W -s "|" `
 `ShiguangBookstoreWeek6Work` 上执行。原始库只用于保留 v0.1 基线，不能作为迁移或样例装载目标。
 2026-10-21 起，第六周 SQL 统一用 `$(DatabaseName)` 选择目标，调用者须显式指定以 `ShiguangBookstoreWeek6` 开头的专用副本名；脚本不再用内置 `:setvar` 覆盖命令行 `-v`。所有本周脚本须在 SQLCMD 模式执行，`:On Error exit` 保证目标选择失败后停止；筛选索引要求的 SET 选项已在脚本中明确设置。
 
+> **筛选唯一索引口径**：第 6 周 `migration.sql` 建 6 个；Web 运行库在 `return-entry.sql` 中另有 `UX_stock_return_once`（退货回库只一次），共 7 个。`run.ps1` 的对象校验按**索引名集合**判断，不再比较数量。
+
 > **归档口径（2026-10-23 用户确认）**：`accept-week-6.ps1` 与 `acceptance/independent-audit.ps1` 是**第六周归档入口**：仅支持 PowerShell 7 + 本机默认实例，**不再修改、不作为跨机复现路径**。跨机复现使用根目录 `run.ps1`（PowerShell 5.1，支持命名实例）。"统一版本"指新工作不再依赖 PS7，不要求历史脚本降到 5.1。
 
 归档入口的原始用法（保留原样，供复核历史证据；**每次换新库名和新结果目录**）：

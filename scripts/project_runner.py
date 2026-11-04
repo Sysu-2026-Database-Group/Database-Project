@@ -174,31 +174,59 @@ def check_instance(config):
 
 BASELINE_TRIGGER = 'tr_card_type_cross_row'
 BASELINE_VIEWS = ('v_sale_detail', 'v_goods_sales_summary', 'v_inventory_status')
+BASELINE_FILTERED_INDEXES = (
+    'UX_goods_book_isbn',
+    'UX_goods_toy_code',
+    'UX_sale_reservation_id',
+    'UX_point_movement_earn',
+    'UX_point_movement_use',
+    'UX_point_movement_return',
+)
+RUNTIME_FILTERED_INDEXES = BASELINE_FILTERED_INDEXES + ('UX_stock_return_once',)
 
 
-def check_objects(config, database):
-    """从零建库必须装齐的对象：跨行约束触发器、Week4 三个视图、六个筛选唯一索引。"""
+def check_objects(config, database, require_runtime=False):
+    """从零建库必须装齐的对象：跨行约束触发器、Week4 三个视图、筛选唯一索引。
+
+    按**索引名集合**校验，而不是数量：
+    - 第 6 周基线只需 6 个筛选唯一索引；
+    - 运行库额外要求 UX_stock_return_once（P5 退货回库，见 db/return-entry.sql）。
+    """
+    required = RUNTIME_FILTERED_INDEXES if require_runtime else BASELINE_FILTERED_INDEXES
     connection = admin_connection(config, database)
     try:
         cursor = connection.cursor()
         try:
-            trigger, views, filtered = cursor.execute(
+            trigger, views = cursor.execute(
                 "SELECT (SELECT COUNT(*) FROM sys.triggers WHERE name=? AND is_disabled=0),"
-                "       (SELECT COUNT(*) FROM sys.views WHERE schema_id=SCHEMA_ID('dbo') AND name IN (?,?,?)),"
-                "       (SELECT COUNT(*) FROM sys.indexes WHERE is_unique=1 AND has_filter=1)",
+                "       (SELECT COUNT(*) FROM sys.views WHERE schema_id=SCHEMA_ID('dbo') AND name IN (?,?,?))",
                 BASELINE_TRIGGER, *BASELINE_VIEWS).fetchone()
+            actual = {
+                row[0]
+                for row in cursor.execute(
+                    "SELECT i.name FROM sys.indexes i"
+                    " JOIN sys.objects o ON o.object_id=i.object_id"
+                    " WHERE i.is_unique=1 AND i.has_filter=1 AND o.schema_id=SCHEMA_ID('dbo')"
+                ).fetchall()
+            }
             problems = []
             if trigger != 1:
                 problems.append('跨行约束触发器 tr_card_type_cross_row 缺失或被禁用')
             if views != len(BASELINE_VIEWS):
                 problems.append(f'Week4 视图缺失（{views}/{len(BASELINE_VIEWS)}）')
-            if filtered != 6:
-                problems.append(f'筛选唯一索引数量不符（{filtered}/6）')
+            missing = [name for name in required if name not in actual]
+            extra = sorted(actual - set(required))
+            if missing:
+                problems.append('缺少筛选唯一索引：' + '、'.join(missing))
+            if extra:
+                problems.append('多出未登记的筛选唯一索引：' + '、'.join(extra))
             if problems:
-                raise RuntimeError('；'.join(problems) + '。请使用新的 -DatabaseName 重新 setup，不要复用旧运行库。')
+                for problem in problems:
+                    print(' - ' + problem, flush=True)
+                raise RuntimeError('对象校验失败：' + '；'.join(problems))
             for view in BASELINE_VIEWS:
                 cursor.execute('SELECT TOP (0) * FROM dbo.[' + view + ']').fetchall()
-            print(f'基础对象 PASS：触发器 1、视图 3、筛选唯一索引 6（库={database}）')
+            print(f'基础对象 PASS：触发器 1、视图 3、筛选唯一索引 {len(required)}（库={database}）')
         finally:
             cursor.close()
     finally:
@@ -339,7 +367,7 @@ def setup(report, config, config_path):
         connection.close()
     source = prepare_source(report, config)
     prepare_target(report, config, source, config['database'], 'runtime')
-    report.action('objects-runtime', lambda: check_objects(config, config['database']))
+    report.action('objects-runtime', lambda: check_objects(config, config['database'], require_runtime=True))
     report.resource('service_login_prefix', config['login_prefix'])
     report.action('provision', lambda: provision(database=config['database'], server=config['server'],
                   driver=config['driver'], login_prefix=config['login_prefix'], directory=directory))
@@ -517,7 +545,7 @@ def main():
             setup(report, config, config_path)
         elif args.command == 'doctor':
             report.action('runtime', lambda: validate_runtime(config))
-            report.action('objects', lambda: check_objects(config, config['database']))
+            report.action('objects', lambda: check_objects(config, config['database'], require_runtime=True))
         elif args.command == 'start':
             report.action('runtime', lambda: validate_runtime(config))
             env = clean_test_environment()
