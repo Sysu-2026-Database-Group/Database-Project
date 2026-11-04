@@ -31,7 +31,7 @@ class EntryDatabaseTests(unittest.TestCase):
             if cursor.execute('SELECT COUNT(*) FROM auth.employee_credential').fetchval():
                 raise RuntimeError('请使用未配置员工凭据的新副本，测试不会覆盖现有凭据')
             cls.users = {}
-            for role in ('auth', 'cashier', 'inventory', 'manager'):
+            for role in ('auth', 'cashier', 'inventory', 'manager', 'guest', 'task'):
                 # 所有标识符由固定前缀与随机十六进制构成，不使用外部SQL输入。
                 user = 'entry_test_' + role + '_' + secrets.token_hex(4)
                 cls.users[role] = user

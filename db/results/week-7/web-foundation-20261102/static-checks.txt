@@ -1,0 +1,6 @@
+﻿COMMAND: python -m compileall -q app scripts tests
+
+EXIT: 0
+COMMAND: git diff --check
+
+EXIT: 0

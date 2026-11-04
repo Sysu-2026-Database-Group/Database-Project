@@ -13,3 +13,6 @@ $env:BOOKSTORE_DB_AUTH = 'DRIVER={ODBC Driver 17 for SQL Server};SERVER=localhos
 $env:BOOKSTORE_DB_CASHIER = 'DRIVER={ODBC Driver 17 for SQL Server};SERVER=localhost;DATABASE=ShiguangBookstoreWeek7EntryYourRun;UID=bookstore_w7_yourrun_cashier;PWD=REPLACE_LOCALLY;Encrypt=yes;TrustServerCertificate=yes;'
 $env:BOOKSTORE_DB_INVENTORY = 'DRIVER={ODBC Driver 17 for SQL Server};SERVER=localhost;DATABASE=ShiguangBookstoreWeek7EntryYourRun;UID=bookstore_w7_yourrun_inventory;PWD=REPLACE_LOCALLY;Encrypt=yes;TrustServerCertificate=yes;'
 $env:BOOKSTORE_DB_MANAGER = 'DRIVER={ODBC Driver 17 for SQL Server};SERVER=localhost;DATABASE=ShiguangBookstoreWeek7EntryYourRun;UID=bookstore_w7_yourrun_manager;PWD=REPLACE_LOCALLY;Encrypt=yes;TrustServerCertificate=yes;'
+# P3公开商品专用身份，只执行公开商品过程；不能复用店长或管理连接。
+$env:BOOKSTORE_DB_GUEST = 'DRIVER={ODBC Driver 17 for SQL Server};SERVER=localhost;DATABASE=ShiguangBookstoreWeek7EntryYourRun;UID=bookstore_w7_yourrun_guest;PWD=REPLACE_LOCALLY;Encrypt=yes;TrustServerCertificate=yes;'
+$env:BOOKSTORE_DB_TASK = 'DRIVER={ODBC Driver 17 for SQL Server};SERVER=localhost;DATABASE=ShiguangBookstoreWeek7EntryYourRun;UID=bookstore_w7_yourrun_task;PWD=REPLACE_LOCALLY;Encrypt=yes;TrustServerCertificate=yes;'

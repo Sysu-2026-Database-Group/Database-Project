@@ -1,0 +1,9 @@
+<!doctype html><meta charset="utf-8"><style>
+    *{box-sizing:border-box}body{margin:0;width:3060px;background:white;color:#21372b;font:20px "Microsoft YaHei",sans-serif}
+    h1{padding:10px 40px;margin:0;font-size:30px}img{width:3060px;height:auto;display:block}
+    .cards{display:grid;grid-template-columns:repeat(4,1fr);gap:30px;margin:20px 40px}section{background:#e5efdf;border:2px solid #45664e;padding:18px}
+    h2{font-size:21px;margin:0}p{line-height:1.6;font-size:20px}.note{padding:0 40px}
+    </style><h1>拾光书店 · Web v1.0 · 21个经营实体及技术映射</h1>
+    <img src="er-diagram-v1.4.drawio.png"><div class="cards"><section><h2>member_service · 会员办理历史</h2><p>id bigint PK<br/>member_phone varchar(11) FK → member<br/>operation varchar(10): buy / upgrade<br/>old_level / new_level nvarchar(10)<br/>old_expiry / new_expiry date<br/>amount / silver_fee / gold_fee decimal(10,2)<br/>fund_flow_id bigint UNIQUE FK → fund_flow<br/>handled_by varchar(11) FK → employee<br/>handled_at datetime2</p></section><section><h2>member_contact_history · 会员联系变更历史</h2><p>id bigint PK<br/>member_phone varchar(11) FK → member<br/>old_contact / new_contact varchar(11)<br/>changed_by varchar(11) FK → employee<br/>changed_at datetime2</p></section><section><h2>auth_member_contact · 当前联系映射（技术）</h2><p>member_phone PK/FK → member<br/>contact_phone varchar(11) UNIQUE<br/>updated_by FK → employee<br/>updated_at datetime2</p></section><section><h2>auth_member_access · 自助凭证（技术）</h2><p>member_phone PK/FK → member<br/>token_hash binary(32)<br/>issued_by FK → employee<br/>issued_at datetime2</p></section></div>
+    <p class="note">新增关系：member 1 → 0..N member_service / member_contact_history；employee 1 → 0..N 两类历史；fund_flow 1 → 0..1 member_service（唯一收费来源）。<br>
+    member 1 → 0..1 当前联系映射 / 自助凭证（技术表，不计经营实体）。联系方式不改历史主键；事件快照不随现配置改写。历史19实体原图保留，新增关系可在配套drawio中编辑。</p>

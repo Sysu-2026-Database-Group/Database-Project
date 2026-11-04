@@ -1,0 +1,470 @@
+[
+  {
+    "width": 360,
+    "role": null,
+    "path": "/shop",
+    "status": 200,
+    "overflow": false,
+    "javascript_errors": [],
+    "screenshot": "360-guest-0.png"
+  },
+  {
+    "width": 360,
+    "role": null,
+    "path": "/shop/reservations/new",
+    "status": 200,
+    "overflow": false,
+    "javascript_errors": [],
+    "screenshot": "360-guest-1.png"
+  },
+  {
+    "width": 360,
+    "role": null,
+    "path": "/shop/reservations/lookup",
+    "status": 200,
+    "overflow": false,
+    "javascript_errors": [],
+    "screenshot": "360-guest-2.png"
+  },
+  {
+    "width": 360,
+    "role": null,
+    "path": "/shop/member",
+    "status": 200,
+    "overflow": false,
+    "javascript_errors": [],
+    "screenshot": "360-guest-3.png"
+  },
+  {
+    "width": 360,
+    "role": "店长",
+    "path": "/workspace",
+    "status": 200,
+    "overflow": false,
+    "javascript_errors": [],
+    "screenshot": "360-店长-0.png"
+  },
+  {
+    "width": 360,
+    "role": "店长",
+    "path": "/management/finance",
+    "status": 200,
+    "overflow": false,
+    "javascript_errors": [],
+    "screenshot": "360-店长-1.png"
+  },
+  {
+    "width": 360,
+    "role": "店长",
+    "path": "/management/cards",
+    "status": 200,
+    "overflow": false,
+    "javascript_errors": [],
+    "screenshot": "360-店长-2.png"
+  },
+  {
+    "width": 360,
+    "role": "店长",
+    "path": "/management/employees",
+    "status": 200,
+    "overflow": false,
+    "javascript_errors": [],
+    "screenshot": "360-店长-3.png"
+  },
+  {
+    "width": 360,
+    "role": "店长",
+    "path": "/management/reports",
+    "status": 200,
+    "overflow": false,
+    "javascript_errors": [],
+    "screenshot": "360-店长-4.png"
+  },
+  {
+    "width": 360,
+    "role": "店长",
+    "path": "/purchases",
+    "status": 200,
+    "overflow": false,
+    "javascript_errors": [],
+    "screenshot": "360-店长-5.png"
+  },
+  {
+    "width": 360,
+    "role": "店长",
+    "path": "/management/sales",
+    "status": 200,
+    "overflow": false,
+    "javascript_errors": [],
+    "screenshot": "360-店长-6.png"
+  },
+  {
+    "width": 360,
+    "role": "店长",
+    "path": "/management/returns",
+    "status": 200,
+    "overflow": false,
+    "javascript_errors": [],
+    "screenshot": "360-店长-7.png"
+  },
+  {
+    "width": 360,
+    "role": "店长",
+    "path": "/management/reservations",
+    "status": 200,
+    "overflow": false,
+    "javascript_errors": [],
+    "screenshot": "360-店长-8.png"
+  },
+  {
+    "width": 360,
+    "role": "库管",
+    "path": "/workspace",
+    "status": 200,
+    "overflow": false,
+    "javascript_errors": [],
+    "screenshot": "360-库管-0.png"
+  },
+  {
+    "width": 360,
+    "role": "库管",
+    "path": "/goods",
+    "status": 200,
+    "overflow": false,
+    "javascript_errors": [],
+    "screenshot": "360-库管-1.png"
+  },
+  {
+    "width": 360,
+    "role": "库管",
+    "path": "/suppliers",
+    "status": 200,
+    "overflow": false,
+    "javascript_errors": [],
+    "screenshot": "360-库管-2.png"
+  },
+  {
+    "width": 360,
+    "role": "库管",
+    "path": "/supplier-quotes",
+    "status": 200,
+    "overflow": false,
+    "javascript_errors": [],
+    "screenshot": "360-库管-3.png"
+  },
+  {
+    "width": 360,
+    "role": "库管",
+    "path": "/purchases",
+    "status": 200,
+    "overflow": false,
+    "javascript_errors": [],
+    "screenshot": "360-库管-4.png"
+  },
+  {
+    "width": 360,
+    "role": "库管",
+    "path": "/inventory",
+    "status": 200,
+    "overflow": false,
+    "javascript_errors": [],
+    "screenshot": "360-库管-5.png"
+  },
+  {
+    "width": 360,
+    "role": "库管",
+    "path": "/return-recovery",
+    "status": 200,
+    "overflow": false,
+    "javascript_errors": [],
+    "screenshot": "360-库管-6.png"
+  },
+  {
+    "width": 360,
+    "role": "收银员",
+    "path": "/workspace",
+    "status": 200,
+    "overflow": false,
+    "javascript_errors": [],
+    "screenshot": "360-收银员-0.png"
+  },
+  {
+    "width": 360,
+    "role": "收银员",
+    "path": "/sales/new",
+    "status": 200,
+    "overflow": false,
+    "javascript_errors": [],
+    "screenshot": "360-收银员-1.png"
+  },
+  {
+    "width": 360,
+    "role": "收银员",
+    "path": "/sales",
+    "status": 200,
+    "overflow": false,
+    "javascript_errors": [],
+    "screenshot": "360-收银员-2.png"
+  },
+  {
+    "width": 360,
+    "role": "收银员",
+    "path": "/pickups",
+    "status": 200,
+    "overflow": false,
+    "javascript_errors": [],
+    "screenshot": "360-收银员-3.png"
+  },
+  {
+    "width": 360,
+    "role": "收银员",
+    "path": "/members?phone=13900000001",
+    "status": 200,
+    "overflow": false,
+    "javascript_errors": [],
+    "screenshot": "360-收银员-4.png"
+  },
+  {
+    "width": 360,
+    "role": "收银员",
+    "path": "/returns/new?no=S20260922-W604",
+    "status": 200,
+    "overflow": false,
+    "javascript_errors": [],
+    "screenshot": "360-收银员-5.png"
+  },
+  {
+    "width": 1440,
+    "role": null,
+    "path": "/shop",
+    "status": 200,
+    "overflow": false,
+    "javascript_errors": [],
+    "screenshot": "1440-guest-0.png"
+  },
+  {
+    "width": 1440,
+    "role": null,
+    "path": "/shop/reservations/new",
+    "status": 200,
+    "overflow": false,
+    "javascript_errors": [],
+    "screenshot": "1440-guest-1.png"
+  },
+  {
+    "width": 1440,
+    "role": null,
+    "path": "/shop/reservations/lookup",
+    "status": 200,
+    "overflow": false,
+    "javascript_errors": [],
+    "screenshot": "1440-guest-2.png"
+  },
+  {
+    "width": 1440,
+    "role": null,
+    "path": "/shop/member",
+    "status": 200,
+    "overflow": false,
+    "javascript_errors": [],
+    "screenshot": "1440-guest-3.png"
+  },
+  {
+    "width": 1440,
+    "role": "店长",
+    "path": "/workspace",
+    "status": 200,
+    "overflow": false,
+    "javascript_errors": [],
+    "screenshot": "1440-店长-0.png"
+  },
+  {
+    "width": 1440,
+    "role": "店长",
+    "path": "/management/finance",
+    "status": 200,
+    "overflow": false,
+    "javascript_errors": [],
+    "screenshot": "1440-店长-1.png"
+  },
+  {
+    "width": 1440,
+    "role": "店长",
+    "path": "/management/cards",
+    "status": 200,
+    "overflow": false,
+    "javascript_errors": [],
+    "screenshot": "1440-店长-2.png"
+  },
+  {
+    "width": 1440,
+    "role": "店长",
+    "path": "/management/employees",
+    "status": 200,
+    "overflow": false,
+    "javascript_errors": [],
+    "screenshot": "1440-店长-3.png"
+  },
+  {
+    "width": 1440,
+    "role": "店长",
+    "path": "/management/reports",
+    "status": 200,
+    "overflow": false,
+    "javascript_errors": [],
+    "screenshot": "1440-店长-4.png"
+  },
+  {
+    "width": 1440,
+    "role": "店长",
+    "path": "/purchases",
+    "status": 200,
+    "overflow": false,
+    "javascript_errors": [],
+    "screenshot": "1440-店长-5.png"
+  },
+  {
+    "width": 1440,
+    "role": "店长",
+    "path": "/management/sales",
+    "status": 200,
+    "overflow": false,
+    "javascript_errors": [],
+    "screenshot": "1440-店长-6.png"
+  },
+  {
+    "width": 1440,
+    "role": "店长",
+    "path": "/management/returns",
+    "status": 200,
+    "overflow": false,
+    "javascript_errors": [],
+    "screenshot": "1440-店长-7.png"
+  },
+  {
+    "width": 1440,
+    "role": "店长",
+    "path": "/management/reservations",
+    "status": 200,
+    "overflow": false,
+    "javascript_errors": [],
+    "screenshot": "1440-店长-8.png"
+  },
+  {
+    "width": 1440,
+    "role": "库管",
+    "path": "/workspace",
+    "status": 200,
+    "overflow": false,
+    "javascript_errors": [],
+    "screenshot": "1440-库管-0.png"
+  },
+  {
+    "width": 1440,
+    "role": "库管",
+    "path": "/goods",
+    "status": 200,
+    "overflow": false,
+    "javascript_errors": [],
+    "screenshot": "1440-库管-1.png"
+  },
+  {
+    "width": 1440,
+    "role": "库管",
+    "path": "/suppliers",
+    "status": 200,
+    "overflow": false,
+    "javascript_errors": [],
+    "screenshot": "1440-库管-2.png"
+  },
+  {
+    "width": 1440,
+    "role": "库管",
+    "path": "/supplier-quotes",
+    "status": 200,
+    "overflow": false,
+    "javascript_errors": [],
+    "screenshot": "1440-库管-3.png"
+  },
+  {
+    "width": 1440,
+    "role": "库管",
+    "path": "/purchases",
+    "status": 200,
+    "overflow": false,
+    "javascript_errors": [],
+    "screenshot": "1440-库管-4.png"
+  },
+  {
+    "width": 1440,
+    "role": "库管",
+    "path": "/inventory",
+    "status": 200,
+    "overflow": false,
+    "javascript_errors": [],
+    "screenshot": "1440-库管-5.png"
+  },
+  {
+    "width": 1440,
+    "role": "库管",
+    "path": "/return-recovery",
+    "status": 200,
+    "overflow": false,
+    "javascript_errors": [],
+    "screenshot": "1440-库管-6.png"
+  },
+  {
+    "width": 1440,
+    "role": "收银员",
+    "path": "/workspace",
+    "status": 200,
+    "overflow": false,
+    "javascript_errors": [],
+    "screenshot": "1440-收银员-0.png"
+  },
+  {
+    "width": 1440,
+    "role": "收银员",
+    "path": "/sales/new",
+    "status": 200,
+    "overflow": false,
+    "javascript_errors": [],
+    "screenshot": "1440-收银员-1.png"
+  },
+  {
+    "width": 1440,
+    "role": "收银员",
+    "path": "/sales",
+    "status": 200,
+    "overflow": false,
+    "javascript_errors": [],
+    "screenshot": "1440-收银员-2.png"
+  },
+  {
+    "width": 1440,
+    "role": "收银员",
+    "path": "/pickups",
+    "status": 200,
+    "overflow": false,
+    "javascript_errors": [],
+    "screenshot": "1440-收银员-3.png"
+  },
+  {
+    "width": 1440,
+    "role": "收银员",
+    "path": "/members?phone=13900000001",
+    "status": 200,
+    "overflow": false,
+    "javascript_errors": [],
+    "screenshot": "1440-收银员-4.png"
+  },
+  {
+    "width": 1440,
+    "role": "收银员",
+    "path": "/returns/new?no=S20260922-W604",
+    "status": 200,
+    "overflow": false,
+    "javascript_errors": [],
+    "screenshot": "1440-收银员-5.png"
+  }
+]

@@ -1,0 +1,57 @@
+[
+  {
+    "workflow": "01-injection",
+    "url": "/management/finance",
+    "status": "PASS"
+  },
+  {
+    "workflow": "02-purchase-received",
+    "url": "/purchases/12",
+    "status": "PASS"
+  },
+  {
+    "workflow": "03-member-card",
+    "url": "/members",
+    "status": "PASS"
+  },
+  {
+    "workflow": "04-reservation",
+    "url": "/shop/reservations/receipt",
+    "status": "PASS"
+  },
+  {
+    "workflow": "05-pickup-sale",
+    "url": "/sales/W7S00000000000000001",
+    "status": "PASS"
+  },
+  {
+    "workflow": "06-refund",
+    "url": "/returns",
+    "status": "PASS"
+  },
+  {
+    "workflow": "07-recovery",
+    "url": "/return-recovery",
+    "status": "PASS"
+  },
+  {
+    "workflow": "08-member-self",
+    "url": "/shop/member",
+    "status": "PASS"
+  },
+  {
+    "workflow": "09-cancellation",
+    "url": "/shop/reservations/receipt",
+    "status": "PASS"
+  },
+  {
+    "workflow": "10-withdrawal",
+    "url": "/management/finance",
+    "status": "PASS"
+  },
+  {
+    "workflow": "11-reports",
+    "url": "/management/reports",
+    "status": "PASS"
+  }
+]

@@ -1,0 +1,4 @@
+{% extends 'base.html' %}{% block title %}预订商品{% endblock %}{% block content %}
+<h1>预订商品，到店自提</h1><section class="panel"><p>预订不收款，保留商品72小时。下单后请保存手机号和预定码；到店按办理时价格结算。商品下架时暂不可取货，可取消或等待有效期内重新上架。</p>
+<form method="post" action="{{ url_for('reservations.create') }}"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><input type="hidden" name="request_key" value="{{ request_key }}"><label>手机号<input name="phone" pattern="[0-9]{11}" maxlength="11" required></label>
+<div class="table-scroll"><table><thead><tr><th>商品</th><th>当前售价</th><th>预订数量</th></tr></thead><tbody>{% for item in goods %}<tr><td>{{ item.name }} {{ '' if item.available else '（暂时无货）' }}</td><td>¥{{ item.price }}</td><td><input type="number" min="0" max="1000" name="quantity_{{ item.id }}" value="0" aria-label="{{ item.name }}预订数量" {% if not item.available %}disabled{% endif %}></td></tr>{% endfor %}</tbody></table></div><button>确认预订，不收款</button></form></section>{% endblock %}

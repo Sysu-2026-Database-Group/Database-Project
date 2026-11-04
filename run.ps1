@@ -1,6 +1,6 @@
 #requires -Version 5.1
 param(
-    [ValidateSet('help', 'doctor', 'setup', 'start', 'test', 'verify')]
+    [ValidateSet('help', 'doctor', 'setup', 'start', 'stop', 'status', 'test', 'verify')]
     [string]$Command = 'help',
     [string]$Server,
     [string]$Driver,
@@ -47,6 +47,10 @@ try {
             throw 'settings_directory must stay inside the project directory.'
         }
         if (Test-Path -LiteralPath $runnerSettings) { . $runnerSettings }
+        $runnerGuestSettings = Join-Path ([IO.Path]::GetDirectoryName($runnerSettings)) 'settings.guest.local.ps1'
+        if (Test-Path -LiteralPath $runnerGuestSettings) { . $runnerGuestSettings }
+        $runnerTaskSettings = Join-Path ([IO.Path]::GetDirectoryName($runnerSettings)) 'settings.task.local.ps1'
+        if (Test-Path -LiteralPath $runnerTaskSettings) { . $runnerTaskSettings }
     }
     $runnerArguments = @((Join-Path $PSScriptRoot 'scripts\project_runner.py'), $Command, '--config', $runnerConfig)
     foreach ($runnerOption in @(@('Server', '--server'), @('Driver', '--driver'), @('DatabaseName', '--database'), @('LoginPrefix', '--login-prefix'), @('Port', '--port'))) {

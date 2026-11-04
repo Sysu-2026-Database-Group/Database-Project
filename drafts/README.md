@@ -1,4 +1,6 @@
-# 历史过程稿
+# 规划与历史过程稿
+
+Web开发规划已获用户授权，正式版本迁入 [docs/design/plan-web-development.md](../docs/design/plan-web-development.md)，实施状态见 [开发台账](../docs/tasks/task-web-development.md)。
 
 本目录保留 `plan-week-1.md` 和 `plan-week-2.md`，用于追溯早期方案及人工裁定。它们记录的是当时的编号、表数和设计，可能与当前正式文档不同；实现、测试和验收以 `docs/specs/spec-*.md` 与当周 `docs/task-week-*.md` 为准。
 

@@ -1,0 +1,1290 @@
+bookstore_webdemo_20261102a_auth: independent login and direct-table read denial PASS
+bookstore_webdemo_20261102a_cashier: independent login and direct-table read denial PASS
+bookstore_webdemo_20261102a_inventory: independent login and direct-table read denial PASS
+bookstore_webdemo_20261102a_manager: independent login and direct-table read denial PASS
+bookstore_webdemo_20261102a_guest: independent login and direct-table read denial PASS
+bookstore_webdemo_20261102a_task: independent login and direct-table read denial PASS
+--- Logging error ---
+Traceback (most recent call last):
+  File "C:\Users\18192\AppData\Local\Programs\Python\Python312\Lib\logging\__init__.py", line 1163, in emit
+    stream.write(msg + self.terminator)
+ValueError: I/O operation on closed file.
+Call stack:
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 541, in <module>
+    raise SystemExit(main())
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 519, in main
+    report.action('verify', lambda: verify(database=config['database'], login_prefix=config['login_prefix'], directory=settings_directory(config)))
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 104, in action
+    value = function()
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 519, in <lambda>
+    report.action('verify', lambda: verify(database=config['database'], login_prefix=config['login_prefix'], directory=settings_directory(config)))
+  File "C:\Users\18192\Desktop\Database-Project\app\provision_local.py", line 144, in verify
+    if client.get('/api/me').status_code != 401:
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 1166, in get
+    return self.open(*args, **kw)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\testing.py", line 235, in open
+    response = super().open(
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 1120, in open
+    response_parts = self.run_wsgi_app(request.environ, buffered=buffered)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 992, in run_wsgi_app
+    rv = run_wsgi_app(self.application, environ, buffered=buffered)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 1268, in run_wsgi_app
+    app_rv = app(environ, start_response)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 1536, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 920, in full_dispatch_request
+    return self.finalize_request(rv)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 941, in finalize_request
+    response = self.process_response(response)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 1319, in process_response
+    response = self.ensure_sync(func)(response)
+  File "C:\Users\18192\Desktop\Database-Project\app\web.py", line 118, in complete_request
+    logger.info(json.dumps(record, ensure_ascii=False))
+Message: '{"event": "request", "request_id": "f6f07029bf86b896e0fb96fc505cd02b", "time": "2026-11-02T15:22:51.757585+00:00", "method": "GET", "action": "auth.me", "subject_type": "anonymous", "role": null, "subject": null, "error_code": "login_required", "result": "failure", "status": 401, "duration_ms": 0.19}'
+Arguments: ()
+--- Logging error ---
+Traceback (most recent call last):
+  File "C:\Users\18192\AppData\Local\Programs\Python\Python312\Lib\logging\__init__.py", line 1163, in emit
+    stream.write(msg + self.terminator)
+ValueError: I/O operation on closed file.
+Call stack:
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 541, in <module>
+    raise SystemExit(main())
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 519, in main
+    report.action('verify', lambda: verify(database=config['database'], login_prefix=config['login_prefix'], directory=settings_directory(config)))
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 104, in action
+    value = function()
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 519, in <lambda>
+    report.action('verify', lambda: verify(database=config['database'], login_prefix=config['login_prefix'], directory=settings_directory(config)))
+  File "C:\Users\18192\Desktop\Database-Project\app\provision_local.py", line 146, in verify
+    client.get('/auth/login')
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 1166, in get
+    return self.open(*args, **kw)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\testing.py", line 235, in open
+    response = super().open(
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 1120, in open
+    response_parts = self.run_wsgi_app(request.environ, buffered=buffered)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 992, in run_wsgi_app
+    rv = run_wsgi_app(self.application, environ, buffered=buffered)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 1268, in run_wsgi_app
+    app_rv = app(environ, start_response)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 1536, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 920, in full_dispatch_request
+    return self.finalize_request(rv)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 941, in finalize_request
+    response = self.process_response(response)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 1319, in process_response
+    response = self.ensure_sync(func)(response)
+  File "C:\Users\18192\Desktop\Database-Project\app\web.py", line 118, in complete_request
+    logger.info(json.dumps(record, ensure_ascii=False))
+Message: '{"event": "request", "request_id": "351d1b545b1c316649e56616aa2fe9de", "time": "2026-11-02T15:22:51.817894+00:00", "method": "GET", "action": "auth.login_form", "subject_type": "anonymous", "role": null, "subject": null, "error_code": null, "result": "success", "status": 200, "duration_ms": 19.48}'
+Arguments: ()
+--- Logging error ---
+Traceback (most recent call last):
+  File "C:\Users\18192\AppData\Local\Programs\Python\Python312\Lib\logging\__init__.py", line 1163, in emit
+    stream.write(msg + self.terminator)
+ValueError: I/O operation on closed file.
+Call stack:
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 541, in <module>
+    raise SystemExit(main())
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 519, in main
+    report.action('verify', lambda: verify(database=config['database'], login_prefix=config['login_prefix'], directory=settings_directory(config)))
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 104, in action
+    value = function()
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 519, in <lambda>
+    report.action('verify', lambda: verify(database=config['database'], login_prefix=config['login_prefix'], directory=settings_directory(config)))
+  File "C:\Users\18192\Desktop\Database-Project\app\provision_local.py", line 149, in verify
+    response = client.post('/auth/login', data=dict(phone=employee['phone'], password=employee['password'], csrf_token=token))
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 1171, in post
+    return self.open(*args, **kw)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\testing.py", line 235, in open
+    response = super().open(
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 1120, in open
+    response_parts = self.run_wsgi_app(request.environ, buffered=buffered)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 992, in run_wsgi_app
+    rv = run_wsgi_app(self.application, environ, buffered=buffered)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 1268, in run_wsgi_app
+    app_rv = app(environ, start_response)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 1536, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 920, in full_dispatch_request
+    return self.finalize_request(rv)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 941, in finalize_request
+    response = self.process_response(response)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 1319, in process_response
+    response = self.ensure_sync(func)(response)
+  File "C:\Users\18192\Desktop\Database-Project\app\web.py", line 118, in complete_request
+    logger.info(json.dumps(record, ensure_ascii=False))
+Message: '{"event": "request", "request_id": "81ecde58d3f34f77fc0b653f5dc90f7d", "time": "2026-11-02T15:22:51.989779+00:00", "method": "POST", "action": "auth.login", "subject_type": "employee", "role": "店长", "subject": "95ba9ecbf5ab0770", "error_code": null, "result": "success", "status": 302, "duration_ms": 168.39}'
+Arguments: ()
+--- Logging error ---
+Traceback (most recent call last):
+  File "C:\Users\18192\AppData\Local\Programs\Python\Python312\Lib\logging\__init__.py", line 1163, in emit
+    stream.write(msg + self.terminator)
+ValueError: I/O operation on closed file.
+Call stack:
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 541, in <module>
+    raise SystemExit(main())
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 519, in main
+    report.action('verify', lambda: verify(database=config['database'], login_prefix=config['login_prefix'], directory=settings_directory(config)))
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 104, in action
+    value = function()
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 519, in <lambda>
+    report.action('verify', lambda: verify(database=config['database'], login_prefix=config['login_prefix'], directory=settings_directory(config)))
+  File "C:\Users\18192\Desktop\Database-Project\app\provision_local.py", line 152, in verify
+    response = client.get('/api/me')
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 1166, in get
+    return self.open(*args, **kw)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\testing.py", line 235, in open
+    response = super().open(
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 1120, in open
+    response_parts = self.run_wsgi_app(request.environ, buffered=buffered)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 992, in run_wsgi_app
+    rv = run_wsgi_app(self.application, environ, buffered=buffered)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 1268, in run_wsgi_app
+    app_rv = app(environ, start_response)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 1536, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 920, in full_dispatch_request
+    return self.finalize_request(rv)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 941, in finalize_request
+    response = self.process_response(response)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 1319, in process_response
+    response = self.ensure_sync(func)(response)
+  File "C:\Users\18192\Desktop\Database-Project\app\web.py", line 118, in complete_request
+    logger.info(json.dumps(record, ensure_ascii=False))
+Message: '{"event": "request", "request_id": "d9d920f856806b89b6887e949276ef88", "time": "2026-11-02T15:22:51.995780+00:00", "method": "GET", "action": "auth.me", "subject_type": "employee", "role": "店长", "subject": "95ba9ecbf5ab0770", "error_code": null, "result": "success", "status": 200, "duration_ms": 4.54}'
+Arguments: ()
+--- Logging error ---
+Traceback (most recent call last):
+  File "C:\Users\18192\AppData\Local\Programs\Python\Python312\Lib\logging\__init__.py", line 1163, in emit
+    stream.write(msg + self.terminator)
+ValueError: I/O operation on closed file.
+Call stack:
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 541, in <module>
+    raise SystemExit(main())
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 519, in main
+    report.action('verify', lambda: verify(database=config['database'], login_prefix=config['login_prefix'], directory=settings_directory(config)))
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 104, in action
+    value = function()
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 519, in <lambda>
+    report.action('verify', lambda: verify(database=config['database'], login_prefix=config['login_prefix'], directory=settings_directory(config)))
+  File "C:\Users\18192\Desktop\Database-Project\app\provision_local.py", line 155, in verify
+    if client.get('/').status_code != 200:
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 1166, in get
+    return self.open(*args, **kw)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\testing.py", line 235, in open
+    response = super().open(
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 1120, in open
+    response_parts = self.run_wsgi_app(request.environ, buffered=buffered)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 992, in run_wsgi_app
+    rv = run_wsgi_app(self.application, environ, buffered=buffered)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 1268, in run_wsgi_app
+    app_rv = app(environ, start_response)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 1536, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 920, in full_dispatch_request
+    return self.finalize_request(rv)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 941, in finalize_request
+    response = self.process_response(response)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 1319, in process_response
+    response = self.ensure_sync(func)(response)
+  File "C:\Users\18192\Desktop\Database-Project\app\web.py", line 118, in complete_request
+    logger.info(json.dumps(record, ensure_ascii=False))
+Message: '{"event": "request", "request_id": "f43f86421ad00e3d17ca66ddb93165e9", "time": "2026-11-02T15:22:52.005258+00:00", "method": "GET", "action": "workspace.home", "subject_type": "employee", "role": "店长", "subject": "95ba9ecbf5ab0770", "error_code": null, "result": "success", "status": 200, "duration_ms": 8.44}'
+Arguments: ()
+--- Logging error ---
+Traceback (most recent call last):
+  File "C:\Users\18192\AppData\Local\Programs\Python\Python312\Lib\logging\__init__.py", line 1163, in emit
+    stream.write(msg + self.terminator)
+ValueError: I/O operation on closed file.
+Call stack:
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 541, in <module>
+    raise SystemExit(main())
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 519, in main
+    report.action('verify', lambda: verify(database=config['database'], login_prefix=config['login_prefix'], directory=settings_directory(config)))
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 104, in action
+    value = function()
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 519, in <lambda>
+    report.action('verify', lambda: verify(database=config['database'], login_prefix=config['login_prefix'], directory=settings_directory(config)))
+  File "C:\Users\18192\Desktop\Database-Project\app\provision_local.py", line 158, in verify
+    if client.get('/sales/new').status_code != expected_sales:
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 1166, in get
+    return self.open(*args, **kw)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\testing.py", line 235, in open
+    response = super().open(
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 1120, in open
+    response_parts = self.run_wsgi_app(request.environ, buffered=buffered)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 992, in run_wsgi_app
+    rv = run_wsgi_app(self.application, environ, buffered=buffered)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 1268, in run_wsgi_app
+    app_rv = app(environ, start_response)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 1536, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 920, in full_dispatch_request
+    return self.finalize_request(rv)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 941, in finalize_request
+    response = self.process_response(response)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 1319, in process_response
+    response = self.ensure_sync(func)(response)
+  File "C:\Users\18192\Desktop\Database-Project\app\web.py", line 118, in complete_request
+    logger.info(json.dumps(record, ensure_ascii=False))
+Message: '{"event": "request", "request_id": "bdbdf20d79c08cf2a0612062edca7f4e", "time": "2026-11-02T15:22:52.017342+00:00", "method": "GET", "action": "sales.sale_form", "subject_type": "employee", "role": "店长", "subject": "95ba9ecbf5ab0770", "error_code": "forbidden", "result": "failure", "status": 403, "duration_ms": 9.52}'
+Arguments: ()
+--- Logging error ---
+Traceback (most recent call last):
+  File "C:\Users\18192\AppData\Local\Programs\Python\Python312\Lib\logging\__init__.py", line 1163, in emit
+    stream.write(msg + self.terminator)
+ValueError: I/O operation on closed file.
+Call stack:
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 541, in <module>
+    raise SystemExit(main())
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 519, in main
+    report.action('verify', lambda: verify(database=config['database'], login_prefix=config['login_prefix'], directory=settings_directory(config)))
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 104, in action
+    value = function()
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 519, in <lambda>
+    report.action('verify', lambda: verify(database=config['database'], login_prefix=config['login_prefix'], directory=settings_directory(config)))
+  File "C:\Users\18192\Desktop\Database-Project\app\provision_local.py", line 162, in verify
+    if client.post('/auth/logout', data={'csrf_token': token}).status_code != 302 or client.get('/api/me').status_code != 401:
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 1171, in post
+    return self.open(*args, **kw)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\testing.py", line 235, in open
+    response = super().open(
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 1120, in open
+    response_parts = self.run_wsgi_app(request.environ, buffered=buffered)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 992, in run_wsgi_app
+    rv = run_wsgi_app(self.application, environ, buffered=buffered)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 1268, in run_wsgi_app
+    app_rv = app(environ, start_response)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 1536, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 920, in full_dispatch_request
+    return self.finalize_request(rv)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 941, in finalize_request
+    response = self.process_response(response)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 1319, in process_response
+    response = self.ensure_sync(func)(response)
+  File "C:\Users\18192\Desktop\Database-Project\app\web.py", line 118, in complete_request
+    logger.info(json.dumps(record, ensure_ascii=False))
+Message: '{"event": "request", "request_id": "35dba133b5fd05f70fe17589c81f66be", "time": "2026-11-02T15:22:52.020329+00:00", "method": "POST", "action": "auth.logout", "subject_type": "employee", "role": "店长", "subject": "95ba9ecbf5ab0770", "error_code": null, "result": "success", "status": 302, "duration_ms": 0.33}'
+Arguments: ()
+--- Logging error ---
+Traceback (most recent call last):
+  File "C:\Users\18192\AppData\Local\Programs\Python\Python312\Lib\logging\__init__.py", line 1163, in emit
+    stream.write(msg + self.terminator)
+ValueError: I/O operation on closed file.
+Call stack:
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 541, in <module>
+    raise SystemExit(main())
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 519, in main
+    report.action('verify', lambda: verify(database=config['database'], login_prefix=config['login_prefix'], directory=settings_directory(config)))
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 104, in action
+    value = function()
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 519, in <lambda>
+    report.action('verify', lambda: verify(database=config['database'], login_prefix=config['login_prefix'], directory=settings_directory(config)))
+  File "C:\Users\18192\Desktop\Database-Project\app\provision_local.py", line 162, in verify
+    if client.post('/auth/logout', data={'csrf_token': token}).status_code != 302 or client.get('/api/me').status_code != 401:
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 1166, in get
+    return self.open(*args, **kw)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\testing.py", line 235, in open
+    response = super().open(
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 1120, in open
+    response_parts = self.run_wsgi_app(request.environ, buffered=buffered)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 992, in run_wsgi_app
+    rv = run_wsgi_app(self.application, environ, buffered=buffered)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 1268, in run_wsgi_app
+    app_rv = app(environ, start_response)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 1536, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 920, in full_dispatch_request
+    return self.finalize_request(rv)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 941, in finalize_request
+    response = self.process_response(response)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 1319, in process_response
+    response = self.ensure_sync(func)(response)
+  File "C:\Users\18192\Desktop\Database-Project\app\web.py", line 118, in complete_request
+    logger.info(json.dumps(record, ensure_ascii=False))
+Message: '{"event": "request", "request_id": "d748a13c17009f5a2bc1b44ec59b1680", "time": "2026-11-02T15:22:52.021331+00:00", "method": "GET", "action": "auth.me", "subject_type": "anonymous", "role": null, "subject": null, "error_code": "login_required", "result": "failure", "status": 401, "duration_ms": 0.14}'
+Arguments: ()
+employee 13800000001: login, identity, home and logout PASS
+--- Logging error ---
+Traceback (most recent call last):
+  File "C:\Users\18192\AppData\Local\Programs\Python\Python312\Lib\logging\__init__.py", line 1163, in emit
+    stream.write(msg + self.terminator)
+ValueError: I/O operation on closed file.
+Call stack:
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 541, in <module>
+    raise SystemExit(main())
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 519, in main
+    report.action('verify', lambda: verify(database=config['database'], login_prefix=config['login_prefix'], directory=settings_directory(config)))
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 104, in action
+    value = function()
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 519, in <lambda>
+    report.action('verify', lambda: verify(database=config['database'], login_prefix=config['login_prefix'], directory=settings_directory(config)))
+  File "C:\Users\18192\Desktop\Database-Project\app\provision_local.py", line 144, in verify
+    if client.get('/api/me').status_code != 401:
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 1166, in get
+    return self.open(*args, **kw)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\testing.py", line 235, in open
+    response = super().open(
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 1120, in open
+    response_parts = self.run_wsgi_app(request.environ, buffered=buffered)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 992, in run_wsgi_app
+    rv = run_wsgi_app(self.application, environ, buffered=buffered)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 1268, in run_wsgi_app
+    app_rv = app(environ, start_response)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 1536, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 920, in full_dispatch_request
+    return self.finalize_request(rv)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 941, in finalize_request
+    response = self.process_response(response)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 1319, in process_response
+    response = self.ensure_sync(func)(response)
+  File "C:\Users\18192\Desktop\Database-Project\app\web.py", line 118, in complete_request
+    logger.info(json.dumps(record, ensure_ascii=False))
+Message: '{"event": "request", "request_id": "d1afdda259122bf28a5f0094c65a9695", "time": "2026-11-02T15:22:52.023637+00:00", "method": "GET", "action": "auth.me", "subject_type": "anonymous", "role": null, "subject": null, "error_code": "login_required", "result": "failure", "status": 401, "duration_ms": 0.12}'
+Arguments: ()
+--- Logging error ---
+Traceback (most recent call last):
+  File "C:\Users\18192\AppData\Local\Programs\Python\Python312\Lib\logging\__init__.py", line 1163, in emit
+    stream.write(msg + self.terminator)
+ValueError: I/O operation on closed file.
+Call stack:
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 541, in <module>
+    raise SystemExit(main())
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 519, in main
+    report.action('verify', lambda: verify(database=config['database'], login_prefix=config['login_prefix'], directory=settings_directory(config)))
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 104, in action
+    value = function()
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 519, in <lambda>
+    report.action('verify', lambda: verify(database=config['database'], login_prefix=config['login_prefix'], directory=settings_directory(config)))
+  File "C:\Users\18192\Desktop\Database-Project\app\provision_local.py", line 146, in verify
+    client.get('/auth/login')
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 1166, in get
+    return self.open(*args, **kw)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\testing.py", line 235, in open
+    response = super().open(
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 1120, in open
+    response_parts = self.run_wsgi_app(request.environ, buffered=buffered)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 992, in run_wsgi_app
+    rv = run_wsgi_app(self.application, environ, buffered=buffered)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 1268, in run_wsgi_app
+    app_rv = app(environ, start_response)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 1536, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 920, in full_dispatch_request
+    return self.finalize_request(rv)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 941, in finalize_request
+    response = self.process_response(response)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 1319, in process_response
+    response = self.ensure_sync(func)(response)
+  File "C:\Users\18192\Desktop\Database-Project\app\web.py", line 118, in complete_request
+    logger.info(json.dumps(record, ensure_ascii=False))
+Message: '{"event": "request", "request_id": "53e7f82a62c3f3bdf627830ed52e783f", "time": "2026-11-02T15:22:52.024648+00:00", "method": "GET", "action": "auth.login_form", "subject_type": "anonymous", "role": null, "subject": null, "error_code": null, "result": "success", "status": 200, "duration_ms": 0.38}'
+Arguments: ()
+--- Logging error ---
+Traceback (most recent call last):
+  File "C:\Users\18192\AppData\Local\Programs\Python\Python312\Lib\logging\__init__.py", line 1163, in emit
+    stream.write(msg + self.terminator)
+ValueError: I/O operation on closed file.
+Call stack:
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 541, in <module>
+    raise SystemExit(main())
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 519, in main
+    report.action('verify', lambda: verify(database=config['database'], login_prefix=config['login_prefix'], directory=settings_directory(config)))
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 104, in action
+    value = function()
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 519, in <lambda>
+    report.action('verify', lambda: verify(database=config['database'], login_prefix=config['login_prefix'], directory=settings_directory(config)))
+  File "C:\Users\18192\Desktop\Database-Project\app\provision_local.py", line 149, in verify
+    response = client.post('/auth/login', data=dict(phone=employee['phone'], password=employee['password'], csrf_token=token))
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 1171, in post
+    return self.open(*args, **kw)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\testing.py", line 235, in open
+    response = super().open(
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 1120, in open
+    response_parts = self.run_wsgi_app(request.environ, buffered=buffered)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 992, in run_wsgi_app
+    rv = run_wsgi_app(self.application, environ, buffered=buffered)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 1268, in run_wsgi_app
+    app_rv = app(environ, start_response)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 1536, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 920, in full_dispatch_request
+    return self.finalize_request(rv)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 941, in finalize_request
+    response = self.process_response(response)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 1319, in process_response
+    response = self.ensure_sync(func)(response)
+  File "C:\Users\18192\Desktop\Database-Project\app\web.py", line 118, in complete_request
+    logger.info(json.dumps(record, ensure_ascii=False))
+Message: '{"event": "request", "request_id": "a95fad2c35f20ab61230a00535199e2d", "time": "2026-11-02T15:22:52.194843+00:00", "method": "POST", "action": "auth.login", "subject_type": "employee", "role": "库管", "subject": "2bd10996fb1c11e3", "error_code": null, "result": "success", "status": 302, "duration_ms": 167.79}'
+Arguments: ()
+--- Logging error ---
+Traceback (most recent call last):
+  File "C:\Users\18192\AppData\Local\Programs\Python\Python312\Lib\logging\__init__.py", line 1163, in emit
+    stream.write(msg + self.terminator)
+ValueError: I/O operation on closed file.
+Call stack:
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 541, in <module>
+    raise SystemExit(main())
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 519, in main
+    report.action('verify', lambda: verify(database=config['database'], login_prefix=config['login_prefix'], directory=settings_directory(config)))
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 104, in action
+    value = function()
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 519, in <lambda>
+    report.action('verify', lambda: verify(database=config['database'], login_prefix=config['login_prefix'], directory=settings_directory(config)))
+  File "C:\Users\18192\Desktop\Database-Project\app\provision_local.py", line 152, in verify
+    response = client.get('/api/me')
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 1166, in get
+    return self.open(*args, **kw)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\testing.py", line 235, in open
+    response = super().open(
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 1120, in open
+    response_parts = self.run_wsgi_app(request.environ, buffered=buffered)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 992, in run_wsgi_app
+    rv = run_wsgi_app(self.application, environ, buffered=buffered)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 1268, in run_wsgi_app
+    app_rv = app(environ, start_response)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 1536, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 920, in full_dispatch_request
+    return self.finalize_request(rv)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 941, in finalize_request
+    response = self.process_response(response)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 1319, in process_response
+    response = self.ensure_sync(func)(response)
+  File "C:\Users\18192\Desktop\Database-Project\app\web.py", line 118, in complete_request
+    logger.info(json.dumps(record, ensure_ascii=False))
+Message: '{"event": "request", "request_id": "75c287b3328c48517cbdecb52b3784ab", "time": "2026-11-02T15:22:52.200851+00:00", "method": "GET", "action": "auth.me", "subject_type": "employee", "role": "库管", "subject": "2bd10996fb1c11e3", "error_code": null, "result": "success", "status": 200, "duration_ms": 4.33}'
+Arguments: ()
+--- Logging error ---
+Traceback (most recent call last):
+  File "C:\Users\18192\AppData\Local\Programs\Python\Python312\Lib\logging\__init__.py", line 1163, in emit
+    stream.write(msg + self.terminator)
+ValueError: I/O operation on closed file.
+Call stack:
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 541, in <module>
+    raise SystemExit(main())
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 519, in main
+    report.action('verify', lambda: verify(database=config['database'], login_prefix=config['login_prefix'], directory=settings_directory(config)))
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 104, in action
+    value = function()
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 519, in <lambda>
+    report.action('verify', lambda: verify(database=config['database'], login_prefix=config['login_prefix'], directory=settings_directory(config)))
+  File "C:\Users\18192\Desktop\Database-Project\app\provision_local.py", line 155, in verify
+    if client.get('/').status_code != 200:
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 1166, in get
+    return self.open(*args, **kw)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\testing.py", line 235, in open
+    response = super().open(
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 1120, in open
+    response_parts = self.run_wsgi_app(request.environ, buffered=buffered)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 992, in run_wsgi_app
+    rv = run_wsgi_app(self.application, environ, buffered=buffered)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 1268, in run_wsgi_app
+    app_rv = app(environ, start_response)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 1536, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 920, in full_dispatch_request
+    return self.finalize_request(rv)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 941, in finalize_request
+    response = self.process_response(response)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 1319, in process_response
+    response = self.ensure_sync(func)(response)
+  File "C:\Users\18192\Desktop\Database-Project\app\web.py", line 118, in complete_request
+    logger.info(json.dumps(record, ensure_ascii=False))
+Message: '{"event": "request", "request_id": "adf57ab9d16de28d5f1c0647eb9cba34", "time": "2026-11-02T15:22:52.205853+00:00", "method": "GET", "action": "workspace.home", "subject_type": "employee", "role": "库管", "subject": "2bd10996fb1c11e3", "error_code": null, "result": "success", "status": 200, "duration_ms": 3.61}'
+Arguments: ()
+--- Logging error ---
+Traceback (most recent call last):
+  File "C:\Users\18192\AppData\Local\Programs\Python\Python312\Lib\logging\__init__.py", line 1163, in emit
+    stream.write(msg + self.terminator)
+ValueError: I/O operation on closed file.
+Call stack:
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 541, in <module>
+    raise SystemExit(main())
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 519, in main
+    report.action('verify', lambda: verify(database=config['database'], login_prefix=config['login_prefix'], directory=settings_directory(config)))
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 104, in action
+    value = function()
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 519, in <lambda>
+    report.action('verify', lambda: verify(database=config['database'], login_prefix=config['login_prefix'], directory=settings_directory(config)))
+  File "C:\Users\18192\Desktop\Database-Project\app\provision_local.py", line 158, in verify
+    if client.get('/sales/new').status_code != expected_sales:
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 1166, in get
+    return self.open(*args, **kw)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\testing.py", line 235, in open
+    response = super().open(
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 1120, in open
+    response_parts = self.run_wsgi_app(request.environ, buffered=buffered)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 992, in run_wsgi_app
+    rv = run_wsgi_app(self.application, environ, buffered=buffered)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 1268, in run_wsgi_app
+    app_rv = app(environ, start_response)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 1536, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 920, in full_dispatch_request
+    return self.finalize_request(rv)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 941, in finalize_request
+    response = self.process_response(response)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 1319, in process_response
+    response = self.ensure_sync(func)(response)
+  File "C:\Users\18192\Desktop\Database-Project\app\web.py", line 118, in complete_request
+    logger.info(json.dumps(record, ensure_ascii=False))
+Message: '{"event": "request", "request_id": "8a3f3f09e9389b563e9f1f5a377ed38a", "time": "2026-11-02T15:22:52.211402+00:00", "method": "GET", "action": "sales.sale_form", "subject_type": "employee", "role": "库管", "subject": "2bd10996fb1c11e3", "error_code": "forbidden", "result": "failure", "status": 403, "duration_ms": 2.95}'
+Arguments: ()
+--- Logging error ---
+Traceback (most recent call last):
+  File "C:\Users\18192\AppData\Local\Programs\Python\Python312\Lib\logging\__init__.py", line 1163, in emit
+    stream.write(msg + self.terminator)
+ValueError: I/O operation on closed file.
+Call stack:
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 541, in <module>
+    raise SystemExit(main())
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 519, in main
+    report.action('verify', lambda: verify(database=config['database'], login_prefix=config['login_prefix'], directory=settings_directory(config)))
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 104, in action
+    value = function()
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 519, in <lambda>
+    report.action('verify', lambda: verify(database=config['database'], login_prefix=config['login_prefix'], directory=settings_directory(config)))
+  File "C:\Users\18192\Desktop\Database-Project\app\provision_local.py", line 162, in verify
+    if client.post('/auth/logout', data={'csrf_token': token}).status_code != 302 or client.get('/api/me').status_code != 401:
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 1171, in post
+    return self.open(*args, **kw)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\testing.py", line 235, in open
+    response = super().open(
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 1120, in open
+    response_parts = self.run_wsgi_app(request.environ, buffered=buffered)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 992, in run_wsgi_app
+    rv = run_wsgi_app(self.application, environ, buffered=buffered)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 1268, in run_wsgi_app
+    app_rv = app(environ, start_response)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 1536, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 920, in full_dispatch_request
+    return self.finalize_request(rv)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 941, in finalize_request
+    response = self.process_response(response)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 1319, in process_response
+    response = self.ensure_sync(func)(response)
+  File "C:\Users\18192\Desktop\Database-Project\app\web.py", line 118, in complete_request
+    logger.info(json.dumps(record, ensure_ascii=False))
+Message: '{"event": "request", "request_id": "7190c0fbbcec3b6826fdb1f6fc174065", "time": "2026-11-02T15:22:52.214413+00:00", "method": "POST", "action": "auth.logout", "subject_type": "employee", "role": "库管", "subject": "2bd10996fb1c11e3", "error_code": null, "result": "success", "status": 302, "duration_ms": 0.36}'
+Arguments: ()
+--- Logging error ---
+Traceback (most recent call last):
+  File "C:\Users\18192\AppData\Local\Programs\Python\Python312\Lib\logging\__init__.py", line 1163, in emit
+    stream.write(msg + self.terminator)
+ValueError: I/O operation on closed file.
+Call stack:
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 541, in <module>
+    raise SystemExit(main())
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 519, in main
+    report.action('verify', lambda: verify(database=config['database'], login_prefix=config['login_prefix'], directory=settings_directory(config)))
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 104, in action
+    value = function()
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 519, in <lambda>
+    report.action('verify', lambda: verify(database=config['database'], login_prefix=config['login_prefix'], directory=settings_directory(config)))
+  File "C:\Users\18192\Desktop\Database-Project\app\provision_local.py", line 162, in verify
+    if client.post('/auth/logout', data={'csrf_token': token}).status_code != 302 or client.get('/api/me').status_code != 401:
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 1166, in get
+    return self.open(*args, **kw)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\testing.py", line 235, in open
+    response = super().open(
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 1120, in open
+    response_parts = self.run_wsgi_app(request.environ, buffered=buffered)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 992, in run_wsgi_app
+    rv = run_wsgi_app(self.application, environ, buffered=buffered)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 1268, in run_wsgi_app
+    app_rv = app(environ, start_response)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 1536, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 920, in full_dispatch_request
+    return self.finalize_request(rv)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 941, in finalize_request
+    response = self.process_response(response)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 1319, in process_response
+    response = self.ensure_sync(func)(response)
+  File "C:\Users\18192\Desktop\Database-Project\app\web.py", line 118, in complete_request
+    logger.info(json.dumps(record, ensure_ascii=False))
+Message: '{"event": "request", "request_id": "a01e771e8614a12bf0abc02edd44716c", "time": "2026-11-02T15:22:52.215410+00:00", "method": "GET", "action": "auth.me", "subject_type": "anonymous", "role": null, "subject": null, "error_code": "login_required", "result": "failure", "status": 401, "duration_ms": 0.14}'
+Arguments: ()
+employee 13800000002: login, identity, home and logout PASS
+--- Logging error ---
+Traceback (most recent call last):
+  File "C:\Users\18192\AppData\Local\Programs\Python\Python312\Lib\logging\__init__.py", line 1163, in emit
+    stream.write(msg + self.terminator)
+ValueError: I/O operation on closed file.
+Call stack:
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 541, in <module>
+    raise SystemExit(main())
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 519, in main
+    report.action('verify', lambda: verify(database=config['database'], login_prefix=config['login_prefix'], directory=settings_directory(config)))
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 104, in action
+    value = function()
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 519, in <lambda>
+    report.action('verify', lambda: verify(database=config['database'], login_prefix=config['login_prefix'], directory=settings_directory(config)))
+  File "C:\Users\18192\Desktop\Database-Project\app\provision_local.py", line 144, in verify
+    if client.get('/api/me').status_code != 401:
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 1166, in get
+    return self.open(*args, **kw)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\testing.py", line 235, in open
+    response = super().open(
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 1120, in open
+    response_parts = self.run_wsgi_app(request.environ, buffered=buffered)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 992, in run_wsgi_app
+    rv = run_wsgi_app(self.application, environ, buffered=buffered)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 1268, in run_wsgi_app
+    app_rv = app(environ, start_response)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 1536, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 920, in full_dispatch_request
+    return self.finalize_request(rv)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 941, in finalize_request
+    response = self.process_response(response)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 1319, in process_response
+    response = self.ensure_sync(func)(response)
+  File "C:\Users\18192\Desktop\Database-Project\app\web.py", line 118, in complete_request
+    logger.info(json.dumps(record, ensure_ascii=False))
+Message: '{"event": "request", "request_id": "3ed87e75b0134c4f5972c13828b85b1e", "time": "2026-11-02T15:22:52.217495+00:00", "method": "GET", "action": "auth.me", "subject_type": "anonymous", "role": null, "subject": null, "error_code": "login_required", "result": "failure", "status": 401, "duration_ms": 0.13}'
+Arguments: ()
+--- Logging error ---
+Traceback (most recent call last):
+  File "C:\Users\18192\AppData\Local\Programs\Python\Python312\Lib\logging\__init__.py", line 1163, in emit
+    stream.write(msg + self.terminator)
+ValueError: I/O operation on closed file.
+Call stack:
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 541, in <module>
+    raise SystemExit(main())
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 519, in main
+    report.action('verify', lambda: verify(database=config['database'], login_prefix=config['login_prefix'], directory=settings_directory(config)))
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 104, in action
+    value = function()
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 519, in <lambda>
+    report.action('verify', lambda: verify(database=config['database'], login_prefix=config['login_prefix'], directory=settings_directory(config)))
+  File "C:\Users\18192\Desktop\Database-Project\app\provision_local.py", line 146, in verify
+    client.get('/auth/login')
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 1166, in get
+    return self.open(*args, **kw)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\testing.py", line 235, in open
+    response = super().open(
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 1120, in open
+    response_parts = self.run_wsgi_app(request.environ, buffered=buffered)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 992, in run_wsgi_app
+    rv = run_wsgi_app(self.application, environ, buffered=buffered)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 1268, in run_wsgi_app
+    app_rv = app(environ, start_response)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 1536, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 920, in full_dispatch_request
+    return self.finalize_request(rv)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 941, in finalize_request
+    response = self.process_response(response)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 1319, in process_response
+    response = self.ensure_sync(func)(response)
+  File "C:\Users\18192\Desktop\Database-Project\app\web.py", line 118, in complete_request
+    logger.info(json.dumps(record, ensure_ascii=False))
+Message: '{"event": "request", "request_id": "7e175854b8fd2317b7828614a234dfc6", "time": "2026-11-02T15:22:52.218491+00:00", "method": "GET", "action": "auth.login_form", "subject_type": "anonymous", "role": null, "subject": null, "error_code": null, "result": "success", "status": 200, "duration_ms": 0.31}'
+Arguments: ()
+--- Logging error ---
+Traceback (most recent call last):
+  File "C:\Users\18192\AppData\Local\Programs\Python\Python312\Lib\logging\__init__.py", line 1163, in emit
+    stream.write(msg + self.terminator)
+ValueError: I/O operation on closed file.
+Call stack:
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 541, in <module>
+    raise SystemExit(main())
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 519, in main
+    report.action('verify', lambda: verify(database=config['database'], login_prefix=config['login_prefix'], directory=settings_directory(config)))
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 104, in action
+    value = function()
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 519, in <lambda>
+    report.action('verify', lambda: verify(database=config['database'], login_prefix=config['login_prefix'], directory=settings_directory(config)))
+  File "C:\Users\18192\Desktop\Database-Project\app\provision_local.py", line 149, in verify
+    response = client.post('/auth/login', data=dict(phone=employee['phone'], password=employee['password'], csrf_token=token))
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 1171, in post
+    return self.open(*args, **kw)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\testing.py", line 235, in open
+    response = super().open(
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 1120, in open
+    response_parts = self.run_wsgi_app(request.environ, buffered=buffered)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 992, in run_wsgi_app
+    rv = run_wsgi_app(self.application, environ, buffered=buffered)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 1268, in run_wsgi_app
+    app_rv = app(environ, start_response)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 1536, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 920, in full_dispatch_request
+    return self.finalize_request(rv)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 941, in finalize_request
+    response = self.process_response(response)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 1319, in process_response
+    response = self.ensure_sync(func)(response)
+  File "C:\Users\18192\Desktop\Database-Project\app\web.py", line 118, in complete_request
+    logger.info(json.dumps(record, ensure_ascii=False))
+Message: '{"event": "request", "request_id": "c27ddd892e012850dbdb155dd22e34ad", "time": "2026-11-02T15:22:52.370516+00:00", "method": "POST", "action": "auth.login", "subject_type": "employee", "role": "收银员", "subject": "74edfeddd9268257", "error_code": null, "result": "success", "status": 302, "duration_ms": 150.07}'
+Arguments: ()
+--- Logging error ---
+Traceback (most recent call last):
+  File "C:\Users\18192\AppData\Local\Programs\Python\Python312\Lib\logging\__init__.py", line 1163, in emit
+    stream.write(msg + self.terminator)
+ValueError: I/O operation on closed file.
+Call stack:
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 541, in <module>
+    raise SystemExit(main())
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 519, in main
+    report.action('verify', lambda: verify(database=config['database'], login_prefix=config['login_prefix'], directory=settings_directory(config)))
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 104, in action
+    value = function()
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 519, in <lambda>
+    report.action('verify', lambda: verify(database=config['database'], login_prefix=config['login_prefix'], directory=settings_directory(config)))
+  File "C:\Users\18192\Desktop\Database-Project\app\provision_local.py", line 152, in verify
+    response = client.get('/api/me')
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 1166, in get
+    return self.open(*args, **kw)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\testing.py", line 235, in open
+    response = super().open(
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 1120, in open
+    response_parts = self.run_wsgi_app(request.environ, buffered=buffered)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 992, in run_wsgi_app
+    rv = run_wsgi_app(self.application, environ, buffered=buffered)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 1268, in run_wsgi_app
+    app_rv = app(environ, start_response)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 1536, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 920, in full_dispatch_request
+    return self.finalize_request(rv)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 941, in finalize_request
+    response = self.process_response(response)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 1319, in process_response
+    response = self.ensure_sync(func)(response)
+  File "C:\Users\18192\Desktop\Database-Project\app\web.py", line 118, in complete_request
+    logger.info(json.dumps(record, ensure_ascii=False))
+Message: '{"event": "request", "request_id": "d29b87d30c7022055862a1f07a726507", "time": "2026-11-02T15:22:52.375671+00:00", "method": "GET", "action": "auth.me", "subject_type": "employee", "role": "收银员", "subject": "74edfeddd9268257", "error_code": null, "result": "success", "status": 200, "duration_ms": 3.99}'
+Arguments: ()
+--- Logging error ---
+Traceback (most recent call last):
+  File "C:\Users\18192\AppData\Local\Programs\Python\Python312\Lib\logging\__init__.py", line 1163, in emit
+    stream.write(msg + self.terminator)
+ValueError: I/O operation on closed file.
+Call stack:
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 541, in <module>
+    raise SystemExit(main())
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 519, in main
+    report.action('verify', lambda: verify(database=config['database'], login_prefix=config['login_prefix'], directory=settings_directory(config)))
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 104, in action
+    value = function()
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 519, in <lambda>
+    report.action('verify', lambda: verify(database=config['database'], login_prefix=config['login_prefix'], directory=settings_directory(config)))
+  File "C:\Users\18192\Desktop\Database-Project\app\provision_local.py", line 155, in verify
+    if client.get('/').status_code != 200:
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 1166, in get
+    return self.open(*args, **kw)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\testing.py", line 235, in open
+    response = super().open(
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 1120, in open
+    response_parts = self.run_wsgi_app(request.environ, buffered=buffered)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 992, in run_wsgi_app
+    rv = run_wsgi_app(self.application, environ, buffered=buffered)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 1268, in run_wsgi_app
+    app_rv = app(environ, start_response)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 1536, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 920, in full_dispatch_request
+    return self.finalize_request(rv)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 941, in finalize_request
+    response = self.process_response(response)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 1319, in process_response
+    response = self.ensure_sync(func)(response)
+  File "C:\Users\18192\Desktop\Database-Project\app\web.py", line 118, in complete_request
+    logger.info(json.dumps(record, ensure_ascii=False))
+Message: '{"event": "request", "request_id": "dd14c9e234271114497f624be1b20010", "time": "2026-11-02T15:22:52.381671+00:00", "method": "GET", "action": "workspace.home", "subject_type": "employee", "role": "收银员", "subject": "74edfeddd9268257", "error_code": null, "result": "success", "status": 200, "duration_ms": 3.85}'
+Arguments: ()
+--- Logging error ---
+Traceback (most recent call last):
+  File "C:\Users\18192\AppData\Local\Programs\Python\Python312\Lib\logging\__init__.py", line 1163, in emit
+    stream.write(msg + self.terminator)
+ValueError: I/O operation on closed file.
+Call stack:
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 541, in <module>
+    raise SystemExit(main())
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 519, in main
+    report.action('verify', lambda: verify(database=config['database'], login_prefix=config['login_prefix'], directory=settings_directory(config)))
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 104, in action
+    value = function()
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 519, in <lambda>
+    report.action('verify', lambda: verify(database=config['database'], login_prefix=config['login_prefix'], directory=settings_directory(config)))
+  File "C:\Users\18192\Desktop\Database-Project\app\provision_local.py", line 158, in verify
+    if client.get('/sales/new').status_code != expected_sales:
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 1166, in get
+    return self.open(*args, **kw)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\testing.py", line 235, in open
+    response = super().open(
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 1120, in open
+    response_parts = self.run_wsgi_app(request.environ, buffered=buffered)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 992, in run_wsgi_app
+    rv = run_wsgi_app(self.application, environ, buffered=buffered)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 1268, in run_wsgi_app
+    app_rv = app(environ, start_response)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 1536, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 920, in full_dispatch_request
+    return self.finalize_request(rv)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 941, in finalize_request
+    response = self.process_response(response)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 1319, in process_response
+    response = self.ensure_sync(func)(response)
+  File "C:\Users\18192\Desktop\Database-Project\app\web.py", line 118, in complete_request
+    logger.info(json.dumps(record, ensure_ascii=False))
+Message: '{"event": "request", "request_id": "aeb55223373f3c926a0293bacfd98c6d", "time": "2026-11-02T15:22:52.398825+00:00", "method": "GET", "action": "sales.sale_form", "subject_type": "employee", "role": "收银员", "subject": "74edfeddd9268257", "error_code": null, "result": "success", "status": 200, "duration_ms": 15.83}'
+Arguments: ()
+--- Logging error ---
+Traceback (most recent call last):
+  File "C:\Users\18192\AppData\Local\Programs\Python\Python312\Lib\logging\__init__.py", line 1163, in emit
+    stream.write(msg + self.terminator)
+ValueError: I/O operation on closed file.
+Call stack:
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 541, in <module>
+    raise SystemExit(main())
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 519, in main
+    report.action('verify', lambda: verify(database=config['database'], login_prefix=config['login_prefix'], directory=settings_directory(config)))
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 104, in action
+    value = function()
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 519, in <lambda>
+    report.action('verify', lambda: verify(database=config['database'], login_prefix=config['login_prefix'], directory=settings_directory(config)))
+  File "C:\Users\18192\Desktop\Database-Project\app\provision_local.py", line 162, in verify
+    if client.post('/auth/logout', data={'csrf_token': token}).status_code != 302 or client.get('/api/me').status_code != 401:
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 1171, in post
+    return self.open(*args, **kw)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\testing.py", line 235, in open
+    response = super().open(
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 1120, in open
+    response_parts = self.run_wsgi_app(request.environ, buffered=buffered)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 992, in run_wsgi_app
+    rv = run_wsgi_app(self.application, environ, buffered=buffered)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 1268, in run_wsgi_app
+    app_rv = app(environ, start_response)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 1536, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 920, in full_dispatch_request
+    return self.finalize_request(rv)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 941, in finalize_request
+    response = self.process_response(response)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 1319, in process_response
+    response = self.ensure_sync(func)(response)
+  File "C:\Users\18192\Desktop\Database-Project\app\web.py", line 118, in complete_request
+    logger.info(json.dumps(record, ensure_ascii=False))
+Message: '{"event": "request", "request_id": "fc7c293c7095e549f8e0c301f0d6db5e", "time": "2026-11-02T15:22:52.401827+00:00", "method": "POST", "action": "auth.logout", "subject_type": "employee", "role": "收银员", "subject": "74edfeddd9268257", "error_code": null, "result": "success", "status": 302, "duration_ms": 0.25}'
+Arguments: ()
+--- Logging error ---
+Traceback (most recent call last):
+  File "C:\Users\18192\AppData\Local\Programs\Python\Python312\Lib\logging\__init__.py", line 1163, in emit
+    stream.write(msg + self.terminator)
+ValueError: I/O operation on closed file.
+Call stack:
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 541, in <module>
+    raise SystemExit(main())
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 519, in main
+    report.action('verify', lambda: verify(database=config['database'], login_prefix=config['login_prefix'], directory=settings_directory(config)))
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 104, in action
+    value = function()
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 519, in <lambda>
+    report.action('verify', lambda: verify(database=config['database'], login_prefix=config['login_prefix'], directory=settings_directory(config)))
+  File "C:\Users\18192\Desktop\Database-Project\app\provision_local.py", line 162, in verify
+    if client.post('/auth/logout', data={'csrf_token': token}).status_code != 302 or client.get('/api/me').status_code != 401:
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 1166, in get
+    return self.open(*args, **kw)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\testing.py", line 235, in open
+    response = super().open(
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 1120, in open
+    response_parts = self.run_wsgi_app(request.environ, buffered=buffered)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 992, in run_wsgi_app
+    rv = run_wsgi_app(self.application, environ, buffered=buffered)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 1268, in run_wsgi_app
+    app_rv = app(environ, start_response)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 1536, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 920, in full_dispatch_request
+    return self.finalize_request(rv)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 941, in finalize_request
+    response = self.process_response(response)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 1319, in process_response
+    response = self.ensure_sync(func)(response)
+  File "C:\Users\18192\Desktop\Database-Project\app\web.py", line 118, in complete_request
+    logger.info(json.dumps(record, ensure_ascii=False))
+Message: '{"event": "request", "request_id": "8e8faa4c780f6b2248023d2fb94dcd17", "time": "2026-11-02T15:22:52.403824+00:00", "method": "GET", "action": "auth.me", "subject_type": "anonymous", "role": null, "subject": null, "error_code": "login_required", "result": "failure", "status": 401, "duration_ms": 0.13}'
+Arguments: ()
+employee 13800000003: login, identity, home and logout PASS
+--- Logging error ---
+Traceback (most recent call last):
+  File "C:\Users\18192\AppData\Local\Programs\Python\Python312\Lib\logging\__init__.py", line 1163, in emit
+    stream.write(msg + self.terminator)
+ValueError: I/O operation on closed file.
+Call stack:
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 541, in <module>
+    raise SystemExit(main())
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 519, in main
+    report.action('verify', lambda: verify(database=config['database'], login_prefix=config['login_prefix'], directory=settings_directory(config)))
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 104, in action
+    value = function()
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 519, in <lambda>
+    report.action('verify', lambda: verify(database=config['database'], login_prefix=config['login_prefix'], directory=settings_directory(config)))
+  File "C:\Users\18192\Desktop\Database-Project\app\provision_local.py", line 144, in verify
+    if client.get('/api/me').status_code != 401:
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 1166, in get
+    return self.open(*args, **kw)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\testing.py", line 235, in open
+    response = super().open(
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 1120, in open
+    response_parts = self.run_wsgi_app(request.environ, buffered=buffered)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 992, in run_wsgi_app
+    rv = run_wsgi_app(self.application, environ, buffered=buffered)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 1268, in run_wsgi_app
+    app_rv = app(environ, start_response)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 1536, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 920, in full_dispatch_request
+    return self.finalize_request(rv)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 941, in finalize_request
+    response = self.process_response(response)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 1319, in process_response
+    response = self.ensure_sync(func)(response)
+  File "C:\Users\18192\Desktop\Database-Project\app\web.py", line 118, in complete_request
+    logger.info(json.dumps(record, ensure_ascii=False))
+Message: '{"event": "request", "request_id": "0128c630c26ebbb02d7d2ed83bdbdb29", "time": "2026-11-02T15:22:52.404816+00:00", "method": "GET", "action": "auth.me", "subject_type": "anonymous", "role": null, "subject": null, "error_code": "login_required", "result": "failure", "status": 401, "duration_ms": 0.12}'
+Arguments: ()
+--- Logging error ---
+Traceback (most recent call last):
+  File "C:\Users\18192\AppData\Local\Programs\Python\Python312\Lib\logging\__init__.py", line 1163, in emit
+    stream.write(msg + self.terminator)
+ValueError: I/O operation on closed file.
+Call stack:
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 541, in <module>
+    raise SystemExit(main())
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 519, in main
+    report.action('verify', lambda: verify(database=config['database'], login_prefix=config['login_prefix'], directory=settings_directory(config)))
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 104, in action
+    value = function()
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 519, in <lambda>
+    report.action('verify', lambda: verify(database=config['database'], login_prefix=config['login_prefix'], directory=settings_directory(config)))
+  File "C:\Users\18192\Desktop\Database-Project\app\provision_local.py", line 146, in verify
+    client.get('/auth/login')
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 1166, in get
+    return self.open(*args, **kw)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\testing.py", line 235, in open
+    response = super().open(
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 1120, in open
+    response_parts = self.run_wsgi_app(request.environ, buffered=buffered)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 992, in run_wsgi_app
+    rv = run_wsgi_app(self.application, environ, buffered=buffered)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 1268, in run_wsgi_app
+    app_rv = app(environ, start_response)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 1536, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 920, in full_dispatch_request
+    return self.finalize_request(rv)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 941, in finalize_request
+    response = self.process_response(response)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 1319, in process_response
+    response = self.ensure_sync(func)(response)
+  File "C:\Users\18192\Desktop\Database-Project\app\web.py", line 118, in complete_request
+    logger.info(json.dumps(record, ensure_ascii=False))
+Message: '{"event": "request", "request_id": "b72a64606d32732d3ae529184dcd76c9", "time": "2026-11-02T15:22:52.405824+00:00", "method": "GET", "action": "auth.login_form", "subject_type": "anonymous", "role": null, "subject": null, "error_code": null, "result": "success", "status": 200, "duration_ms": 0.31}'
+Arguments: ()
+--- Logging error ---
+Traceback (most recent call last):
+  File "C:\Users\18192\AppData\Local\Programs\Python\Python312\Lib\logging\__init__.py", line 1163, in emit
+    stream.write(msg + self.terminator)
+ValueError: I/O operation on closed file.
+Call stack:
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 541, in <module>
+    raise SystemExit(main())
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 519, in main
+    report.action('verify', lambda: verify(database=config['database'], login_prefix=config['login_prefix'], directory=settings_directory(config)))
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 104, in action
+    value = function()
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 519, in <lambda>
+    report.action('verify', lambda: verify(database=config['database'], login_prefix=config['login_prefix'], directory=settings_directory(config)))
+  File "C:\Users\18192\Desktop\Database-Project\app\provision_local.py", line 149, in verify
+    response = client.post('/auth/login', data=dict(phone=employee['phone'], password=employee['password'], csrf_token=token))
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 1171, in post
+    return self.open(*args, **kw)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\testing.py", line 235, in open
+    response = super().open(
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 1120, in open
+    response_parts = self.run_wsgi_app(request.environ, buffered=buffered)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 992, in run_wsgi_app
+    rv = run_wsgi_app(self.application, environ, buffered=buffered)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 1268, in run_wsgi_app
+    app_rv = app(environ, start_response)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 1536, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 920, in full_dispatch_request
+    return self.finalize_request(rv)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 941, in finalize_request
+    response = self.process_response(response)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 1319, in process_response
+    response = self.ensure_sync(func)(response)
+  File "C:\Users\18192\Desktop\Database-Project\app\web.py", line 118, in complete_request
+    logger.info(json.dumps(record, ensure_ascii=False))
+Message: '{"event": "request", "request_id": "c35241021ded60bae2a9665ac2b22649", "time": "2026-11-02T15:22:52.559876+00:00", "method": "POST", "action": "auth.login", "subject_type": "employee", "role": "收银员", "subject": "1728ce4d0dd01214", "error_code": null, "result": "success", "status": 302, "duration_ms": 152.68}'
+Arguments: ()
+--- Logging error ---
+Traceback (most recent call last):
+  File "C:\Users\18192\AppData\Local\Programs\Python\Python312\Lib\logging\__init__.py", line 1163, in emit
+    stream.write(msg + self.terminator)
+ValueError: I/O operation on closed file.
+Call stack:
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 541, in <module>
+    raise SystemExit(main())
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 519, in main
+    report.action('verify', lambda: verify(database=config['database'], login_prefix=config['login_prefix'], directory=settings_directory(config)))
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 104, in action
+    value = function()
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 519, in <lambda>
+    report.action('verify', lambda: verify(database=config['database'], login_prefix=config['login_prefix'], directory=settings_directory(config)))
+  File "C:\Users\18192\Desktop\Database-Project\app\provision_local.py", line 152, in verify
+    response = client.get('/api/me')
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 1166, in get
+    return self.open(*args, **kw)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\testing.py", line 235, in open
+    response = super().open(
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 1120, in open
+    response_parts = self.run_wsgi_app(request.environ, buffered=buffered)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 992, in run_wsgi_app
+    rv = run_wsgi_app(self.application, environ, buffered=buffered)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 1268, in run_wsgi_app
+    app_rv = app(environ, start_response)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 1536, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 920, in full_dispatch_request
+    return self.finalize_request(rv)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 941, in finalize_request
+    response = self.process_response(response)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 1319, in process_response
+    response = self.ensure_sync(func)(response)
+  File "C:\Users\18192\Desktop\Database-Project\app\web.py", line 118, in complete_request
+    logger.info(json.dumps(record, ensure_ascii=False))
+Message: '{"event": "request", "request_id": "62c3bddffaf1ee06c4e590bddb130802", "time": "2026-11-02T15:22:52.565369+00:00", "method": "GET", "action": "auth.me", "subject_type": "employee", "role": "收银员", "subject": "1728ce4d0dd01214", "error_code": null, "result": "success", "status": 200, "duration_ms": 3.96}'
+Arguments: ()
+--- Logging error ---
+Traceback (most recent call last):
+  File "C:\Users\18192\AppData\Local\Programs\Python\Python312\Lib\logging\__init__.py", line 1163, in emit
+    stream.write(msg + self.terminator)
+ValueError: I/O operation on closed file.
+Call stack:
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 541, in <module>
+    raise SystemExit(main())
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 519, in main
+    report.action('verify', lambda: verify(database=config['database'], login_prefix=config['login_prefix'], directory=settings_directory(config)))
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 104, in action
+    value = function()
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 519, in <lambda>
+    report.action('verify', lambda: verify(database=config['database'], login_prefix=config['login_prefix'], directory=settings_directory(config)))
+  File "C:\Users\18192\Desktop\Database-Project\app\provision_local.py", line 155, in verify
+    if client.get('/').status_code != 200:
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 1166, in get
+    return self.open(*args, **kw)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\testing.py", line 235, in open
+    response = super().open(
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 1120, in open
+    response_parts = self.run_wsgi_app(request.environ, buffered=buffered)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 992, in run_wsgi_app
+    rv = run_wsgi_app(self.application, environ, buffered=buffered)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 1268, in run_wsgi_app
+    app_rv = app(environ, start_response)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 1536, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 920, in full_dispatch_request
+    return self.finalize_request(rv)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 941, in finalize_request
+    response = self.process_response(response)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 1319, in process_response
+    response = self.ensure_sync(func)(response)
+  File "C:\Users\18192\Desktop\Database-Project\app\web.py", line 118, in complete_request
+    logger.info(json.dumps(record, ensure_ascii=False))
+Message: '{"event": "request", "request_id": "df0d50e0d9dd810cd45033123082e864", "time": "2026-11-02T15:22:52.570368+00:00", "method": "GET", "action": "workspace.home", "subject_type": "employee", "role": "收银员", "subject": "1728ce4d0dd01214", "error_code": null, "result": "success", "status": 200, "duration_ms": 3.24}'
+Arguments: ()
+--- Logging error ---
+Traceback (most recent call last):
+  File "C:\Users\18192\AppData\Local\Programs\Python\Python312\Lib\logging\__init__.py", line 1163, in emit
+    stream.write(msg + self.terminator)
+ValueError: I/O operation on closed file.
+Call stack:
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 541, in <module>
+    raise SystemExit(main())
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 519, in main
+    report.action('verify', lambda: verify(database=config['database'], login_prefix=config['login_prefix'], directory=settings_directory(config)))
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 104, in action
+    value = function()
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 519, in <lambda>
+    report.action('verify', lambda: verify(database=config['database'], login_prefix=config['login_prefix'], directory=settings_directory(config)))
+  File "C:\Users\18192\Desktop\Database-Project\app\provision_local.py", line 158, in verify
+    if client.get('/sales/new').status_code != expected_sales:
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 1166, in get
+    return self.open(*args, **kw)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\testing.py", line 235, in open
+    response = super().open(
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 1120, in open
+    response_parts = self.run_wsgi_app(request.environ, buffered=buffered)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 992, in run_wsgi_app
+    rv = run_wsgi_app(self.application, environ, buffered=buffered)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 1268, in run_wsgi_app
+    app_rv = app(environ, start_response)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 1536, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 920, in full_dispatch_request
+    return self.finalize_request(rv)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 941, in finalize_request
+    response = self.process_response(response)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 1319, in process_response
+    response = self.ensure_sync(func)(response)
+  File "C:\Users\18192\Desktop\Database-Project\app\web.py", line 118, in complete_request
+    logger.info(json.dumps(record, ensure_ascii=False))
+Message: '{"event": "request", "request_id": "af6785e448a7041086acfe33d51846f5", "time": "2026-11-02T15:22:52.574367+00:00", "method": "GET", "action": "sales.sale_form", "subject_type": "employee", "role": "收银员", "subject": "1728ce4d0dd01214", "error_code": null, "result": "success", "status": 200, "duration_ms": 3.38}'
+Arguments: ()
+--- Logging error ---
+Traceback (most recent call last):
+  File "C:\Users\18192\AppData\Local\Programs\Python\Python312\Lib\logging\__init__.py", line 1163, in emit
+    stream.write(msg + self.terminator)
+ValueError: I/O operation on closed file.
+Call stack:
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 541, in <module>
+    raise SystemExit(main())
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 519, in main
+    report.action('verify', lambda: verify(database=config['database'], login_prefix=config['login_prefix'], directory=settings_directory(config)))
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 104, in action
+    value = function()
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 519, in <lambda>
+    report.action('verify', lambda: verify(database=config['database'], login_prefix=config['login_prefix'], directory=settings_directory(config)))
+  File "C:\Users\18192\Desktop\Database-Project\app\provision_local.py", line 162, in verify
+    if client.post('/auth/logout', data={'csrf_token': token}).status_code != 302 or client.get('/api/me').status_code != 401:
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 1171, in post
+    return self.open(*args, **kw)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\testing.py", line 235, in open
+    response = super().open(
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 1120, in open
+    response_parts = self.run_wsgi_app(request.environ, buffered=buffered)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 992, in run_wsgi_app
+    rv = run_wsgi_app(self.application, environ, buffered=buffered)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 1268, in run_wsgi_app
+    app_rv = app(environ, start_response)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 1536, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 920, in full_dispatch_request
+    return self.finalize_request(rv)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 941, in finalize_request
+    response = self.process_response(response)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 1319, in process_response
+    response = self.ensure_sync(func)(response)
+  File "C:\Users\18192\Desktop\Database-Project\app\web.py", line 118, in complete_request
+    logger.info(json.dumps(record, ensure_ascii=False))
+Message: '{"event": "request", "request_id": "635caf1b9c5dda18f974a7ba1c7788cc", "time": "2026-11-02T15:22:52.576368+00:00", "method": "POST", "action": "auth.logout", "subject_type": "employee", "role": "收银员", "subject": "1728ce4d0dd01214", "error_code": null, "result": "success", "status": 302, "duration_ms": 0.16}'
+Arguments: ()
+--- Logging error ---
+Traceback (most recent call last):
+  File "C:\Users\18192\AppData\Local\Programs\Python\Python312\Lib\logging\__init__.py", line 1163, in emit
+    stream.write(msg + self.terminator)
+ValueError: I/O operation on closed file.
+Call stack:
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 541, in <module>
+    raise SystemExit(main())
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 519, in main
+    report.action('verify', lambda: verify(database=config['database'], login_prefix=config['login_prefix'], directory=settings_directory(config)))
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 104, in action
+    value = function()
+  File "C:\Users\18192\Desktop\Database-Project\scripts\project_runner.py", line 519, in <lambda>
+    report.action('verify', lambda: verify(database=config['database'], login_prefix=config['login_prefix'], directory=settings_directory(config)))
+  File "C:\Users\18192\Desktop\Database-Project\app\provision_local.py", line 162, in verify
+    if client.post('/auth/logout', data={'csrf_token': token}).status_code != 302 or client.get('/api/me').status_code != 401:
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 1166, in get
+    return self.open(*args, **kw)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\testing.py", line 235, in open
+    response = super().open(
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 1120, in open
+    response_parts = self.run_wsgi_app(request.environ, buffered=buffered)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 992, in run_wsgi_app
+    rv = run_wsgi_app(self.application, environ, buffered=buffered)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\werkzeug\test.py", line 1268, in run_wsgi_app
+    app_rv = app(environ, start_response)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 1536, in __call__
+    return self.wsgi_app(environ, start_response)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 1511, in wsgi_app
+    response = self.full_dispatch_request()
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 920, in full_dispatch_request
+    return self.finalize_request(rv)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 941, in finalize_request
+    response = self.process_response(response)
+  File "C:\Users\18192\Desktop\Database-Project\.venv\Lib\site-packages\flask\app.py", line 1319, in process_response
+    response = self.ensure_sync(func)(response)
+  File "C:\Users\18192\Desktop\Database-Project\app\web.py", line 118, in complete_request
+    logger.info(json.dumps(record, ensure_ascii=False))
+Message: '{"event": "request", "request_id": "cb98d8cd05ac71977a9eb5c6ed47db2b", "time": "2026-11-02T15:22:52.577367+00:00", "method": "GET", "action": "auth.me", "subject_type": "anonymous", "role": null, "subject": null, "error_code": "login_required", "result": "failure", "status": 401, "duration_ms": 0.1}'
+Arguments: ()
+employee 13800000004: login, identity, home and logout PASS

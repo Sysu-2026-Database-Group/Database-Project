@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block title %}{{ title }}{% endblock %}
+{% macro hidden() %}<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><input type="hidden" name="request_key" value="{{ request_key }}">{% endmacro %}
+{% block content %}
+<div class="page-heading"><p class="eyebrow">拾光 · 经营记录</p><h1>{{ title }}</h1></div>
+{% if kind == 'finance' %}
+<section class="panel"><h2>当前现金余额：¥{{ listing.balance }}</h2><p>注资增加现金余额，不计入经营收入。登记前请确认已实际收到这笔资金。</p>
+<form method="post" action="/operations/inject/preview">{{ hidden() }}<label>注资或提现金额（元）<input name="amount" inputmode="decimal" required placeholder="50.00"></label><button>预览注资</button> <button formaction="/operations/withdraw/preview" class="secondary">预览提现</button></form></section>
+{% elif kind == 'goods' and actor.role == '库管' %}
+<section class="panel"><h2>{{ '编辑商品 #' ~ edit.id if edit else '建立商品档案' }}</h2><p>新商品库存为0，售价由店长设定。编辑时保留类别和业务编码。</p>
+<form method="post" action="/operations/goods_save">{{ hidden() }}<input type="hidden" name="id" value="{{ edit.id or '' }}">
+<label>商品名称<input name="name" value="{{ edit.name or '' }}" maxlength="100" required></label>
+<label>类别<select name="category"><option value="图书">图书</option><option value="文创" {% if edit.category == '文创' %}selected{% endif %}>文创</option></select></label>
+<label>ISBN / 文创编码<input name="code" value="{{ edit.book_isbn or edit.toy_code or '' }}" maxlength="20" required></label>
+<label>图书作者<input name="author" value="{{ edit.author or '' }}" maxlength="100"></label>
+<label>出版社<input name="publisher" value="{{ edit.publisher or '' }}" maxlength="100"></label>
+<label>页数<input name="page_count" value="{{ edit.page_count or '' }}" type="number" min="1"></label>
+<label>文创规格<input name="spec" value="{{ edit.spec or '' }}" maxlength="100"></label><button>保存商品资料</button></form></section>
+{% elif kind == 'suppliers' and actor.role == '库管' %}
+<section class="panel"><h2>{{ '编辑供应商' if edit else '新增供应商' }}</h2><form method="post" action="/operations/supplier_save">{{ hidden() }}<input type="hidden" name="id" value="{{ edit.id or '' }}"><label>名称<input name="name" value="{{ edit.name or '' }}" maxlength="100" required></label><button>保存供应商</button></form></section>
+{% elif kind == 'quotes' and actor.role == '库管' %}
+<section class="panel"><h2>维护当前报价</h2><p>先在商品和供应商列表查询编号。采购草稿中的批次进价独立保存，不随报价更新而变化。</p><form method="post" action="/operations/quote_save">{{ hidden() }}<label>供应商编号<input name="supplier_id" type="number" min="1" required></label><label>商品编号<input name="goods_id" type="number" min="1" required></label><label>报价（元）<input name="amount" inputmode="decimal" required></label><button>保存报价</button></form></section>
+{% elif kind == 'purchases' and actor.role == '库管' %}
+<section class="panel"><h2>新建采购草稿</h2><p>草稿建立后可增改明细，数量置0移除行；一张单只向一家供应商采购。</p><form method="post" action="/operations/draft">{{ hidden() }}<label>供应商编号<input name="supplier_id" type="number" min="1" required></label><button>建立空草稿</button></form></section>
+{% elif kind == 'stock' %}
+<section class="panel"><form method="get"><label>按商品编号查询<input name="goods_id" type="number" min="1" value="{{ request.args.get('goods_id', '') }}"></label><label>变动原因<select name="reason"><option value="">全部</option>{% for reason in ["购入","卖出","退货","损坏"] %}<option {% if request.args.get("reason")==reason %}selected{% endif %}>{{ reason }}</option>{% endfor %}</select></label><label>从<input type="date" name="from_date" value="{{ request.args.get('from_date','') }}"></label><label>至<input type="date" name="to_date" value="{{ request.args.get('to_date','') }}"></label><button>查询流水</button></form></section>
+{% if actor.role == '库管' %}<section class="panel"><h2>商品报损</h2><p>只减少可售量，不能消耗已订量；提交后写入库存流水。</p><form method="post" action="/operations/damage">{{ hidden() }}<label>商品编号<input name="id" type="number" min="1" required></label><label>报损数量<input name="quantity" type="number" min="1" max="1000" required></label><label>原因<input name="note" maxlength="200" required></label><button>确认登记报损</button></form></section>{% endif %}
+{% endif %}
+<section class="panel"><h2>记录列表</h2><p class="muted">共 {{ listing.total }} 条，第 {{ listing.page }} 页</p>
+<div class="table-scroll"><table><thead><tr>
+{% if kind == 'goods' %}<th>编号 / 商品</th><th>类别 / 编码</th><th>售价 / 上架</th><th>在架 / 已订 / 可售</th><th>维护</th>
+{% elif kind == 'suppliers' %}<th>编号</th><th>名称</th><th>建档人 / 最近修改</th><th>维护</th>
+{% elif kind == 'quotes' %}<th>供应商</th><th>商品</th><th>报价</th><th>上报人 / 时间</th>
+{% elif kind == 'purchases' %}<th>单号</th><th>供应商</th><th>状态</th><th>申请人</th>
+{% elif kind == 'finance' %}<th>流水 / 时间</th><th>事由 / 来源采购</th><th>收付金额</th><th>前余额 → 后余额</th><th>登记人</th>
+{% else %}<th>流水 / 商品</th><th>类型 / 数量</th><th>来源采购 / 销售</th><th>原因 / 经办人 / 时间</th>{% endif %}
+</tr></thead><tbody>
+{% for row in listing.records %}<tr>
+{% if kind == 'goods' %}<td>#{{ row.id }} {{ row.name }}</td><td>{{ row.category }} {{ row.book_isbn or row.toy_code }}</td><td>{{ row.price if row.price is defined else '未定价' }} / {{ '已上架' if row.on_shelf else '未上架' }}</td><td>{{ row.stock_total }} / {{ row.reserved_qty }} / {{ row.stock_total - row.reserved_qty }}</td><td>{% if actor.role == '库管' %}<a href="?page={{ listing.page }}&page_size={{ listing.page_size }}&edit={{ row.id }}">编辑资料</a>{% else %}<form method="post" action="/operations/price">{{ hidden() }}<input type="hidden" name="id" value="{{ row.id }}"><label>售价<input name="amount" value="{{ row.price or '' }}" inputmode="decimal" required aria-label="{{ row.name }}售价"></label><select name="on_shelf" aria-label="上架选择"><option value="0">未上架</option><option value="1" {% if row.on_shelf %}selected{% endif %}>已上架</option></select><button>确认定价及上下架</button></form>{% endif %}</td>
+{% elif kind == 'suppliers' %}<td>#{{ row.id }}</td><td>{{ row.name }}</td><td>{{ row.created_by }} / {{ row.updated_by or '未修改' }}</td><td>{% if actor.role == '库管' %}<a href="?page={{ listing.page }}&page_size={{ listing.page_size }}&edit={{ row.id }}">编辑</a>{% endif %}</td>
+{% elif kind == 'quotes' %}<td>#{{ row.supplier_id }} {{ row.supplier_name }}</td><td>#{{ row.goods_id }} {{ row.goods_name }}</td><td>¥{{ row.quote_amount }}</td><td>{{ row.reported_by }} / {{ row.reported_at }}</td>
+{% elif kind == 'purchases' %}<td><a href="{{ url_for('operations.purchase', purchase_id=row.id) }}">{{ row.no }}</a></td><td>{{ row.supplier_name }}</td><td><span class="badge">{{ row.status }}</span></td><td>{{ row.created_by }}</td>
+{% elif kind == 'finance' %}<td>#{{ row.id }} {{ row.recorded_at }}</td><td>{{ row.reason_type }} / 采购#{{ row.request_id or '—' }} / 销售#{{ row.sale_id or '—' }} / 退货#{{ row.return_id or '—' }} / 会员{{ row.member_phone or '—' }}</td><td>{{ row.direction }} ¥{{ row.amount }}</td><td>{{ row.fund_before }} → {{ row.fund_after }}</td><td>{{ row.recorded_by }}</td>
+{% else %}<td>#{{ row.id }} / 商品#{{ row.goods_id }}</td><td>{{ row.change_type }} / {{ row.quantity }}</td><td>采购#{{ row.request_id or '—' }} / 销售#{{ row.sale_id or '—' }} / 退货明细#{{ row.return_item_id or '—' }}</td><td>{{ row.note or '—' }} / {{ row.changed_by }} / {{ row.changed_at }}</td>{% endif %}
+</tr>{% else %}<tr><td colspan="5" class="muted">暂无记录。</td></tr>{% endfor %}
+</tbody></table></div>
+<nav aria-label="列表分页">{% if listing.page > 1 %}<a href="?page={{ listing.page-1 }}&page_size={{ listing.page_size }}{% if request.args.get('goods_id') %}&goods_id={{ request.args.goods_id }}{% endif %}{% for filter in ['reason','from_date','to_date'] %}{% if request.args.get(filter) %}&{{ filter }}={{ request.args.get(filter)|urlencode }}{% endif %}{% endfor %}">上一页</a>{% endif %} {% if listing.page * listing.page_size < listing.total %}<a href="?page={{ listing.page+1 }}&page_size={{ listing.page_size }}{% if request.args.get('goods_id') %}&goods_id={{ request.args.goods_id }}{% endif %}{% for filter in ['reason','from_date','to_date'] %}{% if request.args.get(filter) %}&{{ filter }}={{ request.args.get(filter)|urlencode }}{% endif %}{% endfor %}">下一页</a>{% endif %}</nav></section>
+{% endblock %}

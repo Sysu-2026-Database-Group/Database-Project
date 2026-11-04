@@ -1,8 +1,14 @@
 # 文档与课程交付索引
 
+队友接手统一阅读[项目交接单](team-handoff.md)，包含运行配置、最新测试、演示顺序与需接续事项。
+
+2026-11-02全角色核心业务入口已实现，完整119项、52页真实Edge及11个真实表单节点通过。当前状态见[Web台账](tasks/task-web-development.md)，交付资料见[操作手册](design/web-operation-manual.md)、[阶段报告](reports/report-web-v1.0.md)、[当前21实体增量模型](design/web-model-extension.md)及[原始证据](../db/results/week-7/web-delivery-20261102/README.md)。下文旧阶段记录保留历史范围；原经营库未升级，人工、跨机及合并ER等差距见台账。
+
 应用的首次准备、启动和验收见[统一入口说明](design/unified-entry.md)，根目录 `run.ps1` 提供 setup、doctor、start、test 和 verify。
 
 接下来的开发顺序、review问题现状、角色动作覆盖及分步验收见[后续开发与验收操作指南](design/next-steps-guide.md)。其中未决实现选择不作为新的业务口径。
+
+用户已授权按 [Web开发规划](design/plan-web-development.md)推进；工作单元、D0确认、验证证据和遗留项统一见 [Web开发台账](tasks/task-web-development.md)。未决经营设计不替代正式业务规定。
 
 课程原始要求以 [homework](../homework/) 内 DOCX 为准。第7—9周第二阶段作业要求保留第5—6周全部成果，不能只交应用。
 

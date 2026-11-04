@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block title %}逛逛书店{% endblock %}
+{% block content %}
+<div class="page-heading"><p class="eyebrow">拾光 · 阅读与生活</p><h1>下一段好时光，从这里开始</h1><p class="muted">发现好书与文创，欢迎到店选购。</p></div>
+<section class="panel"><form method="get" action="{{ url_for('shop.index') }}">
+<label>商品名称<input name="search" maxlength="100" value="{{ request.args.get('search','') }}" placeholder="搜索想找的书或文创"></label>
+<label>分类<select name="category"><option value="">全部商品</option>{% for category in ['图书','文创'] %}<option value="{{ category }}" {% if request.args.get('category') == category %}selected{% endif %}>{{ category }}</option>{% endfor %}</select></label>
+<button>查找商品</button></form></section>
+<p class="muted">共 {{ listing.total }} 件商品 · 第 {{ listing.page }} 页</p>
+<div class="cards">{% for goods in listing.records %}<article class="panel"><span class="badge">{{ goods.category }}</span><h2><a href="{{ url_for('shop.detail',goods_id=goods.id) }}">{{ goods.name }}</a></h2><p class="amount">¥{{ goods.price }}</p><p>{{ '店内有货' if goods.available else '暂时无货' }}</p>{% if goods.author %}<p class="muted">{{ goods.author }} · {{ goods.publisher }}</p>{% else %}<p class="muted">{{ goods.spec }}</p>{% endif %}<a class="button secondary" href="{{ url_for('shop.detail',goods_id=goods.id) }}">查看详情</a></article>{% else %}<section class="panel"><h2>暂未找到商品</h2><p>试试其他名称或分类。</p><a href="{{ url_for('shop.index') }}">查看全部商品</a></section>{% endfor %}</div>
+<nav aria-label="商品分页">{% if listing.page>1 %}<a href="{{ url_for('shop.index',page=listing.page-1,page_size=listing.page_size,search=request.args.get('search',''),category=request.args.get('category','')) }}">上一页</a>{% endif %} {% if listing.page*listing.page_size<listing.total %}<a href="{{ url_for('shop.index',page=listing.page+1,page_size=listing.page_size,search=request.args.get('search',''),category=request.args.get('category','')) }}">下一页</a>{% endif %}</nav>
+{% endblock %}

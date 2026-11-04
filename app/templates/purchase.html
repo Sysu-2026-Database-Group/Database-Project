@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block title %}采购 {{ purchase.no }}{% endblock %}
+{% macro hidden() %}<input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><input type="hidden" name="request_key" value="{{ request_key }}"><input type="hidden" name="id" value="{{ purchase.id }}">{% endmacro %}
+{% block content %}
+<div class="page-heading"><p class="eyebrow">拾光 · 采购单据</p><h1>{{ purchase.no }}</h1><a href="/purchases">返回采购列表</a></div>
+<section class="panel"><p><span class="badge">{{ purchase.status }}</span> / {{ '已付款' if purchase.paid else '未付款' }}</p><p>供应商：#{{ purchase.supplier_id }} {{ purchase.supplier_name }}；金额：¥{{ purchase.amount or '0.00' }}</p><p>申请人：{{ purchase.created_by }}；提交人：{{ purchase.submitted_by or '—' }}；审批人：{{ purchase.approved_by or '—' }}；取消人：{{ purchase.cancelled_by or '—' }}</p></section>
+{% if purchase.status == '草稿' and actor.role == '库管' %}
+<section class="panel"><h2>编辑采购明细</h2><p>须选择本供应商已报价的商品，填写本批进价。数量置0移除原行；空白行不参与保存。提交后内容冻结。</p>
+<form method="post" action="/operations/draft">{{ hidden() }}<label>供应商编号<input name="supplier_id" type="number" min="1" value="{{ purchase.supplier_id }}" required></label>
+<div class="table-scroll"><table><thead><tr><th>商品编号</th><th>数量</th><th>本批单价（元）</th></tr></thead><tbody>
+{% for i in range([purchase['items']|length + 5, 50]|min) %}{% set item = purchase['items'][i] if i < purchase['items']|length else {} %}<tr><td><input aria-label="第{{ i+1 }}行商品编号" name="goods_id_{{ i }}" value="{{ item.goods_id or '' }}" type="number" min="1"></td><td><input aria-label="第{{ i+1 }}行数量" name="quantity_{{ i }}" value="{{ item.request_qty or '' }}" type="number" min="0" max="1000"></td><td><input aria-label="第{{ i+1 }}行批次进价" name="unit_cost_{{ i }}" value="{{ item.unit_cost or '' }}" inputmode="decimal"></td></tr>{% endfor %}
+</tbody></table></div><button>保存草稿明细</button></form></section>
+{% else %}
+<section class="panel"><h2>采购明细</h2><div class="table-scroll"><table><thead><tr><th>商品</th><th>数量</th><th>批次单价</th></tr></thead><tbody>{% for item in purchase['items'] %}<tr><td>#{{ item.goods_id }} {{ item.name }}</td><td>{{ item.request_qty }}</td><td>¥{{ item.unit_cost }}</td></tr>{% else %}<tr><td colspan="3">暂无明细</td></tr>{% endfor %}</tbody></table></div></section>
+{% endif %}
+<section class="panel"><h2>当前可办事项</h2>
+{% if purchase.status == '草稿' and actor.role == '库管' %}<form method="post" action="/operations/submit">{{ hidden() }}<p>提交后不能再修改商品、数量与批次进价。</p><button>确认提交申请</button></form>{% endif %}
+{% if purchase.status in ['草稿','已提交'] %}<form method="post" action="/operations/cancel">{{ hidden() }}<p>取消会保留单据，不能恢复；需要时另建申请。</p><button class="secondary">确认取消采购</button></form>{% endif %}
+{% if purchase.status == '已提交' and actor.role == '店长' %}<form method="post" action="/operations/approve">{{ hidden() }}<p>审批后不能取消，须一次付款并整单收货。</p><button>确认批准采购</button></form>{% endif %}
+{% if purchase.status == '已审批' and not purchase.paid and actor.role == '店长' %}<form method="post" action="/operations/pay/preview">{{ hidden() }}<p>按冻结明细一次付清，付款前核对金额及资金余额。</p><button>预览采购付款</button></form>{% endif %}
+{% if purchase.status == '已审批' and purchase.paid and actor.role == '库管' %}<form method="post" action="/operations/receive">{{ hidden() }}<p>确认所有商品均按单足量收到。整单收货一次增加库存，不再付款。</p><button>确认整单收货</button></form>{% endif %}
+{% if purchase.status in ['已收货','已取消'] %}<p>本单流程已结束。</p>{% endif %}
+</section>
+{% endblock %}

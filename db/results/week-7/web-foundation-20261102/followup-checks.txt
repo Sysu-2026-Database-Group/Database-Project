@@ -1,0 +1,11 @@
+﻿FOLLOW-UP: user authorized dependency installation; automatic approval returned 404/model not found, command not executed.
+COMMAND: python -m compileall -q app scripts tests
+
+EXIT: 0
+COMMAND: git diff --check
+
+EXIT: 0
+COMMAND: python db/checks/audit-week-6-artifacts.py
+Week6 artifact audit PASS: both 45-step runs, 11 date examples, 2 rejected mutants, 19 tables / 137 ER fields.
+
+EXIT: 0

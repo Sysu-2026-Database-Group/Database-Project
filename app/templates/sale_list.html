@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block title %}本人销售单{% endblock %}
+{% block content %}
+<div class="page-heading"><p class="eyebrow">收银服务 / 单据查询</p><h1>本人销售单</h1><p class="muted">{{ actor.name }}，共 {{ listing.total }} 笔销售。点击单号查看成交凭证。</p></div>
+<section class="panel">
+  <div class="section-heading"><h2>销售记录</h2><a class="button" href="{{ url_for('sales.sale_form') }}">办理新销售</a></div>
+  {% if listing.records %}
+  <div class="table-scroll"><table>
+    <thead><tr><th>销售单号</th><th>成交时间</th><th>状态</th><th class="number">实收（元）</th></tr></thead>
+    <tbody>{% for sale in listing.records %}<tr><td><a href="{{ url_for('sales.sale_receipt', sale_no=sale.no) }}">{{ sale.no }}</a></td><td>{{ sale.sold_at }}</td><td><span class="badge">{{ sale.status }}</span></td><td class="number">{{ sale.paid_amount }}</td></tr>{% endfor %}</tbody>
+  </table></div>
+  {% else %}<div class="empty-state"><h3>这一页还没有销售记录</h3><p>完成销售后，可在这里查询本人经手的凭证。</p></div>{% endif %}
+  <nav class="pagination" aria-label="销售单分页">
+    {% if listing.page > 1 %}<a href="{{ url_for('sales.sale_list', page=listing.page-1, page_size=listing.page_size) }}">上一页</a>{% endif %}
+    <span>第 {{ listing.page }} 页 · 每页 {{ listing.page_size }} 条</span>
+    {% if listing.page * listing.page_size < listing.total %}<a href="{{ url_for('sales.sale_list', page=listing.page+1, page_size=listing.page_size) }}">下一页</a>{% endif %}
+  </nav>
+</section>
+{% endblock %}
