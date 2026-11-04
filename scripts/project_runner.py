@@ -15,6 +15,7 @@ import secrets
 import shutil
 import subprocess
 import sys
+import time
 import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -497,6 +498,14 @@ def run_suite(args):
     return 0 if data['successful'] and data['run'] else 1
 
 
+def pid_alive(pid):
+    try:
+        os.kill(int(pid), 0)
+        return True
+    except (OSError, ValueError):
+        return False
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('command', choices=('help', 'doctor', 'setup', 'start', 'stop', 'status', 'test', 'verify', 'suite'))
@@ -509,6 +518,7 @@ def main():
     parser.add_argument('--unit', action='store_true')
     parser.add_argument('--http', action='store_true')
     parser.add_argument('--results')
+    parser.add_argument('--detach', action='store_true')
     args = parser.parse_args()
     if args.command == 'help':
         print('Usage: .\\run.ps1 doctor | setup | start | test [-Unit] | verify [-Http]')
@@ -527,12 +537,38 @@ def main():
         config, config_path = load_configuration(args)
         control = ROOT / '.runner' / ('control-' + hashlib.sha256(str(config_path.resolve()).encode()).hexdigest()[:16])
         if args.command in ('stop', 'status'):
-            state = json.loads((control / 'status.json').read_text(encoding='utf-8')) if (control / 'status.json').exists() else {'status':'not_started'}
-            if args.command == 'stop' and state.get('status') == 'running':
-                (control / 'stop').touch()
-                print('已请求停止此配置对应的 Web 与任务；最多一秒后进入清理。')
-            else:
+            state_path = control / 'status.json'
+            state = json.loads(state_path.read_text(encoding='utf-8')) if state_path.exists() else {'status': 'not_started'}
+            if args.command == 'status':
                 print(json.dumps(state, ensure_ascii=False, indent=2))
+                return 0
+            if state.get('status') != 'running':
+                print('当前配置没有运行中的进程。')
+                return 0
+            (control / 'stop').touch()
+            processes = state.get('processes') or {}
+            pids = [item.get('pid') for item in processes.values() if isinstance(item, dict) and item.get('pid')]
+            for pid in pids:
+                if os.name == 'nt':
+                    subprocess.run(['taskkill', '/PID', str(pid), '/T', '/F'], capture_output=True)
+                else:
+                    try:
+                        os.kill(int(pid), 15)
+                    except OSError:
+                        pass
+            deadline = time.time() + 8
+            while time.time() < deadline and any(pid_alive(pid) for pid in pids):
+                time.sleep(0.5)
+            leftover = [pid for pid in pids if pid_alive(pid)]
+            for item in processes.values():
+                if isinstance(item, dict):
+                    item['status'] = 'stopped'
+            state.update(status='stopped', checked_at=datetime.now(timezone.utc).isoformat(), processes=processes)
+            state_path.write_text(json.dumps(state, ensure_ascii=False, indent=2), encoding='utf-8')
+            if leftover:
+                print(f'已停止，但以下进程仍存活，请手动检查：{leftover}')
+            else:
+                print(f'已停止 Web 与任务：{pids}')
             return 0
         report = Report(args.command, config)
         report.action('dependencies', lambda: require_dependencies(config, sql=not args.unit))
@@ -557,44 +593,55 @@ def main():
             stop_file = control / 'stop'
             stop_file.unlink(missing_ok=True)
             task_log = (report.directory / 'expiry.log').open('a', encoding='utf-8')
+            web_log = (report.directory / 'web.log').open('a', encoding='utf-8')
             task = subprocess.Popen([sys.executable, '-m', 'app.expiry'], cwd=ROOT, env=env,
                                     stdout=task_log, stderr=task_log,
                                     creationflags=subprocess.CREATE_NO_WINDOW if os.name == 'nt' else 0)
             web = None
+            code = 0
             report.data['processes'] = dict(expiry=dict(pid=task.pid, status='running', log='expiry.log'))
             report.save()
             try:
                 web = subprocess.Popen([sys.executable, '-m', 'flask', '--app', 'app', 'run', '--host', '127.0.0.1',
-                                    '--port', str(config['port']), '--no-reload'], cwd=ROOT, env=env)
-                report.data['processes']['web'] = dict(pid=web.pid, status='running')
+                                    '--port', str(config['port']), '--no-reload'], cwd=ROOT, env=env,
+                                    stdout=web_log, stderr=web_log,
+                                    creationflags=subprocess.CREATE_NO_WINDOW if os.name == 'nt' else 0)
+                report.data['processes']['web'] = dict(pid=web.pid, status='running', log='web.log')
                 report.save()
-                while True:
-                    (control / 'status.json').write_text(json.dumps(dict(status='running', checked_at=datetime.now(timezone.utc).isoformat(),
-                        run_id=report.run_id, processes=report.data['processes']),ensure_ascii=False),encoding='utf-8')
-                    if stop_file.exists():
-                        code = 0
-                        break
-                    try:
-                        code = web.wait(timeout=1)
-                        break
-                    except subprocess.TimeoutExpired:
-                        if task.poll() is not None:
-                            raise RuntimeError('预订到期任务提前退出，已停止本次 Web；检查本次 expiry.log。')
-            finally:
-                for process in (web, task):
-                    if process is not None and process.poll() is None:
-                        process.terminate()
+                (control / 'status.json').write_text(json.dumps(dict(status='running', checked_at=datetime.now(timezone.utc).isoformat(),
+                    run_id=report.run_id, processes=report.data['processes']),ensure_ascii=False),encoding='utf-8')
+                if args.detach:
+                    print(f'已后台启动：web={web.pid} expiry={task.pid}；日志目录 {report.directory}', flush=True)
+                else:
+                    while True:
+                        (control / 'status.json').write_text(json.dumps(dict(status='running', checked_at=datetime.now(timezone.utc).isoformat(),
+                            run_id=report.run_id, processes=report.data['processes']),ensure_ascii=False),encoding='utf-8')
+                        if stop_file.exists():
+                            code = 0
+                            break
                         try:
-                            process.wait(timeout=5)
+                            code = web.wait(timeout=1)
+                            break
                         except subprocess.TimeoutExpired:
-                            process.kill()
-                            process.wait(timeout=5)
+                            if task.poll() is not None:
+                                raise RuntimeError('预订到期任务提前退出，已停止本次 Web；检查本次 expiry.log。')
+            finally:
+                if not args.detach:
+                    for process in (web, task):
+                        if process is not None and process.poll() is None:
+                            process.terminate()
+                            try:
+                                process.wait(timeout=5)
+                            except subprocess.TimeoutExpired:
+                                process.kill()
+                                process.wait(timeout=5)
+                    for state in report.data['processes'].values():
+                        state['status'] = 'stopped'
+                    (control / 'status.json').write_text(json.dumps(dict(status='stopped', checked_at=datetime.now(timezone.utc).isoformat(),
+                        run_id=report.run_id,processes=report.data['processes']),ensure_ascii=False),encoding='utf-8')
+                    report.save()
+                web_log.close()
                 task_log.close()
-                for state in report.data['processes'].values():
-                    state['status'] = 'stopped'
-                (control / 'status.json').write_text(json.dumps(dict(status='stopped', checked_at=datetime.now(timezone.utc).isoformat(),
-                    run_id=report.run_id,processes=report.data['processes']),ensure_ascii=False),encoding='utf-8')
-                report.save()
             if code:
                 raise RuntimeError(f'Flask 退出码为 {code}，检查端口是否占用。')
         elif args.command == 'verify':

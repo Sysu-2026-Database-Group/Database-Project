@@ -10,7 +10,8 @@ param(
     [string]$ConfigFile = 'run.local.json',
     [string]$Python = 'python',
     [switch]$Unit,
-    [switch]$Http
+    [switch]$Http,
+    [switch]$Detach
 )
 $ErrorActionPreference = 'Stop'
 $env:PYTHONUTF8 = '1'
@@ -60,6 +61,7 @@ try {
     }
     if ($Unit) { $runnerArguments += '--unit' }
     if ($Http) { $runnerArguments += '--http' }
+    if ($Detach) { $runnerArguments += '--detach' }
     & $runnerPython @runnerArguments
     $runnerExitCode = $LASTEXITCODE
 } catch {
