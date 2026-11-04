@@ -39,7 +39,9 @@ class MemberService:
             if not isinstance(value,dict) or set(value)!={'actor','key','phone','level','operation','quote'} or value['actor']!=[actor['phone'],actor['session_version']]: raise BadData('actor')
         except BadData:
             raise AppError('invalid_confirmation','会员收费确认无效。',400) from None
-        return self.dao.member_create(actor,value['key'],value['phone'],value['level'],value['operation'],value['quote'])
+        token=base64.urlsafe_b64encode(hmac.new(self.secret,('member-access:'+value['key']).encode(),hashlib.sha256).digest()).decode().rstrip('=')
+        result=self.dao.member_create(actor,value['key'],value['phone'],value['level'],value['operation'],value['quote'],hashlib.sha256(token.encode()).digest())
+        return dict(result,access_token=token)
 
     def contact(self,actor,data):
         require_cashier(actor)

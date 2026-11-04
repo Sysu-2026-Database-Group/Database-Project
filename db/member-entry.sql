@@ -81,7 +81,7 @@ BEGIN
 END;
 GO
 CREATE OR ALTER PROCEDURE api.usp_member_create
-    @employee_phone varchar(11),@session_version int,@key uniqueidentifier,@phone varchar(11),@level nvarchar(10),@operation varchar(10),@expected nvarchar(max)
+    @employee_phone varchar(11),@session_version int,@key uniqueidentifier,@phone varchar(11),@level nvarchar(10),@operation varchar(10),@expected nvarchar(max),@token_hash binary(32)
 AS
 BEGIN
     SET NOCOUNT ON; SET XACT_ABORT ON;
@@ -117,6 +117,9 @@ BEGIN
             VALUES(@phone,@operation,JSON_VALUE(@quote,'$.old_level'),@level,TRY_CONVERT(date,JSON_VALUE(@quote,'$.old_expiry')),@expiry,@amount,
                 TRY_CONVERT(decimal(10,2),JSON_VALUE(@quote,'$.silver_fee')),TRY_CONVERT(decimal(10,2),JSON_VALUE(@quote,'$.gold_fee')),@flow,@employee_phone);
         SET @result=JSON_MODIFY(@quote,'$.service_id',CONVERT(bigint,SCOPE_IDENTITY()));
+        IF @token_hash IS NULL THROW 52701,N'Token hash required.',1;
+        UPDATE auth.member_access SET token_hash=@token_hash,issued_by=@employee_phone,issued_at=SYSDATETIME() WHERE member_phone=@phone;
+        IF @@ROWCOUNT=0 INSERT auth.member_access(member_phone,token_hash,issued_by) VALUES(@phone,@token_hash,@employee_phone);
         INSERT api.operation_request(employee_phone,request_key,action,payload_hash,result_json) VALUES(@employee_phone,@key,'member_create',@hash,@result);
         COMMIT; SELECT @result result_json;
     END TRY

@@ -75,6 +75,9 @@ class EmployeeDAO:
                 52304: ('record_not_found', '指定记录不存在。', 404),
                 52305: ('quote_changed', '预览已过期或金额发生变化，请重新预览。', 409),
                 52306: ('insufficient_funds', '门店资金不足，请由店长注资后重试。', 409),
+                52307: ('goods_has_stock', '该商品有库存，不能删除。', 409),
+                52308: ('goods_on_shelf', '请先下架再删除。', 409),
+                52309: ('goods_referenced', '该商品已被单据引用，不能删除。', 409),
             }
             for number, details in operation_errors.items():
                 if f'({number})' in message:
@@ -233,9 +236,9 @@ class EmployeeDAO:
     def member_quote(self, actor, phone, level, operation):
         return self._one('cashier','EXEC api.usp_member_quote ?,?,?,?,?',(actor['phone'],actor['session_version'],phone,level,operation))['result_json']
 
-    def member_create(self, actor, key, phone, level, operation, quote):
-        return json.loads(self._one('cashier','EXEC api.usp_member_create ?,?,?,?,?,?,?',
-                         (actor['phone'],actor['session_version'],key,phone,level,operation,quote))['result_json'])
+    def member_create(self, actor, key, phone, level, operation, quote, token_hash):
+        return json.loads(self._one('cashier','EXEC api.usp_member_create ?,?,?,?,?,?,?,?',
+                         (actor['phone'],actor['session_version'],key,phone,level,operation,quote,token_hash))['result_json'])
 
     def member_contact(self, actor, key, phone, contact, token_hash):
         return json.loads(self._one('cashier','EXEC api.usp_member_contact ?,?,?,?,?,?',

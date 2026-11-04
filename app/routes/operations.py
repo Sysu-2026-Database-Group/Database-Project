@@ -110,7 +110,7 @@ def destination(result):
     if action in {'draft', 'submit', 'cancel', 'approve', 'pay', 'receive'}:
         return url_for('operations.purchase', purchase_id=result['id'])
     return {'inject': '/management/finance', 'withdraw': '/management/finance', 'price': '/management/goods', 'goods_save': '/goods',
-            'supplier_save': '/suppliers', 'quote_save': '/supplier-quotes', 'damage': '/inventory'}[action]
+            'goods_delete': '/goods', 'supplier_save': '/suppliers', 'quote_save': '/supplier-quotes', 'damage': '/inventory'}[action]
 
 
 @bp.post('/operations/<action>/preview')

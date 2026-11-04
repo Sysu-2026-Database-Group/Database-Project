@@ -34,7 +34,7 @@ BEGIN
     SET NOCOUNT ON;
     DECLARE @role nvarchar(10)=CASE
         WHEN @action IN ('inject','withdraw','price','approve','pay','finance') THEN N'店长'
-        WHEN @action IN ('goods_save','supplier_save','quote_save','draft','submit','receive','damage') THEN N'库管'
+        WHEN @action IN ('goods_save','supplier_save','quote_save','draft','submit','receive','damage','goods_delete') THEN N'库管'
         WHEN @action IN ('goods','suppliers','quotes','purchases','purchase','stock','cancel')
             THEN CASE WHEN IS_MEMBER('bookstore_app_manager')=1 THEN N'店长' ELSE N'库管' END END;
     IF @role IS NULL THROW 52301,N'Unknown operation.',1;
@@ -302,6 +302,22 @@ BEGIN
             UPDATE dbo.goods WITH(UPDLOCK,HOLDLOCK) SET stock_total=stock_total-@loss WHERE id=@id AND stock_total-reserved_qty>=@loss;
             IF @@ROWCOUNT=0 THROW 52302,N'Insufficient available stock.',1;
             INSERT dbo.stock_movement(goods_id,change_type,quantity,note,changed_by) VALUES(@id,N'损坏',-@loss,@note,@employee_phone);
+        END
+        ELSE IF @action='goods_delete'
+        BEGIN
+            IF @id IS NULL THROW 52301,N'Goods required.',1;
+            DECLARE @del_stock int,@del_reserved int,@del_shelf bit;
+            SELECT @del_stock=stock_total,@del_reserved=reserved_qty,@del_shelf=on_shelf FROM dbo.goods WITH(UPDLOCK,HOLDLOCK) WHERE id=@id;
+            IF @del_stock IS NULL THROW 52304,N'Goods not found.',1;
+            IF @del_stock<>0 OR @del_reserved<>0 THROW 52307,N'该商品有库存，不能删除。',1;
+            IF @del_shelf<>0 THROW 52308,N'请先下架再删除。',1;
+            IF EXISTS(SELECT 1 FROM dbo.sale_item WHERE goods_id=@id)
+                OR EXISTS(SELECT 1 FROM dbo.purchase_request_item WHERE goods_id=@id)
+                OR EXISTS(SELECT 1 FROM dbo.reservation_item WHERE goods_id=@id)
+                OR EXISTS(SELECT 1 FROM dbo.stock_movement WHERE goods_id=@id)
+                OR EXISTS(SELECT 1 FROM dbo.supplier_quote WHERE goods_id=@id)
+                THROW 52309,N'该商品已被单据引用，不能删除。',1;
+            DELETE dbo.goods WHERE id=@id;
         END
         ELSE IF @action NOT IN ('inject','withdraw') THROW 52301,N'Unknown write.',1;
         IF @action IN ('inject','withdraw','pay')

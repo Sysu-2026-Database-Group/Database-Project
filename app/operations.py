@@ -9,12 +9,13 @@ from itsdangerous import BadData, URLSafeSerializer
 from .errors import AppError
 
 MANAGER = {'inject', 'withdraw', 'price', 'approve', 'pay', 'finance'}
-INVENTORY = {'goods_save', 'supplier_save', 'quote_save', 'draft', 'submit', 'receive', 'damage'}
+INVENTORY = {'goods_save', 'supplier_save', 'quote_save', 'draft', 'submit', 'receive', 'damage', 'goods_delete'}
 SHARED = {'goods', 'suppliers', 'quotes', 'purchases', 'purchase', 'stock', 'cancel'}
 WRITES = MANAGER | INVENTORY | {'cancel'}
 LABELS = {'withdraw': '店长提现', 'inject': '店长注资', 'price': '定价与上下架', 'approve': '审批采购', 'pay': '采购付款',
           'goods_save': '保存商品资料', 'supplier_save': '保存供应商', 'quote_save': '保存报价',
-          'draft': '保存采购草稿', 'submit': '提交采购', 'receive': '整单收货', 'damage': '登记报损', 'cancel': '取消采购'}
+          'draft': '保存采购草稿', 'submit': '提交采购', 'receive': '整单收货', 'damage': '登记报损',
+          'goods_delete': '删除商品档案', 'cancel': '取消采购'}
 
 
 def require_operation(actor, action):
@@ -62,6 +63,7 @@ def normalize(action, data):
         'goods_save': {'id', 'name', 'category', 'code', 'author', 'publisher', 'page_count', 'spec'},
         'supplier_save': {'id', 'name'}, 'quote_save': {'supplier_id', 'goods_id', 'amount'},
         'draft': {'id', 'supplier_id', 'items'}, 'damage': {'id', 'quantity', 'note'},
+        'goods_delete': {'id'},
         'submit': {'id'}, 'cancel': {'id'}, 'approve': {'id'}, 'pay': {'id'}, 'receive': {'id'},
     }
     if action not in fields or set(data) - fields[action]:
