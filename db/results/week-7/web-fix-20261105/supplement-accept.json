@@ -1,0 +1,47 @@
+[
+  {
+    "name": "分页-第1页",
+    "ok": true,
+    "detail": "rows=10 next=True"
+  },
+  {
+    "name": "分页-第2页",
+    "ok": true,
+    "detail": "rows=2"
+  },
+  {
+    "name": "详情-编辑回填",
+    "ok": true,
+    "detail": "name=活着"
+  },
+  {
+    "name": "列表耗时(100条)",
+    "ok": true,
+    "detail": "0.53s"
+  },
+  {
+    "name": "有库存→无删除按钮",
+    "ok": true,
+    "detail": "活着 stock=6"
+  },
+  {
+    "name": "在架→无删除按钮",
+    "ok": true,
+    "detail": "百年孤独 stock=0 on_shelf=1"
+  },
+  {
+    "name": "三无→有删除按钮",
+    "ok": true,
+    "detail": "gid=26"
+  },
+  {
+    "name": "凭证-时间格式",
+    "ok": true,
+    "detail": "W7S00000000000000007"
+  },
+  {
+    "name": "凭证-金额两位",
+    "ok": true,
+    "detail": "supplement-sale-receipt.png"
+  }
+]
