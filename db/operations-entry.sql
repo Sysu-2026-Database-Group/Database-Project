@@ -306,8 +306,10 @@ BEGIN
         ELSE IF @action='goods_delete'
         BEGIN
             IF @id IS NULL THROW 52301,N'Goods required.',1;
-            DECLARE @del_stock int,@del_reserved int,@del_shelf bit;
-            SELECT @del_stock=stock_total,@del_reserved=reserved_qty,@del_shelf=on_shelf FROM dbo.goods WITH(UPDLOCK,HOLDLOCK) WHERE id=@id;
+            DECLARE @del_stock int,@del_reserved int,@del_shelf bit,@del_category nvarchar(10),@del_code varchar(20);
+            SELECT @del_stock=stock_total,@del_reserved=reserved_qty,@del_shelf=on_shelf,
+                   @del_category=category,@del_code=COALESCE(book_isbn,toy_code)
+              FROM dbo.goods WITH(UPDLOCK,HOLDLOCK) WHERE id=@id;
             IF @del_stock IS NULL THROW 52304,N'Goods not found.',1;
             IF @del_stock<>0 OR @del_reserved<>0 THROW 52307,N'该商品有库存，不能删除。',1;
             IF @del_shelf<>0 THROW 52308,N'请先下架再删除。',1;
@@ -318,6 +320,8 @@ BEGIN
                 OR EXISTS(SELECT 1 FROM dbo.supplier_quote WHERE goods_id=@id)
                 THROW 52309,N'该商品已被单据引用，不能删除。',1;
             DELETE dbo.goods WHERE id=@id;
+            IF @del_category=N'图书' DELETE dbo.book WHERE isbn=@del_code;
+            ELSE DELETE dbo.toy WHERE inner_code=@del_code;
         END
         ELSE IF @action NOT IN ('inject','withdraw') THROW 52301,N'Unknown write.',1;
         IF @action IN ('inject','withdraw','pay')

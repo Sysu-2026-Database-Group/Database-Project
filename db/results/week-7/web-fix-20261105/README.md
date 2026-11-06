@@ -29,6 +29,7 @@
 | 库管 | 删除在架商品 | 409 | 409 | `web-fix-20261105/F08-shelf-reject.png` |
 | 库管 | 删除被引用商品 | 409 | 409 | `web-fix-20261105/F08-ref-reject.png` |
 | 库管 | 删除三无商品 | 成功 | 成功 | `web-fix-20261105/F08-delete-ok.png` |
+| 库管 | 删除后同编码重建 | 成功 | 成功 | `check_g08.py` 输出 `recreated same code` |
 
 ## 三、回归
 
