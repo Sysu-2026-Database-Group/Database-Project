@@ -207,7 +207,8 @@ def check_objects(config, database, require_runtime=False):
                 for row in cursor.execute(
                     "SELECT i.name FROM sys.indexes i"
                     " JOIN sys.objects o ON o.object_id=i.object_id"
-                    " WHERE i.is_unique=1 AND i.has_filter=1 AND o.schema_id=SCHEMA_ID('dbo')"
+                    " WHERE i.is_unique=1 AND i.has_filter=1 AND i.is_disabled=0"
+                    "   AND o.schema_id=SCHEMA_ID('dbo')"
                 ).fetchall()
             }
             problems = []
@@ -560,15 +561,17 @@ def main():
             while time.time() < deadline and any(pid_alive(pid) for pid in pids):
                 time.sleep(0.5)
             leftover = [pid for pid in pids if pid_alive(pid)]
+            if leftover:
+                state.update(checked_at=datetime.now(timezone.utc).isoformat(), processes=processes)
+                state_path.write_text(json.dumps(state, ensure_ascii=False, indent=2), encoding='utf-8')
+                print(f'停止未完成，以下进程仍存活，可再次执行 stop 重试：{leftover}')
+                return 1
             for item in processes.values():
                 if isinstance(item, dict):
                     item['status'] = 'stopped'
             state.update(status='stopped', checked_at=datetime.now(timezone.utc).isoformat(), processes=processes)
             state_path.write_text(json.dumps(state, ensure_ascii=False, indent=2), encoding='utf-8')
-            if leftover:
-                print(f'已停止，但以下进程仍存活，请手动检查：{leftover}')
-            else:
-                print(f'已停止 Web 与任务：{pids}')
+            print(f'已停止 Web 与任务：{pids}')
             return 0
         report = Report(args.command, config)
         report.action('dependencies', lambda: require_dependencies(config, sql=not args.unit))
