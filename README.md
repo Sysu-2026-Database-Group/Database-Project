@@ -2,9 +2,27 @@
 
 一个以「单门店 + 线上预订自提」为背景的书店运营系统。
 
+## 快速开始
+
+前置：Windows；SQL Server（默认 `localhost\SQLEXPRESS`）；Python 3.12+；ODBC Driver 17/18；sqlcmd。
+
+```powershell
+python -m venv .venv
+.\.venv\Scripts\pip install -r requirements.txt
+
+Copy-Item run.example.json run.local.json   # 至少改 database / login_prefix；server、port 按需
+.\run.ps1 setup                             # 首次建库，只跑一次
+.\run.ps1 start -Detach                     # 后台启动；不加 -Detach 则前台常驻，Ctrl+C 停止
+.\run.ps1 verify -Http                      # 另开终端，应双 PASS
+```
+
+- 访问：`http://127.0.0.1:<port>`（默认 5000）；顾客端无需登录。
+- 员工账号由 `setup` 生成，路径写在本机 `demo-credentials.local.json`（不提交）。
+- 停止：`.\run.ps1 stop`；排障先看 `.runner/<最新运行>/summary.json` 与同目录 `*.log`。
+
 队友接手请先阅读 **[项目交接单](docs/team-handoff.md)**：包含换电脑运行、账号配置、119项完整验收证据、演示顺序及剩余交付事项。
 
-当前应用已提供顾客预订/取消/会员自助、收银销售/取货/会员/退款、库管商品/采购/收货/报损/退货回收及店长经营管理。准备、启动和验收统一使用根目录 [`run.ps1`](run.ps1)：`setup` → `doctor` → `test` → `start`，另开终端执行 `verify -Http`，结束时 `stop`。日常操作见[全角色手册](docs/design/web-operation-manual.md)。人工签收和跨机复现尚待完成，状态见[台账](docs/tasks/task-web-development.md)。
+当前应用已提供顾客预订/取消/会员自助、收银销售/取货/会员/退款、库管商品/采购/收货/报损/退货回收及店长经营管理。准备、启动和验收统一使用根目录 [`run.ps1`](run.ps1)：`setup` → `doctor` → `test` → `start`，另开终端执行 `verify -Http`，结束时 `stop`。日常操作见[全角色手册](docs/design/web-operation-manual.md)。跨机复现已由作者与团队第二人分别完成；人工签收仍待组员确认，状态见[台账](docs/tasks/task-web-development.md)。
 
 项目目标不是做出一个网站，而是把「钱、书、人」在时间轴上的流动，
 落成 SQL Server 上一套**可审查、可对账、可回滚**的表、约束与事务。
@@ -32,7 +50,7 @@ Database-Project/
 ├─ drafts/         草稿 —— 讨论稿与中间产物（敲定后才迁入 docs/）
 ├─ ER/             第 5 周 ER 图（可编辑源文件 + 清晰导出图 + 审查记录）
 ├─ homework/       课程官方材料 —— 每周底线任务
-├─ app/            第七周应用：员工登录、门店销售及受限过程调用
+├─ app/            Web 应用：顾客/收银/库管/店长全流程与受限过程调用
 ├─ tests/          应用、真实 SQL Server 权限、销售事务及并发测试
 └─ db/             Week 3–4 基线及 Week 6 迁移、回归、复现与执行记录
 ```
@@ -81,7 +99,7 @@ Database-Project/
 ### 3.3 设计要点
 
 - **数据库是主角，应用只是遥控器** —— 业务规则尽量下沉为约束、触发器与存储过程；
-  应用按第7—9周要求分为页面、业务、数据访问层；仅数据访问层连接 SQL Server，采用参数绑定和后端权限检查。目前已提供员工登录、门店销售预览与原子结算、本人销售凭证查询，并验证重复提交、失败回滚和并发库存/积分/资金；其他业务入口逐步接入，见 [应用使用说明](app/README.md)。
+  应用按第7—9周要求分为页面、业务、数据访问层；仅数据访问层连接 SQL Server，采用参数绑定和后端权限检查。已提供顾客、收银、库管、店长四类角色的完整流程（B1—B15），含预订取货、退货回收、采购闭环、会员办理与经营报表；实现说明见 [应用使用说明](app/README.md)。
 - **单据驱动** —— 采购申请单、销售单、预订单、退货单都采用「头 + 明细」两级结构，
   明细行逐条留痕、可回溯；**每张单据都有单号**，卖货与预订的单据会交给顾客一份。
 - **库存只维护计数** —— 保留「在架总量」与「已订量」两个计数，
@@ -109,13 +127,15 @@ Database-Project/
 
 ## 四、文档导航
 
+> **怎么找**：先看 `specs/`（口径）、`web-operation-manual.md`（怎么用）、`team-handoff.md`（怎么接手）、`task-web-development.md`（做到哪）；历史周报与验收证据在本节后半与 `db/results/`，只在追溯时读。
+
 | 文档 | 内容 | 状态 |
 |---|---|---|
 | `docs/specs/spec-scenario.md` | 场景说明：拾光书店 | ✅ 已敲定 |
 | `docs/specs/spec-roles.md` | 角色与职能清单 | ✅ 已敲定 |
 | `docs/specs/spec-businesses.md` | 业务清单与**业务流程**（15 条动作链）+ R 系列规定 | ✅ 已敲定 |
 | `docs/specs/spec-data-boundary.md` | 数据边界清单：什么进库 / 什么不进库（逐条给理由） | ✅ 已敲定 |
-| `docs/specs/spec-data-dictionary.md` | 数据字典：19 张表的字段、域、码与样例元组 | 设计口径 |
+| `docs/specs/spec-data-dictionary.md` | 数据字典：19 张基表的字段、域、码与样例元组；Web 增量实体见 `docs/design/web-model-extension.md` | 设计口径 |
 | `docs/tasks/task-week-N.md` | 第 N 周任务说明：官方原文、本组任务说明与验收标准 | ✅ 第 1–6 周 |
 | `docs/tasks/task-v0.1.md` | 第一阶段作业（可运行的数据库原型 v0.1）任务说明与验收标准 | 当前口径 |
 | `docs/reports/report-v0.1.md` | v0.1 阶段总结：场景、边界、表设计、约束权限、过程与问题修正 | ✅ 已整理 |
@@ -141,7 +161,7 @@ Database-Project/
 **每张截图对应的 SQL 语句与预期值**集中记在 `docs/reports/evidence-v0.1.md` **§3**，
 结论与核对方式见 `db/results/week-4/week-4.md` 与 `db/README.md` §7。
 
-课程原件对照与提交材料索引见 [docs/README.md](docs/README.md)。第7—9周应用已从[入口与权限基础](docs/design/entry-permissions.md)开始，完整业务流程及多角色页面仍待实现；独立服务连接尚待配置，当前真实SQL权限通过隔离库身份切换测试。第二周独立严格样例文件的旧引用缺失，已在该周验收记录标明待核实。
+课程原件对照与提交材料索引见 [docs/README.md](docs/README.md)。第7—9周应用已覆盖四类角色的完整流程；独立服务连接与六类运行身份已配置，真实 SQL 权限通过隔离库身份切换测试验证。第二周独立严格样例文件的旧引用缺失，已在该周验收记录标明待核实。
 
 ER 当前使用 [v1.4 用户调整修订图](ER/er-diagram-v1.4.drawio) 与[PNG](ER/er-diagram-v1.4.drawio.png)。保持原整体布局和19实体尺寸，仅微调4框对齐，修正文义、属性和局部连线；见[逐表审查与检查](ER/review-v1.4.md)。此前v1.4/v1.5重排稿已撤下，当前v1.4沿用用户调整的布局，人工验收已于2026-10-22由梁宇聪确认通过。
 
