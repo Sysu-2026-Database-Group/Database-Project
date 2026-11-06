@@ -4,7 +4,7 @@
 <section class="panel">
   <div class="receipt-heading"><p class="eyebrow">拾光书店 / 销售凭证</p><h1>销售完成</h1></div>
   <p>单号：<strong>{{ sale.no }}</strong>；状态：{{ sale.status }}</p>
-  <p>收银员账号：{{ sale.cashier_by }}；成交时间：{{ sale.sold_at }}</p>
+  <p>收银员账号：{{ sale.cashier_by }}；成交时间：{{ sale.sold_at|dt }}</p>
   <div class="table-scroll"><table><thead><tr><th>商品</th><th>数量</th><th>成交单价（元）</th></tr></thead>
     <tbody>{% for item in sale['items'] %}<tr><td>{{ item.name }}</td><td>{{ item.quantity }}</td><td>{{ '%.2f'|format(item.unit_price) }}</td></tr>{% endfor %}</tbody>
   </table></div>

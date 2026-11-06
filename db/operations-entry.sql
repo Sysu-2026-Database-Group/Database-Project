@@ -77,7 +77,15 @@ BEGIN
     IF @action='goods'
     BEGIN
         SELECT @total=COUNT_BIG(*) FROM dbo.goods;
-        SET @records=(SELECT g.*,b.author,b.publisher,b.page_count,t.spec FROM dbo.goods g
+        SET @records=(SELECT g.*,b.author,b.publisher,b.page_count,t.spec,
+            CAST(CASE WHEN g.stock_total=0 AND g.reserved_qty=0 AND g.on_shelf=0
+                AND NOT EXISTS(SELECT 1 FROM dbo.sale_item WHERE goods_id=g.id)
+                AND NOT EXISTS(SELECT 1 FROM dbo.purchase_request_item WHERE goods_id=g.id)
+                AND NOT EXISTS(SELECT 1 FROM dbo.reservation_item WHERE goods_id=g.id)
+                AND NOT EXISTS(SELECT 1 FROM dbo.stock_movement WHERE goods_id=g.id)
+                AND NOT EXISTS(SELECT 1 FROM dbo.supplier_quote WHERE goods_id=g.id)
+                THEN 1 ELSE 0 END AS bit) can_delete
+            FROM dbo.goods g
             LEFT JOIN dbo.book b ON b.isbn=g.book_isbn LEFT JOIN dbo.toy t ON t.inner_code=g.toy_code
             ORDER BY g.id DESC OFFSET (@page-1)*@page_size ROWS FETCH NEXT @page_size ROWS ONLY FOR JSON PATH);
     END

@@ -7,7 +7,7 @@
   {% if listing.records %}
   <div class="table-scroll"><table>
     <thead><tr><th>销售单号</th><th>成交时间</th><th>状态</th><th class="number">实收（元）</th></tr></thead>
-    <tbody>{% for sale in listing.records %}<tr><td><a href="{{ url_for('sales.sale_receipt', sale_no=sale.no) }}">{{ sale.no }}</a></td><td>{{ sale.sold_at }}</td><td><span class="badge">{{ sale.status }}</span></td><td class="number">{{ sale.paid_amount }}</td></tr>{% endfor %}</tbody>
+    <tbody>{% for sale in listing.records %}<tr><td><a href="{{ url_for('sales.sale_receipt', sale_no=sale.no) }}">{{ sale.no }}</a></td><td>{{ sale.sold_at|dt }}</td><td><span class="badge">{{ sale.status }}</span></td><td class="number">{{ sale.paid_amount }}</td></tr>{% endfor %}</tbody>
   </table></div>
   {% else %}<div class="empty-state"><h3>这一页还没有销售记录</h3><p>完成销售后，可在这里查询本人经手的凭证。</p></div>{% endif %}
   <nav class="pagination" aria-label="销售单分页">

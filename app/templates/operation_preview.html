@@ -4,6 +4,6 @@
 <div class="page-heading"><h1>{{ label }}预览</h1></div>
 <section class="panel"><h2>本次金额：¥{{ quote.amount }}</h2>
 {% if quote.action == 'inject' %}<p>登记已实际收到的注资，门店现金余额增加 ¥{{ quote.amount }}。此笔不计入经营收入。</p>{% elif quote.action == 'withdraw' %}<p>确认提取门店资金 ¥{{ quote.amount }}，现金余额减少相同金额，不计入经营支出。余额不足时拒绝。</p>{% else %}<p>为采购申请 #{{ quote.id }} 一次付清 ¥{{ quote.amount }}，现金余额减少相同金额；库存由库管另行整单收货后增加。</p>{% endif %}
-<p>确认有效期至 {{ quote.expires_at }}（门店本地时间）。</p><p class="muted">请求标识：{{ request_key }}。结果不确定时保留本页，使用同一确认重试。</p>
+<p>确认有效期至 {{ quote.expires_at|dt }}（门店本地时间）。</p><p class="muted">请求标识：{{ request_key }}。结果不确定时保留本页，使用同一确认重试。</p>
 <form method="post" action="{{ url_for('operations.confirm') }}"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><input type="hidden" name="quote_token" value="{{ quote_token }}"><button>确认{{ label }}</button></form></section>
 {% endblock %}
