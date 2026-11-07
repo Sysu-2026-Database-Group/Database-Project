@@ -1,0 +1,419 @@
+{
+  "commit": "481ee1a",
+  "local_change": ".gitattributes",
+  "isolated_database": "ShiguangBookstoreWeek7WebDemoReport20261107",
+  "port": 5098,
+  "commands": [
+    {
+      "command": "setup",
+      "run_id": "20261107T015902Zc7968f",
+      "status": "PASS",
+      "steps": [
+        {
+          "name": "dependencies",
+          "status": "PASS"
+        },
+        {
+          "name": "instance",
+          "status": "PASS"
+        },
+        {
+          "name": "schema",
+          "status": "PASS"
+        },
+        {
+          "name": "seed",
+          "status": "PASS"
+        },
+        {
+          "name": "baseline-check",
+          "status": "PASS"
+        },
+        {
+          "name": "constraint-ddl",
+          "status": "PASS"
+        },
+        {
+          "name": "views",
+          "status": "PASS"
+        },
+        {
+          "name": "migration",
+          "status": "PASS"
+        },
+        {
+          "name": "migration-check",
+          "status": "PASS"
+        },
+        {
+          "name": "application-baseline",
+          "status": "PASS"
+        },
+        {
+          "name": "application-baseline-check",
+          "status": "PASS"
+        },
+        {
+          "name": "application-rule-tests",
+          "status": "PASS"
+        },
+        {
+          "name": "expanded-seed",
+          "status": "PASS"
+        },
+        {
+          "name": "regression",
+          "status": "PASS"
+        },
+        {
+          "name": "objects-baseline",
+          "status": "PASS"
+        },
+        {
+          "name": "runtime-copy",
+          "status": "PASS"
+        },
+        {
+          "name": "runtime-auth-schema",
+          "status": "PASS"
+        },
+        {
+          "name": "runtime-sales-schema",
+          "status": "PASS"
+        },
+        {
+          "name": "runtime-workspace-schema",
+          "status": "PASS"
+        },
+        {
+          "name": "runtime-operations-schema",
+          "status": "PASS"
+        },
+        {
+          "name": "runtime-shop-schema",
+          "status": "PASS"
+        },
+        {
+          "name": "runtime-reservation-schema",
+          "status": "PASS"
+        },
+        {
+          "name": "runtime-management-schema",
+          "status": "PASS"
+        },
+        {
+          "name": "runtime-member-schema",
+          "status": "PASS"
+        },
+        {
+          "name": "runtime-return-schema",
+          "status": "PASS"
+        },
+        {
+          "name": "runtime-baseline-check",
+          "status": "PASS"
+        },
+        {
+          "name": "runtime-permissions-check",
+          "status": "PASS"
+        },
+        {
+          "name": "objects-runtime",
+          "status": "PASS"
+        },
+        {
+          "name": "provision",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "command": "doctor",
+      "run_id": "20261107T015910Z24fd47",
+      "status": "PASS",
+      "steps": [
+        {
+          "name": "dependencies",
+          "status": "PASS"
+        },
+        {
+          "name": "instance",
+          "status": "PASS"
+        },
+        {
+          "name": "application-baseline-check",
+          "status": "PASS"
+        },
+        {
+          "name": "application-permissions-check",
+          "status": "PASS"
+        },
+        {
+          "name": "runtime",
+          "status": "PASS"
+        },
+        {
+          "name": "objects",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "command": "test",
+      "run_id": "20261107T015912Z22c48b",
+      "status": "PASS",
+      "steps": [
+        {
+          "name": "dependencies",
+          "status": "PASS"
+        },
+        {
+          "name": "instance",
+          "status": "PASS"
+        },
+        {
+          "name": "schema",
+          "status": "PASS"
+        },
+        {
+          "name": "seed",
+          "status": "PASS"
+        },
+        {
+          "name": "baseline-check",
+          "status": "PASS"
+        },
+        {
+          "name": "constraint-ddl",
+          "status": "PASS"
+        },
+        {
+          "name": "views",
+          "status": "PASS"
+        },
+        {
+          "name": "migration",
+          "status": "PASS"
+        },
+        {
+          "name": "migration-check",
+          "status": "PASS"
+        },
+        {
+          "name": "application-baseline",
+          "status": "PASS"
+        },
+        {
+          "name": "application-baseline-check",
+          "status": "PASS"
+        },
+        {
+          "name": "application-rule-tests",
+          "status": "PASS"
+        },
+        {
+          "name": "expanded-seed",
+          "status": "PASS"
+        },
+        {
+          "name": "regression",
+          "status": "PASS"
+        },
+        {
+          "name": "objects-baseline",
+          "status": "PASS"
+        },
+        {
+          "name": "auth-test-copy",
+          "status": "PASS"
+        },
+        {
+          "name": "auth-test-auth-schema",
+          "status": "PASS"
+        },
+        {
+          "name": "auth-test-sales-schema",
+          "status": "PASS"
+        },
+        {
+          "name": "auth-test-workspace-schema",
+          "status": "PASS"
+        },
+        {
+          "name": "auth-test-operations-schema",
+          "status": "PASS"
+        },
+        {
+          "name": "auth-test-shop-schema",
+          "status": "PASS"
+        },
+        {
+          "name": "auth-test-reservation-schema",
+          "status": "PASS"
+        },
+        {
+          "name": "auth-test-management-schema",
+          "status": "PASS"
+        },
+        {
+          "name": "auth-test-member-schema",
+          "status": "PASS"
+        },
+        {
+          "name": "auth-test-return-schema",
+          "status": "PASS"
+        },
+        {
+          "name": "auth-test-baseline-check",
+          "status": "PASS"
+        },
+        {
+          "name": "auth-test-permissions-check",
+          "status": "PASS"
+        },
+        {
+          "name": "sale-test-copy",
+          "status": "PASS"
+        },
+        {
+          "name": "sale-test-auth-schema",
+          "status": "PASS"
+        },
+        {
+          "name": "sale-test-sales-schema",
+          "status": "PASS"
+        },
+        {
+          "name": "sale-test-workspace-schema",
+          "status": "PASS"
+        },
+        {
+          "name": "sale-test-operations-schema",
+          "status": "PASS"
+        },
+        {
+          "name": "sale-test-shop-schema",
+          "status": "PASS"
+        },
+        {
+          "name": "sale-test-reservation-schema",
+          "status": "PASS"
+        },
+        {
+          "name": "sale-test-management-schema",
+          "status": "PASS"
+        },
+        {
+          "name": "sale-test-member-schema",
+          "status": "PASS"
+        },
+        {
+          "name": "sale-test-return-schema",
+          "status": "PASS"
+        },
+        {
+          "name": "sale-test-baseline-check",
+          "status": "PASS"
+        },
+        {
+          "name": "sale-test-permissions-check",
+          "status": "PASS"
+        },
+        {
+          "name": "business-baseline",
+          "status": "PASS"
+        },
+        {
+          "name": "full-tests",
+          "status": "PASS"
+        },
+        {
+          "name": "test-state-restored",
+          "status": "PASS"
+        },
+        {
+          "name": "cleanup-test-logins",
+          "status": "PASS"
+        },
+        {
+          "name": "week6-artifact-audit",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "command": "start",
+      "run_id": "20261107T015943Za74579",
+      "status": "PASS",
+      "steps": [
+        {
+          "name": "dependencies",
+          "status": "PASS"
+        },
+        {
+          "name": "application-baseline-check",
+          "status": "PASS"
+        },
+        {
+          "name": "application-permissions-check",
+          "status": "PASS"
+        },
+        {
+          "name": "runtime",
+          "status": "PASS"
+        }
+      ]
+    },
+    {
+      "command": "verify",
+      "run_id": "20261107T015946Zf80f6c",
+      "status": "PASS",
+      "steps": [
+        {
+          "name": "dependencies",
+          "status": "PASS"
+        },
+        {
+          "name": "application-baseline-check",
+          "status": "PASS"
+        },
+        {
+          "name": "application-permissions-check",
+          "status": "PASS"
+        },
+        {
+          "name": "runtime",
+          "status": "PASS"
+        },
+        {
+          "name": "verify",
+          "status": "PASS"
+        },
+        {
+          "name": "verify-http",
+          "status": "PASS"
+        }
+      ]
+    }
+  ],
+  "unittest": {
+    "run": 119,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "stop": {
+    "expiry": "stopped",
+    "web": "stopped"
+  },
+  "week6_checkout_audit": {
+    "false": "PASS",
+    "true": "PASS",
+    "input": "PASS"
+  },
+  "503_test_client": {
+    "route": "/shop",
+    "status": 503,
+    "same_page_retry": true
+  }
+}

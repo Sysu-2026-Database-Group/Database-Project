@@ -2,34 +2,32 @@
 
 - 分支/标签：`fix/web-20261105` / `web-baseline-20261105`
 - 验证库：`ShiguangBookstoreWeek7Fix20261105`（全新库名、全新登录前缀）
-- 原始输出：`migration-summary.txt`、`fix-verification.json`
-- 截图：`drafts/assets/web-fix-20261105/`、`drafts/assets/web-audit-20261105/`
+- 原始输出：[结构与经营汇总](migration-summary.txt)、[修复验证](fix-verification.json)、[补充验收](supplement-accept.json)。JSON 中的旧截图路径保留为历史记录，原图未归档。
+- 2026-11-07 使用新隔离库补拍了开卡、错误页和商品删除。见[本轮图证与数据库对账](../stage-report-20261107/README.md)。
 
-## 一、迁移前后关键查询
+## 一、历史迁移截面与 Web 验证库
 
-| 指标 | 迁移前（v0.2-w6） | 迁移后（v1.0） |
+| 截面 | 结构口径 | 资金口径 |
 |---|---|---|
-| 经营实体 | 19 | 21（+`member_service`、`member_contact_history`） |
-| 外码 | 47 | 49 |
-| 筛选唯一索引 | 6 | 7（+`UX_stock_return_once`） |
-| 现金余额 | `1430.30` | `555.30` |
-| 经营盈亏 | `−69.70` | `−944.70` |
+| 第六周迁移前的 v0.1 | 19 张用户表、47 个外码 | 旧场景现金 ¥1,430.30，经营盈亏 −¥69.70 |
+| 第六周迁移后并扩充样例 | 20 张用户表、49 个外码 | 旧截面保持一致，扩充截面现金 ¥555.30，经营盈亏 −¥944.70 |
+| 11 月 5 日 Web v1.0 验证库 | 21 个经营实体。该次实测 `dbo` 表 22 张、全库 63 个外码及 7 个筛选唯一索引 | 实测现金 ¥693.30。该库已有验证操作，数值对应当时的运行截面 |
 
-迁移前后分别引用，不用新数据覆盖旧截面；结构与账目明细见 `migration-summary.txt`。
+第六周以[回归原始输出](../../week-6/acceptance/final-check/14-regression.txt)为准。Web 结构与账目明细见[当次运行输出](migration-summary.txt)和[增量模型](../../../../docs/design/web-model-extension.md)。
 
 ## 二、权限矩阵（实测）
 
 | 主体 | 动作 | 期望 | 实际 | 证据 |
 |---|---|---|---|---|
-| 匿名 | 访问 `/workspace` | 401 | 401 | `web-repro-20261104/07-workspace-anon.png` |
-| 收银员 | 访问 `/management/goods` | 403 | 403 | `16-cashier-forbidden-management.png` |
-| 库管 | 访问 `/management/reports` | 403 | 403 | `26-inventory-forbidden-reports.png` |
-| 店长 | 调用商品删除 | 403 | 403 | `web-fix-20261105/F08-manager-forbidden.png` |
-| 库管 | 删除有库存商品 | 409 | 409 | `web-fix-20261105/F08-stock-reject.png` |
-| 库管 | 删除在架商品 | 409 | 409 | `web-fix-20261105/F08-shelf-reject.png` |
-| 库管 | 删除被引用商品 | 409 | 409 | `web-fix-20261105/F08-ref-reject.png` |
-| 库管 | 删除三无商品 | 成功 | 成功 | `web-fix-20261105/F08-delete-ok.png` |
-| 库管 | 删除后同编码重建 | 成功 | 成功 | `check_g08.py` 输出 `recreated same code` |
+| 匿名 | 访问 `/workspace` | 401 | 401 | [11 月 7 日复验截图](../stage-report-20261107/13-login-required.png) |
+| 收银员 | 访问 `/management/goods` | 403 | 403 | [11 月 7 日复验截图](../stage-report-20261107/14-forbidden.png) |
+| 库管 | 访问 `/management/reports` | 403 | 403 | [11 月 4 日复现报告](../../../../drafts/Web复现报告-20261104.md)，原图未归档 |
+| 店长 | 调用商品删除 | 403 | 403 | [修复验证 F-08e](fix-verification.json) |
+| 库管 | 删除有库存商品 | 409 | 409 | [修复验证 F-08b](fix-verification.json) |
+| 库管 | 删除在架商品 | 409 | 409 | [修复验证 F-08c](fix-verification.json) |
+| 库管 | 删除被引用商品 | 409 | 409 | [修复验证 F-08d](fix-verification.json) |
+| 库管 | 删除三无商品 | 成功 | 成功 | [修复验证 F-08a](fix-verification.json)及[11 月 7 日复验截图](../stage-report-20261107/16-goods-deleted.png) |
+| 库管 | 删除后同编码重建 | 成功 | 历史记录为成功 | 11 月 5 日报告记录 `recreated same code`，原始脚本及输出未归档。11 月 7 日复验核对了[删除后的数据库记录](../stage-report-20261107/database-checks.json) |
 
 ## 三、回归
 

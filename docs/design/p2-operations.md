@@ -1,5 +1,7 @@
 # P2 商品、资金与采购入口
 
+> P2 实施记录，本文中的测试数和待办对应采购、报损和注资阶段。后续提现、经营报表及当前业务边界见[Web 增量设计](web-model-extension.md)，最新验收见[实施台账](../tasks/task-web-development.md)。
+
 实施日期：2026-11-02。正式范围仍以 [Web规划](plan-web-development.md) 和 [唯一台账](../tasks/task-web-development.md) 为准。
 
 调用链为 `routes/operations.py` → `OperationsService` → `EmployeeDAO` → `api.usp_operation_*`。HTTP层从已验证会话取主体，不接受前端操作人；服务层拒绝未知字段，金额限正数及两位小数。SQL以固定动作白名单复核数据库角色、员工岗位、会话版本及业务状态，无动态SQL；精确授权过程，不授予底表访问。

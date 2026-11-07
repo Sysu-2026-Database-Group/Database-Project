@@ -1,37 +1,14 @@
 # 拾光书店 Web 应用
 
-2026-11-02当前版本已实现全角色核心业务入口，119项完整测试、52页真实Edge及11个真实表单节点通过。当前状态以[Web台账](../docs/tasks/task-web-development.md)为准；[操作手册](../docs/design/web-operation-manual.md)、[阶段报告](../docs/reports/report-web-v1.0.md)及[增量21实体模型](../docs/design/web-model-extension.md)已补齐。下文旧部署记录保留历史范围，其中“尚未实现”不代表当前结论。原经营副本未升级，人工、跨机及合并ER等差距见台账。
+当前版本覆盖顾客、收银员、库管和店长的核心业务。2026-11-07 隔离库完整测试 119 项及 Edge 16 个取证节点通过。首次准备与日常操作见[全角色手册](../docs/design/web-operation-manual.md)，设计与实现见[第 5—9 周实验报告](../docs/reports/report-web-v1.0.md)及[增量模型](../docs/design/web-model-extension.md)，验收状态见[台账](../docs/tasks/task-web-development.md)与[本轮证据](../db/results/week-7/stage-report-20261107/README.md)。
 
-2026-11-02实时状态见 [Web实施台账](../docs/tasks/task-web-development.md)。P0/P1修复后76项完整验收已核实，P2主要闭环及采购竞争补充后93项完整验收通过；P3公开商品查询正在增量实现，不能用93项旧结果替代P3完整验收。下文历史部署状态不代表当前机器已配置。
+## 使用与设计
 
-P3新增公开商品 `/shop`、详情及公开API，使用专用顾客身份，只显示公开资料、售价及有货状态。新增部署为P2之后安装 `shop-entry.sql`；新库setup自动创建guest登录。已有环境须按 [P3设计及增量升级说明](../docs/design/p3-public-catalog.md) 添加独立配置，不能重新setup覆盖员工口令。预订、取货及自动到期尚未实现。
+日常操作、启动命令和常见问题统一见[全角色操作手册](../docs/design/web-operation-manual.md)。配置字段、日志和独立副本的要求见[统一入口说明](../docs/design/unified-entry.md)。数据库职责、岗位权限和事务边界见[Web 增量模型](../docs/design/web-model-extension.md)。
 
-新增部署顺序：在明确指定的Week7副本先执行 `db/application-baseline.sql`，再执行原 `entry-foundation.sql`、`sale-entry.sql` 和新增 `workspace-entry.sql`，最后执行 `checks/application-baseline-check.sql` 与 `checks/application-permissions-check.sql`。SQLCMD均带 `-f 65001 -b`。这些安装不重新装载样例、不重置口令；应先通过新建隔离库的 `run.ps1 test` 后再安排已有运行副本升级。doctor/start/verify现在检查基线版本、触发器、视图、索引和精确授权，缺项会明确失败。
+## 历史开发与部署记录
 
-新增页面：`/workspace` 为员工工作台；`/sales` 为本人销售列表，支持 `page` 和 `page_size`（默认20、最大100），其他岗位不能访问。`/sales/new` 支持保存清单、改数量、数量置0移除及清空；内容留在服务端临时内存，重启后丢弃，确认前不占库存。提交后303跳转到凭证；结果不确定时保留原确认凭据重试。该实现用于当前单进程本机演示，多进程部署须先改为共享服务端清单存储。
-
-统一错误响应补充顶层 `request_id`，响应头含 `X-Request-ID`；请求日志使用 `bookstore.requests` logger记录时间、动作、脱敏主体、岗位、错误码、结果和耗时，避免记录原始URL、查询参数、请求体及凭据。
-
-当前实现员工登录、退出、本人身份查询，门店销售及本人单据，以及P2商品/供应商/报价、店长定价上下架、采购草稿至收货、注资资金查询和报损库存查询。预订、会员办理、退货及完整经营管理仍待后续开发。技术方案及信任边界见 [入口与权限方案](../docs/design/entry-permissions.md)，P2见[增量入口设计](../docs/design/p2-operations.md)和[90项完整验收](../db/results/week-7/p2-operations-20261102/README.md)。已有运行副本尚未升级，新库由runner自动部署。
-
-P2新增部署顺序：在`workspace-entry.sql`之后执行 `operations-entry.sql`，再执行基线和精确授权检查。沿用 `sqlcmd -S localhost -E -C -b -f 65001 -i db/operations-entry.sql -v DatabaseName=明确指定的Week7副本`；不要重新setup覆盖原配置或口令。完整验收使用 `.\run.ps1 test`；本机直接执行脚本若被执行策略拒绝，可使用项目Python等效入口 `.venv\Scripts\python.exe scripts/project_runner.py test`。受限环境无法连接SQL时须正常审批，不修改实例设置。
-
-## 推荐入口
-
-统一使用仓库根目录 `run.ps1`。本机已有配置，可直接执行 doctor、test、start，无需重新生成账号或口令。队友首次换电脑使用 setup，完整说明见[统一入口与跨电脑复现](../docs/design/unified-entry.md)。
-
-```powershell
-.\run.ps1 doctor
-.\run.ps1 test -Unit
-.\run.ps1 test
-.\run.ps1 start
-# 保持start运行，在另一终端：
-.\run.ps1 verify -Http
-```
-
-若系统禁止脚本执行，可用 `powershell -NoProfile -ExecutionPolicy Bypass -File .\run.ps1 doctor`，其他命令同理。完整测试自行准备独立库及临时登录，不需要手动加载运行配置或设置测试连接。
-
-下面第1—6节保留底层部署说明供排查；日常操作以上述入口为准，不必再逐条执行。
+下列第 1—8 节保留早期练习副本的手工部署与销售专项验收，供复查该批次。当前从仓库根目录使用统一入口。早期缺失的功能及旧库名仅适用于当时的开发截面。
 
 ## 1 准备依赖
 
@@ -92,7 +69,7 @@ ALTER ROLE bookstore_app_cashier ADD MEMBER bookstore_cashier_service;
 
 ## 4 初始化员工口令
 
-当前四名员工已初始化。打开本地 [demo-credentials.local.json](demo-credentials.local.json) 查看手机号、姓名、岗位及各自练习口令。该文件与 `settings.local.ps1` 均被 Git 忽略，且已将本机访问权限限制为当前用户和 SYSTEM。下面的命令用于后续主动重置或停用。
+该次部署初始化了四名员工。在对应设置目录打开本机生成的 `demo-credentials.local.json`，可查看演示账号及练习口令。该文件与 `settings.local.ps1` 均由 Git 忽略。下面的命令用于后续主动重置或停用。
 
 在单独的管理终端配置管理连接，使用交互工具输入口令；不要将口令写进命令参数或提交仓库。
 

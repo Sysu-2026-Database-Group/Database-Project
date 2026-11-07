@@ -1,0 +1,50 @@
+{
+  "purchase": [
+    {
+      "no": "W7P00000000000000001",
+      "status": "已收货",
+      "goods_id": 3,
+      "request_qty": 2,
+      "unit_cost": "5.00",
+      "received_quantity": 2
+    }
+  ],
+  "sale": [
+    {
+      "no": "W7S00000000000000001",
+      "paid_amount": "18.05",
+      "status": "已全退",
+      "goods_id": 3,
+      "quantity": 1,
+      "unit_price": "19.00",
+      "reservation_status": "已取"
+    }
+  ],
+  "return": [
+    {
+      "no": "W7R00000000000000001",
+      "refund_amount": "18.05",
+      "quantity": 1,
+      "recovered_quantity": 1
+    }
+  ],
+  "stock": [
+    {
+      "change_type": "购入",
+      "quantity": 2
+    },
+    {
+      "change_type": "卖出",
+      "quantity": -1
+    },
+    {
+      "change_type": "退货",
+      "quantity": 1
+    }
+  ],
+  "deleted_fixture": [
+    {
+      "remaining": 0
+    }
+  ]
+}

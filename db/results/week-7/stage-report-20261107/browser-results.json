@@ -1,0 +1,114 @@
+[
+  {
+    "id": "01-injection",
+    "route": "/management/finance",
+    "status": "PASS",
+    "http_status": 200,
+    "image": "01-injection.png"
+  },
+  {
+    "id": "02-purchase-received",
+    "route": "/purchases/11",
+    "status": "PASS",
+    "http_status": 200,
+    "image": "02-purchase-received.png"
+  },
+  {
+    "id": "03-member-card",
+    "route": "/members",
+    "status": "PASS",
+    "http_status": 200,
+    "image": "03-member-card.png"
+  },
+  {
+    "id": "04-reservation",
+    "route": "/shop/reservations/receipt",
+    "status": "PASS",
+    "http_status": 200,
+    "image": "04-reservation.png"
+  },
+  {
+    "id": "05-pickup-sale",
+    "route": "/sales/W7S00000000000000001",
+    "status": "PASS",
+    "http_status": 200,
+    "image": "05-pickup-sale.png"
+  },
+  {
+    "id": "06-refund",
+    "route": "/returns",
+    "status": "PASS",
+    "http_status": 200,
+    "image": "06-refund.png"
+  },
+  {
+    "id": "07-recovery",
+    "route": "/return-recovery",
+    "status": "PASS",
+    "http_status": 200,
+    "image": "07-recovery.png"
+  },
+  {
+    "id": "08-member-self",
+    "route": "/shop/member",
+    "status": "PASS",
+    "http_status": 200,
+    "image": "08-member-self.png"
+  },
+  {
+    "id": "09-cancellation",
+    "route": "/shop/reservations/receipt",
+    "status": "PASS",
+    "http_status": 200,
+    "image": "09-cancellation.png"
+  },
+  {
+    "id": "10-withdrawal",
+    "route": "/management/finance",
+    "status": "PASS",
+    "http_status": 200,
+    "image": "10-withdrawal.png"
+  },
+  {
+    "id": "11-reports",
+    "route": "/management/reports",
+    "status": "PASS",
+    "http_status": 200,
+    "image": "11-reports.png"
+  },
+  {
+    "id": "12-not-found",
+    "route": "/no-such-page",
+    "status": "PASS",
+    "http_status": 404,
+    "image": "12-not-found.png"
+  },
+  {
+    "id": "13-login-required",
+    "route": "/workspace",
+    "status": "PASS",
+    "http_status": 401,
+    "image": "13-login-required.png"
+  },
+  {
+    "id": "14-forbidden",
+    "route": "/management/goods",
+    "status": "PASS",
+    "http_status": 403,
+    "image": "14-forbidden.png"
+  },
+  {
+    "id": "15-goods-delete-eligibility",
+    "route": "/goods",
+    "status": "PASS",
+    "http_status": 200,
+    "image": "15-goods-delete-eligibility.png"
+  },
+  {
+    "id": "16-goods-deleted",
+    "route": "/goods",
+    "status": "PASS",
+    "http_status": 200,
+    "image": "16-goods-deleted.png"
+  }
+]

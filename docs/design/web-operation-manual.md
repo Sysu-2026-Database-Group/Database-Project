@@ -1,22 +1,33 @@
 # Web 全角色操作与验收手册
 
-2026-11-02。实现状态和真实证据以[台账](../tasks/task-web-development.md)为准；新增模型及事务口径见[增量模型](web-model-extension.md)。所有示例从仓库根目录执行，不覆盖已有配置或口令。
+实现状态和真实证据以[台账](../tasks/task-web-development.md)为准；新增模型及事务口径见[增量模型](web-model-extension.md)。所有示例从仓库根目录执行，不覆盖已有配置或口令。
 
 ## 环境与启动
 
-先决条件：Windows、本机 SQL Server、sqlcmd、ODBC17/18、Python3.12、requirements.txt。新机器按[统一入口](unified-entry.md)选择未占用的 Week7 库名和登录前缀执行 setup。已有环境先 doctor；不要再次 setup。`run.ps1 test` 自建基线及两个隔离测试库，临时身份结束后删除，测试库及备份保留供排查；运行配置和原经营数据不被测试覆盖。
+在 Windows 上准备本机 SQL Server、sqlcmd、ODBC Driver 17 或 18、Python 和 PowerShell。实例须支持项目使用的 SQL 登录。首次运行时，从示例复制本地配置，选择未占用的 Week7 库名、登录前缀和端口，以及独立设置目录。配置字段见[统一入口](unified-entry.md)。
 
-```powershell
-.\run.ps1 test
-.\run.ps1 doctor
-.\run.ps1 start
-# 另一终端
-.\run.ps1 verify -Http
-.\run.ps1 status
-.\run.ps1 stop
-```
+~~~powershell
+if (Test-Path -LiteralPath 'run.stage.local.json') { throw '请使用新的配置文件名' }
+Copy-Item -LiteralPath run.example.json -Destination run.stage.local.json
+~~~
 
-本机脚本策略限制时，test 可用 `.\.venv\Scripts\python.exe scripts/project_runner.py test`。doctor/start/verify 的 Python 等效命令须先点源加载对应 `settings.local.ps1`，以及存在时的 `settings.guest.local.ps1`、`settings.task.local.ps1`。配置、示范账号口令不能提交或粘贴到报告。
+编辑并保存 `run.stage.local.json`，将 `database`、`login_prefix`、`port` 和 `settings_directory` 改为本次环境的值，再执行以下命令。
+
+~~~powershell
+$config = 'run.stage.local.json'
+.\run.ps1 setup -ConfigFile $config
+.\run.ps1 doctor -ConfigFile $config
+.\run.ps1 test -ConfigFile $config
+.\run.ps1 start -Detach -ConfigFile $config
+.\run.ps1 verify -Http -ConfigFile $config
+# 使用配置端口打开本地 Web。演示完毕后停止并检查。
+.\run.ps1 stop -ConfigFile $config
+.\run.ps1 status -ConfigFile $config
+~~~
+
+已有环境从 doctor 开始。test 自建两个隔离测试库并在结束时清理临时身份，测试库及备份保留供排查。首次准备命令会生成本地演示凭据。
+
+若 PowerShell 执行策略拦截脚本，使用 `pwsh -NoProfile -ExecutionPolicy Bypass -File .\run.ps1 test -ConfigFile run.stage.local.json`，其他命令同理。配置和演示账号口令留在本机。
 
 增量安装顺序：application-baseline、entry-foundation、sale-entry、workspace-entry、operations-entry、shop-entry、reservation-entry、management-entry、member-entry、return-entry，最后两个 application 检查脚本。每个脚本用 `sqlcmd -S localhost -E -C -b -f 65001 -i db/脚本.sql -v DatabaseName=明确指定的Week7库`。完整隔离验收先通过再升级运行副本；不向已有库重装样例。新增缺失的 guest/task 身份使用 `python -m app.upgrade_guest --identity guest或task --database 明确库名 --login-prefix 原前缀 --directory 原配置目录`，仅新增独立配置，已有身份拒绝覆盖。
 
@@ -55,6 +66,7 @@
 | 现象 | 原因与处理 |
 |---|---|
 | `start` 后终端没有输出、也不返回 | `start` 默认前台常驻，Ctrl+C 停止；自动化场景使用 `.\run.ps1 start -Detach`，日志在 `.runner/start-<id>/web.log` 与 `expiry.log` |
+| SQL Server 报 911，找不到默认运行库 | 核对是否缺少默认配置 run.local.json，或使用了错误的库名。传入已完成 setup 的同一 -ConfigFile |
 | 端口已被占用 | 先 `.\run.ps1 stop`（会结束本配置记录的 Web 与任务），再重新 `start` |
 | `doctor` 报"缺少筛选唯一索引 X" | 目标库未装齐运行时对象；用新库名重新 `setup`，或按增量顺序补脚本 |
 | 403 | 岗位不足或 CSRF 失效；刷新页面后重试，不要跨角色直接访问管理页 |

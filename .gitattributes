@@ -1,0 +1,32 @@
+# The Week 6 audit verifies the original SHA-256 values, including CRLF.
+# Pin checkout bytes for the evidence and the sources listed in its manifest.
+db/results/week-6/acceptance/** text=auto eol=crlf
+db/accept-week-6.ps1 text eol=crlf
+db/checks/audit-week-6-artifacts.py text eol=crlf
+db/checks/legacy-snapshot.sql text eol=crlf
+db/checks/migration-check.sql text eol=crlf
+db/checks/verify.sql text eol=crlf
+db/constraint.sql text eol=crlf
+db/migration.sql text eol=crlf
+db/query.sql text eol=crlf
+db/regression.sql text eol=crlf
+db/role.sql text eol=crlf
+db/sample-data-week-6.sql text eol=crlf
+db/schema.sql text eol=crlf
+db/tests/auto-expiry-boundary-check.sql text eol=crlf
+db/tests/duplicate-cancel-boundary-check.sql text eol=crlf
+db/tests/inventory-query-week-6.sql text eol=crlf
+db/tests/member-validity-week-6.sql text eol=crlf
+db/tests/price-snapshot-week-6.sql text eol=crlf
+db/tests/regression-negative.sql text eol=crlf
+db/tests/sales-statistics-week-6.sql text eol=crlf
+db/tests/supplier-audit-week-6.sql text eol=crlf
+db/tests/supplier-cost-week-6.sql text eol=crlf
+db/tests/transaction-week-6.sql text eol=crlf
+db/tests/unique-index-week-6.sql text eol=crlf
+docs/design/design-normalization-v1.0.md text eol=crlf
+docs/design/sample-data-week-6-plan.md text eol=crlf
+docs/specs/spec-data-dictionary.md text eol=crlf
+docs/tasks/task-week-6.md text eol=crlf
+ER/er-diagram-v1.4.drawio text eol=crlf
+ER/er-diagram-v1.4.drawio.png -text

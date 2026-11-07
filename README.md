@@ -22,7 +22,7 @@ Copy-Item run.example.json run.local.json   # 至少改 database / login_prefix�
 
 队友接手请先阅读 **[项目交接单](docs/team-handoff.md)**：包含换电脑运行、账号配置、119项完整验收证据、演示顺序及剩余交付事项。
 
-当前应用已提供顾客预订/取消/会员自助、收银销售/取货/会员/退款、库管商品/采购/收货/报损/退货回收及店长经营管理。准备、启动和验收统一使用根目录 [`run.ps1`](run.ps1)：`setup` → `doctor` → `test` → `start`，另开终端执行 `verify -Http`，结束时 `stop`。日常操作见[全角色手册](docs/design/web-operation-manual.md)。跨机复现已由作者与团队第二人分别完成；人工签收仍待组员确认，状态见[台账](docs/tasks/task-web-development.md)。
+当前应用已提供顾客预订/取消/会员自助、收银销售/取货/会员/退款、库管商品/采购/收货/报损/退货回收及店长经营管理。准备、启动和验收统一使用根目录 [`run.ps1`](run.ps1)：`setup` → `doctor` → `test` → `start`，另开终端执行 `verify -Http`，结束时 `stop`。日常操作见[全角色手册](docs/design/web-operation-manual.md)。第二阶段设计、实现、测试及截图见[第 5—9 周实验报告](docs/reports/report-web-v1.0.md)和[本轮复验证据](db/results/week-7/stage-report-20261107/README.md)。跨机复现已有用户确认，执行信息和原始输出待补。个人签收见[分工表](docs/reports/team-division-v1.0.md)。
 
 项目目标不是做出一个网站，而是把「钱、书、人」在时间轴上的流动，
 落成 SQL Server 上一套**可审查、可对账、可回滚**的表、约束与事务。
@@ -163,6 +163,6 @@ Database-Project/
 
 课程原件对照与提交材料索引见 [docs/README.md](docs/README.md)。第7—9周应用已覆盖四类角色的完整流程；独立服务连接与六类运行身份已配置，真实 SQL 权限通过隔离库身份切换测试验证。第二周独立严格样例文件的旧引用缺失，已在该周验收记录标明待核实。
 
-ER 当前使用 [v1.4 用户调整修订图](ER/er-diagram-v1.4.drawio) 与[PNG](ER/er-diagram-v1.4.drawio.png)。保持原整体布局和19实体尺寸，仅微调4框对齐，修正文义、属性和局部连线；见[逐表审查与检查](ER/review-v1.4.md)。此前v1.4/v1.5重排稿已撤下，当前v1.4沿用用户调整的布局，人工验收已于2026-10-22由梁宇聪确认通过。
+第 5—6 周历史 ER 为 [v1.4 用户调整修订图](ER/er-diagram-v1.4.drawio) 与[PNG](ER/er-diagram-v1.4.drawio.png)。保持原整体布局和19实体尺寸，仅微调4框对齐，修正文义、属性和局部连线；见[逐表审查与检查](ER/review-v1.4.md)。此前v1.4/v1.5重排稿已撤下，当前v1.4沿用用户调整的布局，人工验收已于2026-10-22由梁宇聪确认通过。当前 Web 版另有[21 实体 ER 图源](ER/er-diagram-web-v1.0.drawio)与[PNG](ER/er-diagram-web-v1.0.png)。
 
 第六周验收口径已统一为允许AI自检，人工验收确认及当前技术证据见[正式验收记录](docs/reviews/review-week-6.md)。
