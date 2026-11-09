@@ -1,5 +1,5 @@
 {
-  "server": "localhost",
+  "server": "localhost\\SQLEXPRESS",
   "driver": "ODBC Driver 17 for SQL Server",
   "database": "ShiguangBookstoreWeek7EntryYourRun",
   "login_prefix": "bookstore_w7_yourrun",

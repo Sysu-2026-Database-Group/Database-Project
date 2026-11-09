@@ -8,21 +8,27 @@
 
 ```powershell
 python -m venv .venv
+.\.venv\Scripts\Activate.ps1
 .\.venv\Scripts\pip install -r requirements.txt
 
 Copy-Item run.example.json run.local.json   # 至少改 database / login_prefix；server、port 按需
 .\run.ps1 setup                             # 首次建库，只跑一次
+.\run.ps1 doctor                            # 6 项只读诊断
+.\run.ps1 test                              # 119 项；失败/错误/跳过均应为 0
 .\run.ps1 start -Detach                     # 后台启动；不加 -Detach 则前台常驻，Ctrl+C 停止
-.\run.ps1 verify -Http                      # 另开终端，应双 PASS
+.\run.ps1 verify -Http                      # 应 verify + verify-http 双 PASS
 ```
 
 - 访问：`http://127.0.0.1:<port>`（默认 5000）；顾客端无需登录。
-- 员工账号由 `setup` 生成，路径写在本机 `demo-credentials.local.json`（不提交）。
+- 员工账号由 `setup` 生成，路径写在本机 `<settings_directory>/demo-credentials.local.json`（不提交）。
 - 停止：`.\run.ps1 stop`；排障先看 `.runner/<最新运行>/summary.json` 与同目录 `*.log`。
+- 若 PowerShell 禁止运行脚本，先执行 `Set-ExecutionPolicy -Scope Process Bypass`（只影响当前窗口）。
 
 队友接手请先阅读 **[项目交接单](docs/team-handoff.md)**：包含换电脑运行、账号配置、119项完整验收证据、演示顺序及剩余交付事项。
 
-当前应用已提供顾客预订/取消/会员自助、收银销售/取货/会员/退款、库管商品/采购/收货/报损/退货回收及店长经营管理。准备、启动和验收统一使用根目录 [`run.ps1`](run.ps1)：`setup` → `doctor` → `test` → `start`，另开终端执行 `verify -Http`，结束时 `stop`。日常操作见[全角色手册](docs/design/web-operation-manual.md)。第二阶段设计、实现、测试及截图见[第 5—9 周实验报告](docs/reports/report-web-v1.0.md)和[本轮复验证据](db/results/week-7/stage-report-20261107/README.md)。跨机复现已有用户确认，执行信息和原始输出待补。个人签收见[分工表](docs/reports/team-division-v1.0.md)。
+当前应用已提供顾客预订/取消/会员自助、收银销售/取货/会员/退款、库管商品/采购/收货/报损/退货回收及店长经营管理。准备、启动和验收统一使用根目录 [`run.ps1`](run.ps1)：`setup` → `doctor` → `test` → `start -Detach` → `verify -Http`，结束时 `stop`。日常操作见[全角色手册](docs/design/web-operation-manual.md)。
+
+第 7—9 周 Web 的设计、实现、测试与截图见[Web 实验报告](docs/reports/report-web-v1.0.md)，正文截图在 `docs/reports/assets/web-v1.0/`，运行证据在[本轮复验记录](db/results/week-7/stage-report-20261107/README.md)；第 5—6 周设计与迁移见[第六周报告](docs/reports/report-week-6.md)与[设计说明](docs/design/design-notes-v1.0.md)。跨机复现已有用户确认，执行信息和原始输出待补。个人签收见[分工表](docs/reports/team-division-v1.0.md)。
 
 项目目标不是做出一个网站，而是把「钱、书、人」在时间轴上的流动，
 落成 SQL Server 上一套**可审查、可对账、可回滚**的表、约束与事务。
