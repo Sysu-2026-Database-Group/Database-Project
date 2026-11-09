@@ -22,7 +22,7 @@
 
 ## 最新证据
 
-2026-11-07 为[第二阶段实验报告](../reports/report-web-v1.0.md)新建隔离副本。setup 29 步、doctor 6 项、test 44 步和数据库／HTTP 双验证均通过。119 项用例中失败、错误、跳过均为 0。真实 Edge 16 个取证节点通过，订单及库存流水经 SQL 复核。Web 和到期任务已停止，详见[图证与运行摘要](../../db/results/week-7/stage-report-20261107/README.md)。
+2026-11-07 为[第 7—9 周 Web 实验报告](../reports/report-web-v1.0.md)新建隔离副本。setup 29 步、doctor 6 项、test 44 步和数据库／HTTP 双验证均通过。119 项用例中失败、错误、跳过均为 0。真实 Edge 16 个取证节点通过，订单及库存流水经 SQL 复核。Web 和到期任务已停止，详见[图证与运行摘要](../../db/results/week-7/stage-report-20261107/README.md)。
 
 [11 月 2 日历史交付](../../db/results/week-7/web-delivery-20261102/README.md)单独记录当时的 52 页 Edge 检查、11 个表单节点、运行生命周期及源码指纹。历史覆盖范围与本轮 16 个取证节点分别使用。
 

@@ -4,7 +4,8 @@
 
 | 想了解什么 | 维护位置 |
 |---|---|
-| 课程交付的设计、实现与实验结论 | [第 5—9 周实验报告](reports/report-web-v1.0.md) |
+| 第 7—9 周 Web 的设计、实现与实验结论 | [Web 实验报告](reports/report-web-v1.0.md) |
+| 第 5—6 周 ER、范式、迁移与回归 | [第六周报告](reports/report-week-6.md) · [第六周验收](reviews/review-week-6.md) · [设计说明](design/design-notes-v1.0.md) |
 | 首次建库、启动、四角色操作及排障 | [全角色手册](design/web-operation-manual.md) · [统一入口参数](design/unified-entry.md) |
 | Web 实际数据模型、角色与事务边界 | [Web 增量模型与事务设计](design/web-model-extension.md)，基础经营规则仍由 [specs](specs/) 维护 |
 | 最新技术验证、遗留边界与个人签收 | [实施台账](tasks/task-web-development.md) · [分工与签收](reports/team-division-v1.0.md) |

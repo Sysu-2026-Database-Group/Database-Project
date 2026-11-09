@@ -4,7 +4,7 @@
 
 ## 1. 接手时先核对
 
-当前交付包含 Web 应用和第 5—6 周历史材料。完整业务链、设计取舍及截图见[实验报告](reports/report-web-v1.0.md)。当前数据模型和权限见[增量设计](design/web-model-extension.md)，验收与未关闭事项见[实施台账](tasks/task-web-development.md)。
+当前交付包含 Web 应用和第 5—6 周历史材料。Web 完整业务链与运行截图见[Web 实验报告](reports/report-web-v1.0.md)；第 5—6 周 ER、范式、迁移与回归见[第六周报告](reports/report-week-6.md)与[设计说明](design/design-notes-v1.0.md)。当前数据模型和权限见[增量设计](design/web-model-extension.md)，验收与未关闭事项见[实施台账](tasks/task-web-development.md)。
 
 ## 2. 在本机复现
 
