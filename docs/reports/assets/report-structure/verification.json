@@ -1,0 +1,24 @@
+{
+  "pages": 73,
+  "previous_pages": 73,
+  "old_images_retained": 33,
+  "current_images": 33,
+  "chapter_order": [
+    "0 文档信息与摘要",
+    "1 项目总体介绍",
+    "2 第五周：ER 建模与原设计审查",
+    "3 第六周：函数依赖、规范化、迁移与验证",
+    "4 Web 设计",
+    "5 Web 实现",
+    "6 运行结果与截图",
+    "7 异常与测试结果",
+    "8 项目推进过程、困难与阶段复盘",
+    "9 实验总结",
+    "附录 A 证据与协作资料",
+    "附录 B 资料来源与原稿编排记录"
+  ],
+  "markdown_sha256": "9feaa609031766b39d6f5e0b5c93f14d30c701f874137991984055f5116f5e07",
+  "pdf_sha256": "3ae75c0d965c4f76461352789eb5d1e11165d9f7c627e7cfa4fb9e0bd943abf5",
+  "backup_markdown": "docs\\reports\\report-web-v1.0.md",
+  "backup_pdf": "docs\\reports\\report-web-v1.0.pdf"
+}
