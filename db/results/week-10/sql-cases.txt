@@ -15,7 +15,7 @@ W10-R02 {"goods_id":3,"name":"拾光帆布袋","stock_total":12,"reserved_qty":4
 test_case subtotal discount_rate discounted_amount discount_amount
 W10-D01 101.23 .95 96.17 5.06
 test_case actual
-W10-D02 1: no discount; 0, 1.01 and NULL: zero rows
+W10-D02 silver 0.95; no member 1.00; unknown member / NULL subtotal: zero rows
 test_case stock_before stock_after reserved_qty movements_added
 W10-I01 12 11 4 1
 test_case stock_before stock_after reserved_qty movements_added
@@ -36,6 +36,12 @@ test_case expected_error actual_error transaction_count transaction_state state_
 W10-I02-zero 52301 52301 0 0 1
 test_case expected_error actual_error transaction_count transaction_state state_unchanged
 W10-R03-id 52304 52304 0 0 1
+test_case expected_error actual_error transaction_count transaction_state state_unchanged
+W10-R03-id-neg 52304 52304 0 0 1
+test_case expected_error actual_error transaction_count transaction_state state_unchanged
+W10-R03-id-null 52304 52304 0 0 1
+test_case expected_error actual_error transaction_count transaction_state state_unchanged
+W10-R03-id-zero 52301 52301 0 0 1
 test_case expected_error actual_error transaction_count transaction_state state_unchanged
 W10-R03-negative 52301 52301 0 0 1
 test_case expected_error actual_error transaction_count transaction_state state_unchanged

@@ -28,13 +28,31 @@ AS RETURN
     GROUP BY g.id,g.name
 );
 GO
-CREATE OR ALTER FUNCTION dbo.fn_sale_discount(@subtotal decimal(10,2),@rate decimal(3,2))
+CREATE OR ALTER FUNCTION dbo.fn_member_discount_rate(@member_phone varchar(11))
+RETURNS decimal(3,2)
+AS
+BEGIN
+    IF @member_phone IS NULL RETURN CONVERT(decimal(3,2),1);
+    DECLARE @phone varchar(11)=@member_phone,@resolved varchar(11),@level nvarchar(10),@rate decimal(3,2),@expires date;
+    SELECT @resolved=member_phone FROM auth.member_contact WHERE contact_phone=@member_phone;
+    SET @phone=COALESCE(@resolved,@member_phone);
+    SELECT @level=card_level,@expires=expires_at
+      FROM dbo.member WITH(HOLDLOCK) WHERE phone=@phone;
+    IF @level IS NULL OR @expires IS NULL RETURN NULL;
+    IF @expires<CONVERT(date,SYSUTCDATETIME() AT TIME ZONE 'UTC' AT TIME ZONE 'China Standard Time')
+        RETURN CONVERT(decimal(3,2),1);
+    SELECT @rate=discount_rate FROM dbo.card_type WITH(HOLDLOCK) WHERE [level]=@level;
+    RETURN @rate;
+END;
+GO
+CREATE OR ALTER FUNCTION dbo.fn_sale_discount(@subtotal decimal(10,2),@member_phone varchar(11))
 RETURNS TABLE
 AS RETURN
 (
-    SELECT @rate AS discount_rate,a.discounted_amount,
-        CONVERT(decimal(10,2),@subtotal-a.discounted_amount) AS discount_amount
-    FROM (VALUES(CONVERT(decimal(10,2),ROUND(@subtotal*@rate,2)))) a(discounted_amount)
-    WHERE @subtotal>=0 AND @rate>0 AND @rate<=1
+    SELECT r.rate AS discount_rate,
+        CONVERT(decimal(10,2),ROUND(@subtotal*r.rate,2)) AS discounted_amount,
+        CONVERT(decimal(10,2),@subtotal-ROUND(@subtotal*r.rate,2)) AS discount_amount
+    FROM (SELECT dbo.fn_member_discount_rate(@member_phone) AS rate) r
+    WHERE @subtotal>=0 AND r.rate>0 AND r.rate<=1
 );
 GO

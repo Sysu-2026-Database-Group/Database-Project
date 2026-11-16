@@ -19,7 +19,9 @@ IF DB_NAME() NOT LIKE N'ShiguangBookstoreWeek7AuthTests%' OR @@TRANCOUNT<>0
 
 DECLARE @manager varchar(11)=(SELECT MIN(phone) FROM dbo.employee WHERE role=N'店长'),
         @inventory varchar(11)=(SELECT MIN(phone) FROM dbo.employee WHERE role=N'库管'),
-        @cashier varchar(11)=(SELECT MIN(phone) FROM dbo.employee WHERE role=N'收银员');
+        @cashier varchar(11)=(SELECT MIN(phone) FROM dbo.employee WHERE role=N'收银员'),
+        @silver varchar(11)=(SELECT MIN(phone) FROM dbo.member WHERE card_level=N'银卡' AND expires_at>=CONVERT(date,SYSUTCDATETIME())),
+        @gold varchar(11)=(SELECT MIN(phone) FROM dbo.member WHERE card_level=N'金卡' AND expires_at>=CONVERT(date,SYSUTCDATETIME()));
 DECLARE @stock_before int=(SELECT stock_total FROM dbo.goods WHERE id=3),
         @reserved_before int=(SELECT reserved_qty FROM dbo.goods WHERE id=3),
         @movement_before bigint=(SELECT COUNT_BIG(*) FROM dbo.stock_movement),
@@ -114,16 +116,20 @@ IF (SELECT COUNT(*) FROM @results WHERE JSON_VALUE(result_json,'$.suggested_quan
     THROW 53012,N'补货过程结果不一致或产生库存写入。',1;
 SELECT TOP(1) N'W10-R02' test_case,result_json FROM @results;
 
-IF NOT EXISTS(SELECT 1 FROM dbo.fn_sale_discount(101.23,0.95)
+IF ISNULL(dbo.fn_member_discount_rate(@silver),-1)<>0.95
+   OR ISNULL(dbo.fn_member_discount_rate(@gold),-1)<>0.90
+   OR ISNULL(dbo.fn_member_discount_rate(NULL),-1)<>1.00
+   OR dbo.fn_member_discount_rate('99999999999') IS NOT NULL
+    THROW 53013,N'会员折扣率函数错误。',1;
+IF NOT EXISTS(SELECT 1 FROM dbo.fn_sale_discount(101.23,@silver)
               WHERE discount_rate=0.95 AND discounted_amount=96.17 AND discount_amount=5.06)
-   OR NOT EXISTS(SELECT 1 FROM dbo.fn_sale_discount(101.23,1)
-                 WHERE discounted_amount=101.23 AND discount_amount=0)
-   OR EXISTS(SELECT 1 FROM dbo.fn_sale_discount(101.23,0)
-             UNION ALL SELECT 1 FROM dbo.fn_sale_discount(101.23,1.01)
-             UNION ALL SELECT 1 FROM dbo.fn_sale_discount(101.23,NULL))
-    THROW 53013,N'折扣函数舍入或非法折扣处理错误。',1;
-SELECT N'W10-D01' test_case,101.23 subtotal,d.* FROM dbo.fn_sale_discount(101.23,0.95) d;
-SELECT N'W10-D02' test_case,N'1: no discount; 0, 1.01 and NULL: zero rows' actual;
+   OR NOT EXISTS(SELECT 1 FROM dbo.fn_sale_discount(101.23,NULL)
+                 WHERE discount_rate=1.00 AND discounted_amount=101.23 AND discount_amount=0)
+   OR EXISTS(SELECT 1 FROM dbo.fn_sale_discount(101.23,'99999999999'))
+   OR EXISTS(SELECT 1 FROM dbo.fn_sale_discount(NULL,@silver))
+    THROW 53013,N'折扣函数舍入或会员折扣处理错误。',1;
+SELECT N'W10-D01' test_case,101.23 subtotal,d.* FROM dbo.fn_sale_discount(101.23,@silver) d;
+SELECT N'W10-D02' test_case,N'silver 0.95; no member 1.00; unknown member / NULL subtotal: zero rows' actual;
 
 DECLARE @key uniqueidentifier=NEWID(),@payload nvarchar(max)=N'{"id":3,"quantity":1,"note":"W10 SQL test"}';
 DELETE @results;
@@ -186,6 +192,9 @@ INSERT @cases VALUES
 ('W10-S04-null',NULL,NULL,NULL,'2098-06-02',NULL,53001),
 ('W10-S04-reversed',NULL,NULL,'2098-06-02','2098-06-01',NULL,53001),
 ('W10-R03-id',9223372036854775807,10,NULL,NULL,NULL,52304),
+('W10-R03-id-null',9223372036854775807,NULL,NULL,NULL,NULL,52304),
+('W10-R03-id-neg',9223372036854775807,-1,NULL,NULL,NULL,52304),
+('W10-R03-id-zero',0,10,NULL,NULL,NULL,52301),
 ('W10-R03-null',3,NULL,NULL,NULL,NULL,52301),
 ('W10-R03-negative',3,-1,NULL,NULL,NULL,52301),
 ('W10-I02-zero',NULL,NULL,NULL,NULL,N'{"id":3,"quantity":0,"note":"W10 negative"}',52301),

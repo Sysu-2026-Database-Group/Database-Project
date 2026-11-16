@@ -69,10 +69,7 @@ BEGIN
         IF @expires IS NULL THROW 52102,N'会员不存在；非会员请留空会员手机号。',1;
         -- 门店日期固定采用中国标准时间，不接受客户端传入成交日期。
         IF @expires>=CONVERT(date,SYSUTCDATETIME() AT TIME ZONE 'UTC' AT TIME ZONE 'China Standard Time')
-        BEGIN
             SET @active=1;
-            SELECT @rate=discount_rate FROM dbo.card_type WITH(HOLDLOCK) WHERE [level]=@card;
-        END
         ELSE SET @card=NULL;
     END;
     -- 所有请求按商品主码升序取更新锁，减少反向多商品请求的死锁风险。
@@ -96,7 +93,8 @@ BEGIN
     DECLARE @total decimal(20,2)=(SELECT SUM(CONVERT(decimal(20,2),unit_price)*quantity) FROM @lines);
     IF @total>99999999.99 THROW 52101,N'单笔金额超出支持范围。',1;
     DECLARE @subtotal decimal(10,2)=@total,@discounted decimal(10,2),@maximum int=0;
-    SELECT @discounted=discounted_amount FROM dbo.fn_sale_discount(@subtotal,@rate);
+    SELECT @rate=discount_rate,@discounted=discounted_amount
+      FROM dbo.fn_sale_discount(@subtotal,@member_phone);
     IF @discounted IS NULL THROW 52101,N'折扣参数不合法。',1;
     IF @active=1 AND @balance>0 SET @maximum=CASE WHEN @balance<FLOOR(@discounted*20) THEN @balance ELSE CONVERT(int,FLOOR(@discounted*20)) END;
     IF @used_points>@maximum THROW 52105,N'积分抵扣超过本次上限，请减少使用积分。',1;

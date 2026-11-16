@@ -58,8 +58,12 @@ AS
 BEGIN
     SET NOCOUNT ON;
     EXEC api.usp_require_employee @employee_phone,@session_version,N'库管';
-    IF @goods_id IS NULL OR @goods_id<=0 OR @target IS NULL OR @target<0
-        THROW 52301,N'请提供商品编号和非负的目标可售量。',1;
+    IF @goods_id IS NULL OR @goods_id<=0
+        THROW 52301,N'请提供有效的商品编号。',1;
+    IF NOT EXISTS(SELECT 1 FROM dbo.goods WITH(HOLDLOCK) WHERE id=@goods_id)
+        THROW 52304,N'商品不存在。',1;
+    IF @target IS NULL OR @target<0
+        THROW 52301,N'请提供非负的目标可售量。',1;
     DECLARE @result nvarchar(max);
     SELECT @result=(SELECT id AS goods_id,name,stock_total,reserved_qty,
         stock_total-reserved_qty AS available,@target AS target,

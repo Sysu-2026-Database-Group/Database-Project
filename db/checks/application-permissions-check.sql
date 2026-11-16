@@ -85,6 +85,7 @@ IF OBJECT_ID(N'auth.employee_credential',N'U') IS NULL OR OBJECT_ID(N'api.sale_r
     OR OBJECT_ID(N'api.usp_adjust_stock',N'P') IS NULL
     OR OBJECT_ID(N'dbo.fn_replenishment_quantity',N'FN') IS NULL
     OR OBJECT_ID(N'dbo.fn_sales_by_goods',N'IF') IS NULL
+    OR OBJECT_ID(N'dbo.fn_member_discount_rate',N'FN') IS NULL
     OR OBJECT_ID(N'dbo.fn_sale_discount',N'IF') IS NULL
     OR OBJECT_ID(N'api.reservation_request',N'U') IS NULL
     OR OBJECT_ID(N'api.reservation_cancellation',N'U') IS NULL

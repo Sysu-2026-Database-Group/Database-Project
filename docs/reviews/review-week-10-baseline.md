@@ -39,7 +39,7 @@
 | 销售统计 | 店长经营报表增加销售统计入口。`GET /management/sales-statistics` → `DAO.sales_statistics()` → `api.usp_sales_statistics` → `dbo.fn_sales_by_goods`。原经营收支查询继续走 `usp_management_read('reports')`。 [Web](../../app/management.py#L24) · [SQL](../../db/procedure.sql) |
 | 补货建议 | 库管采购页增加按商品查询入口。`GET /purchases/replenishment` → `DAO.replenishment()` → `api.usp_replenishment` → `dbo.fn_replenishment_quantity`。目标可售量由库管输入，结果供填写采购草稿。 [Web](../../app/routes/operations.py#L75) · [函数](../../db/function.sql) |
 | 库存调整 | 采购收货和报损通过 `usp_operation_write`，结算和取货通过 `usp_sale_commit`，退货回收通过 `usp_return_recover`，都调用内部 `usp_adjust_stock`。调用方保留单据校验、事务及请求去重。内部过程按流水类型核验库管或收银员身份，应用账号通过原业务入口操作。 [Web](../../app/routes/operations.py) · [现有写入入口](../../db/operations-entry.sql) · [共用过程](../../db/procedure.sql) |
-| 订单完成和折扣 | 原销售、取货预览和提交继续调用 `usp_sale_calculate`。原过程内联的折后金额计算改为调用 `dbo.fn_sale_discount`，沿用现有的会员有效期、锁、积分规则和成交快照。 [成交过程](../../db/sale-entry.sql) · [函数](../../db/function.sql) |
+| 订单完成和折扣 | 原销售、取货预览和提交继续调用 `usp_sale_calculate`。`dbo.fn_member_discount_rate(member_phone)` 先按会员卡档/有效期取得倍率，`dbo.fn_sale_discount(subtotal, member_phone)` 再计算折后金额；沿用现有的会员有效期、锁、积分规则和成交快照。 [成交过程](../../db/sale-entry.sql) · [函数](../../db/function.sql) |
 
 统一安装入口先安装函数和过程，再安装依赖的销售与库存操作入口。已有完整 Web v1.0 库的增量顺序见[应用使用说明](../../app/README.md)。权限检查验证店长和库管各自的过程权限，库存共用过程由既有业务过程调用，应用角色无直接执行权限。
 
