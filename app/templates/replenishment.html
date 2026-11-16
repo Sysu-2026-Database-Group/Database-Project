@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block title %}补货建议{% endblock %}
+{% block content %}
+<h1>补货建议</h1>
+<form method="get">
+  <label>商品编号<input type="number" name="goods_id" min="1" value="{{ request.args.get('goods_id','') }}" required></label>
+  <label>目标可售量<input type="number" name="target" min="0" max="2147483647" value="{{ request.args.get('target','') }}" required></label>
+  <button>查询建议量</button>
+</form>
+{% if result %}
+<section class="panel">
+  <h2>#{{ result.goods_id }} {{ result.name }}</h2>
+  <p>在架 {{ result.stock_total }} 件，已订 {{ result.reserved_qty }} 件，当前可售 {{ result.available }} 件。</p>
+  <p>目标可售 {{ result.target }} 件，建议补货 {{ result.suggested_quantity }} 件。</p>
+</section>
+{% endif %}
+<a href="/purchases">返回采购申请</a>
+{% endblock %}

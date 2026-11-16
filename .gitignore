@@ -9,6 +9,7 @@ Thumbs.db
 .vscode/
 .idea/
 *.swp
+~$*.docx
 
 # 课堂练习（本地临时练习，不纳入版本控制）
 课堂练习/

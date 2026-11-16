@@ -171,8 +171,7 @@ BEGIN
         IF @key IS NULL THROW 52801,N'Request required.',1;
         SELECT @goods=s.goods_id,@qty=i.quantity FROM dbo.goods_return_item i WITH(UPDLOCK,HOLDLOCK) JOIN dbo.sale_item s ON s.id=i.sale_item_id WHERE i.id=@item;
         IF @goods IS NULL OR EXISTS(SELECT 1 FROM dbo.stock_movement WHERE return_item_id=@item) THROW 52802,N'Return missing or already recovered.',1;
-        UPDATE dbo.goods SET stock_total=stock_total+@qty WHERE id=@goods;
-        INSERT dbo.stock_movement(goods_id,change_type,quantity,changed_by,return_item_id) VALUES(@goods,N'退货',@qty,@employee_phone,@item);
+        EXEC api.usp_adjust_stock @goods,@qty,N'退货',@employee_phone,@session_version,@source_id=@item;
         SET @result=(SELECT @item return_item_id,@goods goods_id,@qty quantity FOR JSON PATH,WITHOUT_ARRAY_WRAPPER);
         INSERT api.operation_request(employee_phone,request_key,action,payload_hash,result_json) VALUES(@employee_phone,@key,'return_recover',@hash,@result);
         COMMIT; SELECT @result result_json;

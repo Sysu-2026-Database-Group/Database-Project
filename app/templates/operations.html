@@ -26,6 +26,7 @@
 {% elif kind == 'quotes' and actor.role == '库管' %}
 <section class="panel"><h2>维护当前报价</h2><p>先在商品和供应商列表查询编号。采购草稿中的批次进价独立保存，不随报价更新而变化。</p><form method="post" action="/operations/quote_save">{{ hidden() }}<label>供应商编号<input name="supplier_id" type="number" min="1" required></label><label>商品编号<input name="goods_id" type="number" min="1" required></label><label>报价（元）<input name="amount" inputmode="decimal" required></label><button>保存报价</button></form></section>
 {% elif kind == 'purchases' and actor.role == '库管' %}
+<p><a href="{{ url_for('operations.replenishment') }}">查询补货建议</a></p>
 <section class="panel"><h2>新建采购草稿</h2><p>草稿建立后可增改明细，数量置0移除行；一张单只向一家供应商采购。</p><form method="post" action="/operations/draft">{{ hidden() }}<label>供应商编号<input name="supplier_id" type="number" min="1" required></label><button>建立空草稿</button></form></section>
 {% elif kind == 'stock' %}
 <section class="panel"><form method="get"><label>按商品编号查询<input name="goods_id" type="number" min="1" value="{{ request.args.get('goods_id', '') }}"></label><label>变动原因<select name="reason"><option value="">全部</option>{% for reason in ["购入","卖出","退货","损坏"] %}<option {% if request.args.get("reason")==reason %}selected{% endif %}>{{ reason }}</option>{% endfor %}</select></label><label>从<input type="date" name="from_date" value="{{ request.args.get('from_date','') }}"></label><label>至<input type="date" name="to_date" value="{{ request.args.get('to_date','') }}"></label><button>查询流水</button></form></section>

@@ -1,0 +1,46 @@
+已将数据库上下文更改为 "ShiguangBookstoreWeek7AuthTests20261116084710b683a3"。
+test_case inputs orders units gross_amount paid_amount
+W10-S01 2098-06-01..2098-06-02; repeated; TVF comparison 2 4 45.00 42.25
+test_case goods_id sold_quantity gross_sales_amount order_count
+W10-S02 3 3 30.00 2
+W10-S02 4 1 15.00 1
+test_case actual_empty_report
+W10-S03 {"order_count":0,"paid_amount":0.00,"sold_quantity":0,"gross_sales_amount":0.00,"records":[]}
+test_case target expected actual
+W10-R01 10 2 2
+W10-R01 8 0 0
+W10-R01 7 0 0
+test_case result_json
+W10-R02 {"goods_id":3,"name":"拾光帆布袋","stock_total":12,"reserved_qty":4,"available":8,"target":10,"suggested_quantity":2}
+test_case subtotal discount_rate discounted_amount discount_amount
+W10-D01 101.23 .95 96.17 5.06
+test_case actual
+W10-D02 1: no discount; 0, 1.01 and NULL: zero rows
+test_case stock_before stock_after reserved_qty movements_added
+W10-I01 12 11 4 1
+test_case stock_before stock_after reserved_qty movements_added
+W10-I03 11 9 4 1
+test_case actual_error transaction_count transaction_state state_unchanged
+W10-I04 52302 1 1 1
+test_case actual
+W10-Z01 PASS: fixture, movements, credentials and role principals rolled back
+test_case expected_error actual_error transaction_count transaction_state state_unchanged
+W10-I02-id 52302 52302 0 0 1
+test_case expected_error actual_error transaction_count transaction_state state_unchanged
+W10-I02-negative 52301 52301 0 0 1
+test_case expected_error actual_error transaction_count transaction_state state_unchanged
+W10-I02-reason 52301 52301 0 0 1
+test_case expected_error actual_error transaction_count transaction_state state_unchanged
+W10-I02-stock 52302 52302 0 0 1
+test_case expected_error actual_error transaction_count transaction_state state_unchanged
+W10-I02-zero 52301 52301 0 0 1
+test_case expected_error actual_error transaction_count transaction_state state_unchanged
+W10-R03-id 52304 52304 0 0 1
+test_case expected_error actual_error transaction_count transaction_state state_unchanged
+W10-R03-negative 52301 52301 0 0 1
+test_case expected_error actual_error transaction_count transaction_state state_unchanged
+W10-R03-null 52301 52301 0 0 1
+test_case expected_error actual_error transaction_count transaction_state state_unchanged
+W10-S04-null 53001 53001 0 0 1
+test_case expected_error actual_error transaction_count transaction_state state_unchanged
+W10-S04-reversed 53001 53001 0 0 1

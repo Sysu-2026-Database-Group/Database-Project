@@ -28,12 +28,14 @@ python -m venv .venv
 ```powershell
 sqlcmd -S localhost -E -C -b -f 65001 -i db/prepare-entry-test.sql -v DatabaseName=ShiguangBookstoreWeek7EntryYourRun
 sqlcmd -S localhost -E -C -b -f 65001 -i db/entry-foundation.sql -v DatabaseName=ShiguangBookstoreWeek7EntryYourRun
+sqlcmd -S localhost -E -C -b -f 65001 -i db/function.sql -v DatabaseName=ShiguangBookstoreWeek7EntryYourRun
+sqlcmd -S localhost -E -C -b -f 65001 -i db/procedure.sql -v DatabaseName=ShiguangBookstoreWeek7EntryYourRun
 sqlcmd -S localhost -E -C -b -f 65001 -i db/sale-entry.sql -v DatabaseName=ShiguangBookstoreWeek7EntryYourRun
 ```
 
-这些 SQL 文件使用 UTF-8 编码，`-f 65001` 必须保留。本机 `sqlcmd` 的默认代码页不能正确读取这些文件中的中文注释，可能漏执行后续语句，表现为准备副本仅显示切换到 `master`，部署时再报 `api` 架构不存在。准备副本成功时应看到备份、校验、恢复消息及目标库名称；后两步应分别看到 `entry-foundation.sql PASS`、`sale-entry.sql PASS`。当前本机副本已完成全部部署，不必重建。
+这些 SQL 文件使用 UTF-8 编码，`-f 65001` 必须保留。准备副本成功时应看到备份、校验、恢复消息及目标库名称，安装员工入口和销售入口时分别看到 `entry-foundation.sql PASS` 和 `sale-entry.sql PASS`。其他角色入口的完整安装顺序见[全角色手册](../docs/design/web-operation-manual.md)。
 
-后两条部署脚本可以在该副本上重复执行，不重新装载样例或重置凭据。登录基础新增1张技术表，销售再新增1张请求技术表；全部部署后为22表/52外码。不要对第七周副本执行第六周固定截面验收并期待其表数仍为20。
+入口与第 10 周 SQL 脚本可按上述顺序在同一副本重复执行，无需重装样例或重置凭据。已有完整 Web v1.0 的副本依次执行 `function.sql`、`procedure.sql`、`sale-entry.sql`、`operations-entry.sql`、`return-entry.sql`，再执行 `checks/application-permissions-check.sql`。第 10 周页面入口为店长经营报表中的销售统计和库管采购页中的补货建议。库存变动通过原有业务入口执行：库管收货、退货回收和报损，收银员完成销售或预订取货。
 
 ## 3 配置运行身份
 

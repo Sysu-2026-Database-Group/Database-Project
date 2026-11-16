@@ -72,6 +72,21 @@ def purchase(purchase_id):
     return render_template('purchase.html', actor=actor, purchase=value, request_key=str(uuid4()), labels=LABELS)
 
 
+@bp.get('/purchases/replenishment')
+def replenishment():
+    actor = actor_for('replenishment')
+    goods_id = request.args.get('goods_id')
+    target = request.args.get('target')
+    result = None
+    if goods_id is not None or target is not None:
+        product = form_integer(goods_id)
+        expected = form_integer(target)
+        if product > 9223372036854775807 or expected > 2147483647:
+            invalid()
+        result = dao().replenishment(actor, product, expected)
+    return render_template('replenishment.html', result=result)
+
+
 def form_integer(value, optional=False):
     if optional and not value:
         return None

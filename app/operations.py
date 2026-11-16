@@ -9,7 +9,8 @@ from itsdangerous import BadData, URLSafeSerializer
 from .errors import AppError
 
 MANAGER = {'inject', 'withdraw', 'price', 'approve', 'pay', 'finance'}
-INVENTORY = {'goods_save', 'supplier_save', 'quote_save', 'draft', 'submit', 'receive', 'damage', 'goods_delete'}
+INVENTORY = {'goods_save', 'supplier_save', 'quote_save', 'draft', 'submit', 'receive', 'damage',
+             'goods_delete', 'replenishment'}
 SHARED = {'goods', 'suppliers', 'quotes', 'purchases', 'purchase', 'stock', 'cancel'}
 WRITES = MANAGER | INVENTORY | {'cancel'}
 LABELS = {'withdraw': '店长提现', 'inject': '店长注资', 'price': '定价与上下架', 'approve': '审批采购', 'pay': '采购付款',

@@ -2,6 +2,7 @@
 import logging
 import json
 from contextlib import contextmanager
+from decimal import Decimal
 
 import pyodbc
 
@@ -69,6 +70,7 @@ class EmployeeDAO:
                 if f'({number})' in message:
                     raise AppError(*details) from exc
             operation_errors = {
+                53001: ('invalid_date', '请填写有效的起止日期，起始日期不能晚于结束日期。', 400),
                 52301: ('invalid_operation', '请检查商品、供应商、数量、金额及必填资料。', 400),
                 52302: ('operation_conflict', '当前状态不允许此操作，或可售量不足。请刷新单据核对。', 409),
                 52303: ('request_conflict', '该请求标识已用于其他内容。', 409),
@@ -220,6 +222,16 @@ class EmployeeDAO:
         row = self._one('cashier', 'EXEC api.usp_pickup_create ?,?,?,?,?,?,?,?',
                         (actor['phone'],actor['session_version'],key,phone,code,payload['member_phone'],payload['used_points'],quote))
         return json.loads(row['result_json'])
+
+    def replenishment(self, actor, goods_id, target):
+        row = self._one('inventory', 'EXEC api.usp_replenishment ?,?,?,?',
+                        (actor['phone'], actor['session_version'], goods_id, target))
+        return json.loads(row['result_json'])
+
+    def sales_statistics(self, actor, from_date, to_date):
+        row = self._one('manager', 'EXEC api.usp_sales_statistics ?,?,?,?',
+                        (actor['phone'], actor['session_version'], from_date, to_date))
+        return json.loads(row['result_json'], parse_float=Decimal)
 
     def management_read(self, actor, action, page=1, page_size=20, from_date=None, to_date=None):
         return json.loads(self._one('manager','EXEC api.usp_management_read ?,?,?,?,?,?,?',

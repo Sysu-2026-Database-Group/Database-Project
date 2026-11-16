@@ -287,15 +287,13 @@ BEGIN
             BEGIN
                 IF @status<>N'已审批' OR NOT EXISTS(SELECT 1 FROM dbo.fund_flow WHERE request_id=@id AND reason_type=N'采购付款')
                     THROW 52302,N'Only paid approved purchases can receive.',1;
-                DECLARE @receive_goods bigint,@qty int,@current int;
+                DECLARE @receive_goods bigint,@qty int;
                 DECLARE goods_cursor CURSOR LOCAL FAST_FORWARD FOR SELECT goods_id,request_qty FROM dbo.purchase_request_item WHERE request_id=@id ORDER BY goods_id;
                 OPEN goods_cursor;
                 FETCH NEXT FROM goods_cursor INTO @receive_goods,@qty;
                 WHILE @@FETCH_STATUS=0
                 BEGIN
-                    SELECT @current=stock_total FROM dbo.goods WITH(UPDLOCK,HOLDLOCK) WHERE id=@receive_goods;
-                    UPDATE dbo.goods SET stock_total=stock_total+@qty WHERE id=@receive_goods;
-                    INSERT dbo.stock_movement(goods_id,change_type,quantity,changed_by,request_id) VALUES(@receive_goods,N'购入',@qty,@employee_phone,@id);
+                    EXEC api.usp_adjust_stock @receive_goods,@qty,N'购入',@employee_phone,@session_version,@source_id=@id;
                     FETCH NEXT FROM goods_cursor INTO @receive_goods,@qty;
                 END;
                 CLOSE goods_cursor;
@@ -305,11 +303,11 @@ BEGIN
         END
         ELSE IF @action='damage'
         BEGIN
-            DECLARE @loss int=TRY_CONVERT(int,JSON_VALUE(@payload,'$.quantity')),@note nvarchar(200)=JSON_VALUE(@payload,'$.note');
-            IF @loss IS NULL OR @loss NOT BETWEEN 1 AND 1000 OR NULLIF(LTRIM(RTRIM(@note)),'') IS NULL THROW 52301,N'Quantity and reason required.',1;
-            UPDATE dbo.goods WITH(UPDLOCK,HOLDLOCK) SET stock_total=stock_total-@loss WHERE id=@id AND stock_total-reserved_qty>=@loss;
-            IF @@ROWCOUNT=0 THROW 52302,N'Insufficient available stock.',1;
-            INSERT dbo.stock_movement(goods_id,change_type,quantity,note,changed_by) VALUES(@id,N'损坏',-@loss,@note,@employee_phone);
+            DECLARE @delta int=TRY_CONVERT(int,JSON_VALUE(@payload,'$.quantity')),
+                @adjust_reason nvarchar(max)=JSON_VALUE(@payload,'$.note');
+            IF @delta IS NULL OR @delta NOT BETWEEN 1 AND 1000 THROW 52301,N'Invalid damage quantity.',1;
+            SET @delta=-@delta;
+            EXEC api.usp_adjust_stock @id,@delta,N'损坏',@employee_phone,@session_version,@reason=@adjust_reason;
         END
         ELSE IF @action='goods_delete'
         BEGIN

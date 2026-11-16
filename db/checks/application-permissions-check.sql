@@ -30,6 +30,8 @@ INSERT @expected VALUES
     ('bookstore_app_task','usp_reservations_expire'),
     ('bookstore_app_manager','usp_management_read'),
     ('bookstore_app_manager','usp_management_write'),
+    ('bookstore_app_manager','usp_sales_statistics'),
+    ('bookstore_app_inventory','usp_replenishment'),
     ('bookstore_app_cashier','usp_member_read'),
     ('bookstore_app_cashier','usp_member_quote'),
     ('bookstore_app_cashier','usp_member_create'),
@@ -80,6 +82,10 @@ IF OBJECT_ID(N'auth.employee_credential',N'U') IS NULL OR OBJECT_ID(N'api.sale_r
     OR OBJECT_ID(N'api.purchase_number',N'SO') IS NULL
     OR OBJECT_ID(N'api.usp_operation_actor',N'P') IS NULL
     OR OBJECT_ID(N'api.usp_sale_commit',N'P') IS NULL
+    OR OBJECT_ID(N'api.usp_adjust_stock',N'P') IS NULL
+    OR OBJECT_ID(N'dbo.fn_replenishment_quantity',N'FN') IS NULL
+    OR OBJECT_ID(N'dbo.fn_sales_by_goods',N'IF') IS NULL
+    OR OBJECT_ID(N'dbo.fn_sale_discount',N'IF') IS NULL
     OR OBJECT_ID(N'api.reservation_request',N'U') IS NULL
     OR OBJECT_ID(N'api.reservation_cancellation',N'U') IS NULL
     OR OBJECT_ID(N'api.usp_reservation_release',N'P') IS NULL

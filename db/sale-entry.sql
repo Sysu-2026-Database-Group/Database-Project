@@ -95,7 +95,9 @@ BEGIN
     CLOSE goods_to_lock; DEALLOCATE goods_to_lock;
     DECLARE @total decimal(20,2)=(SELECT SUM(CONVERT(decimal(20,2),unit_price)*quantity) FROM @lines);
     IF @total>99999999.99 THROW 52101,N'单笔金额超出支持范围。',1;
-    DECLARE @subtotal decimal(10,2)=@total,@discounted decimal(10,2)=ROUND(@total*@rate,2),@maximum int=0;
+    DECLARE @subtotal decimal(10,2)=@total,@discounted decimal(10,2),@maximum int=0;
+    SELECT @discounted=discounted_amount FROM dbo.fn_sale_discount(@subtotal,@rate);
+    IF @discounted IS NULL THROW 52101,N'折扣参数不合法。',1;
     IF @active=1 AND @balance>0 SET @maximum=CASE WHEN @balance<FLOOR(@discounted*20) THEN @balance ELSE CONVERT(int,FLOOR(@discounted*20)) END;
     IF @used_points>@maximum THROW 52105,N'积分抵扣超过本次上限，请减少使用积分。',1;
     DECLARE @deduction decimal(10,2)=CONVERT(decimal(10,2),@used_points/100.0),@paid decimal(10,2),@earned int=0;
@@ -203,11 +205,20 @@ BEGIN
         SET @sale=SCOPE_IDENTITY();
         INSERT dbo.sale_item(sale_id,goods_id,quantity,unit_price)
         SELECT @sale,goods_id,quantity,unit_price FROM OPENJSON(@quote,'$.items') WITH(goods_id bigint,quantity int,unit_price decimal(10,2));
-        UPDATE g SET stock_total=stock_total-i.quantity,reserved_qty=reserved_qty-CASE WHEN @reservation_id IS NULL THEN 0 ELSE i.quantity END FROM dbo.goods g
-        JOIN dbo.sale_item i ON i.goods_id=g.id AND i.sale_id=@sale;
+        DECLARE @stock_goods bigint,@stock_delta int;
+        DECLARE sale_goods CURSOR LOCAL FAST_FORWARD FOR
+            SELECT goods_id,-quantity FROM dbo.sale_item WHERE sale_id=@sale ORDER BY goods_id;
+        OPEN sale_goods;
+        FETCH NEXT FROM sale_goods INTO @stock_goods,@stock_delta;
+        WHILE @@FETCH_STATUS=0
+        BEGIN
+            EXEC api.usp_adjust_stock @stock_goods,@stock_delta,N'卖出',@employee_phone,@session_version,
+                @source_id=@sale,@changed_at=@now;
+            FETCH NEXT FROM sale_goods INTO @stock_goods,@stock_delta;
+        END;
+        CLOSE sale_goods;
+        DEALLOCATE sale_goods;
         IF @reservation_id IS NOT NULL UPDATE dbo.reservation SET status=N'已取' WHERE id=@reservation_id;
-        INSERT dbo.stock_movement(goods_id,change_type,quantity,changed_by,changed_at,sale_id)
-        SELECT goods_id,N'卖出',-quantity,@employee_phone,@now,@sale FROM dbo.sale_item WHERE sale_id=@sale;
         IF @used_points>0
             INSERT dbo.point_movement(member_phone,change_type,points,sale_id,changed_by,changed_at)
             VALUES(@member_phone,N'抵扣使用',-@used_points,@sale,@employee_phone,@now);

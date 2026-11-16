@@ -144,6 +144,12 @@ class OperationsDatabaseTests(unittest.TestCase):
         self.assert_sql_denied('cashier', "EXEC api.usp_operation_read '13800000003',1,'goods'")
         self.assert_sql_denied('inventory', "EXEC api.usp_operation_read '13800000002',1,'finance'", expected=52003)
         self.assert_sql_denied('inventory', 'SELECT * FROM api.operation_request')
+        self.assert_sql_denied('inventory', "EXEC api.usp_sales_statistics '13800000002',1,'2000-01-01','2000-01-02'")
+        self.assert_sql_denied('cashier', "EXEC api.usp_sales_statistics '13800000003',1,'2000-01-01','2000-01-02'")
+        self.assert_sql_denied('manager', "EXEC api.usp_replenishment '13800000001',1,3,10")
+        self.assert_sql_denied('cashier', "EXEC api.usp_replenishment '13800000003',1,3,10")
+        for role in ('manager', 'cashier', 'inventory'):
+            self.assert_sql_denied(role, "EXEC api.usp_adjust_stock 3,-1,N'损坏','13800000002',1,@reason=N'测试'")
         # Actor check precedes any domain writes; this rejection rolls back fixture DDL.
         self.assert_sql_denied('manager', "EXEC api.usp_operation_write '13800000001',1,'receive','00000000-0000-0000-0000-000000000001',N'{}'", expected=52003)
 
@@ -204,6 +210,47 @@ class OperationsDatabaseTests(unittest.TestCase):
         with self.assertRaises(AppError) as caught:
             self.write('damage', dict(id=3, quantity=1, note='不可损坏预订商品'))
         self.assertEqual(caught.exception.code, 'operation_conflict')
+
+    def test_replenishment_and_damage_use_sql_inventory(self):
+        self.connection.cursor().execute('UPDATE dbo.goods SET stock_total=12,reserved_qty=4 WHERE id=3')
+        self.login(self.inventory['phone'])
+        query = '/purchases/replenishment?goods_id=3&target='
+        self.assertIn('建议补货 2 件', self.client.get(query + '10').text)
+        self.assertIn('建议补货 0 件', self.client.get(query + '8').text)
+        self.assertEqual(self.client.get(query.replace('=3', '=9223372036854775807') + '10').status_code, 404)
+        with self.client.session_transaction() as stored:
+            csrf = stored['csrf_token']
+        adjustment = dict(csrf_token=csrf, request_key=str(uuid4()), id='3', quantity='1', note='包装破损')
+        self.assertNotIn('人工调整', self.client.get('/inventory').text)
+        self.assertEqual(self.client.post('/operations/adjust_stock', data=adjustment).status_code, 403)
+        for _ in range(2):
+            self.assertEqual(self.client.post('/operations/damage', data=adjustment).status_code, 303)
+        self.assertEqual(self.scalar('SELECT stock_total FROM dbo.goods WHERE id=3'), 11)
+        self.assertEqual(self.scalar("SELECT COUNT(*) FROM dbo.stock_movement WHERE change_type=N'损坏' AND note=N'包装破损'"), 1)
+        adjustment.update(request_key=str(uuid4()), quantity='8', note='预订保护')
+        self.assertEqual(self.client.post('/operations/damage', data=adjustment).status_code, 409)
+        self.assertEqual(self.scalar("SELECT COUNT(*) FROM dbo.stock_movement WHERE note=N'预订保护'"), 0)
+
+    def test_sales_statistics_page_and_sql_date_contract(self):
+        self.login(self.inventory['phone'])
+        page = '/management/sales-statistics'
+        self.assertEqual(self.client.get(page).status_code, 403)
+        self.login(self.manager['phone'])
+        self.assertEqual(self.client.get('/purchases/replenishment?goods_id=3&target=10').status_code, 403)
+        date_of_sale = self.scalar('SELECT CONVERT(date,MIN(sold_at)) FROM dbo.sale').isoformat()
+        query = f'?from_date={date_of_sale}&to_date={date_of_sale}'
+        count = self.scalar('SELECT COUNT(*) FROM dbo.sale WHERE CONVERT(date,sold_at)=?', date_of_sale)
+        response = self.client.get(page + query)
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(f'订单 {count} 笔', response.text)
+        empty = self.client.get(page + '?from_date=1900-01-01&to_date=1900-01-01')
+        self.assertIn('该日期范围内没有销售', empty.text)
+        self.assertEqual(self.client.get(page + '?from_date=2099-01-01&to_date=2000-01-01').status_code, 400)
+        self.assertEqual(self.client.get(page + '?from_date=2099-01-01').status_code, 400)
+        self.assertEqual(self.client.get(page + '?from_date=2099-02-30&to_date=2099-03-01').status_code, 400)
+        self.login('13800000003')
+        self.assertEqual(self.client.get(page).status_code, 403)
+        self.assertEqual(self.client.get('/purchases/replenishment?goods_id=3&target=10').status_code, 403)
 
     def test_expired_preview_before_success_is_rejected(self):
         preview = self.service.preview(self.manager, 'inject', dict(request_key=str(uuid4()), payload=dict(amount='50')))

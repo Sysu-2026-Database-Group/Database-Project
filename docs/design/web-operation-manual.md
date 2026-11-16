@@ -29,7 +29,7 @@ $config = 'run.stage.local.json'
 
 若 PowerShell 执行策略拦截脚本，使用 `pwsh -NoProfile -ExecutionPolicy Bypass -File .\run.ps1 test -ConfigFile run.stage.local.json`，其他命令同理。配置和演示账号口令留在本机。
 
-增量安装顺序：application-baseline、entry-foundation、sale-entry、workspace-entry、operations-entry、shop-entry、reservation-entry、management-entry、member-entry、return-entry，最后两个 application 检查脚本。每个脚本用 `sqlcmd -S localhost -E -C -b -f 65001 -i db/脚本.sql -v DatabaseName=明确指定的Week7库`。完整隔离验收先通过再升级运行副本；不向已有库重装样例。新增缺失的 guest/task 身份使用 `python -m app.upgrade_guest --identity guest或task --database 明确库名 --login-prefix 原前缀 --directory 原配置目录`，仅新增独立配置，已有身份拒绝覆盖。
+完整安装顺序为 application-baseline、entry-foundation、function、procedure、sale-entry、workspace-entry、operations-entry、shop-entry、reservation-entry、management-entry、member-entry、return-entry，最后执行两个 application 检查脚本。已有完整 Web v1.0 库按 `function.sql`、`procedure.sql`、`sale-entry.sql`、`operations-entry.sql`、`return-entry.sql` 的顺序升级，再执行权限检查。每个脚本用 `sqlcmd -S localhost -E -C -b -f 65001 -i db/脚本.sql -v DatabaseName=明确指定的Week7库`。完整隔离验收通过后再升级运行副本，升级无需重装样例。新增缺失的 guest/task 身份使用 `python -m app.upgrade_guest --identity guest或task --database 明确库名 --login-prefix 原前缀 --directory 原配置目录`，已有身份拒绝覆盖。
 
 `start` 管理 Web 和过期任务，Ctrl+C 停止两者。本次 `.runner/start-*/summary.json` 的 processes 记录 PID 和生命周期状态，`expiry.log` 记录每轮时间、成功/失败及数量。单独排查可加载 task 配置后执行 `python -m app.expiry --once`，或 `--interval 60 --batch-size 100` 循环。任务只能连明确的 Week7 库；失败记录代码，不打印连接秘密。
 

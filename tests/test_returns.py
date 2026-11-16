@@ -12,6 +12,7 @@ from app.returns import ReturnService
 @unittest.skipUnless(os.environ.get('BOOKSTORE_TEST_ADMIN_CONNECTION'),'未配置隔离SQL连接')
 class ReturnDatabaseTests(unittest.TestCase):
     connect_as=fixture.EntryDatabaseTests.connect_as
+    login=fixture.EntryDatabaseTests.login
 
     def setUp(self):
         fixture.EntryDatabaseTests.setUpClass.__func__(type(self))
@@ -20,6 +21,7 @@ class ReturnDatabaseTests(unittest.TestCase):
         self.actor=dict(phone='13800000003',role='收银员',session_version=1)
         self.inventory=dict(phone='13800000002',role='库管',session_version=1)
         self.service=ReturnService(self.dao,'return-secret-'*4)
+        self.client=self.app.test_client()
 
     def test_full_return_reconciles_money_points_and_separate_recovery(self):
         cursor=self.connection.cursor()
@@ -31,9 +33,27 @@ class ReturnDatabaseTests(unittest.TestCase):
         self.assertEqual(Decimal(result['refund_amount']),sale[2])
         self.assertEqual(self.service.confirm(self.actor,preview['quote_token']),result)
         self.assertEqual([tuple(row) for row in cursor.execute('SELECT id,stock_total FROM dbo.goods ORDER BY id')],before)
-        for row in cursor.execute('SELECT id FROM dbo.goods_return_item WHERE return_id=?',result['return_id']).fetchall():
-            key=str(uuid4()); recovered=self.dao.return_recover(self.inventory,key,row[0])
-            self.assertEqual(self.dao.return_recover(self.inventory,key,row[0]),recovered)
+        self.assertEqual(self.login(self.actor['phone']).status_code,302)
+        self.assertEqual(self.client.get('/return-recovery').status_code,403)
+        self.assertEqual(self.login(self.inventory['phone']).status_code,302)
+        self.assertEqual(self.client.get('/return-recovery').status_code,200)
+        with self.client.session_transaction() as session:
+            csrf=session['csrf_token']
+        expected_stock=dict(before)
+        recovery_lines=cursor.execute('''SELECT r.id,s.goods_id,r.quantity FROM dbo.goods_return_item r
+            JOIN dbo.sale_item s ON s.id=r.sale_item_id WHERE r.return_id=?''',result['return_id']).fetchall()
+        for item,goods,quantity in recovery_lines:
+            key=str(uuid4())
+            form=dict(csrf_token=csrf,request_key=key,return_item_id=item)
+            for _ in range(2):
+                self.assertEqual(self.client.post('/return-recovery',data=form).status_code,303)
+            recovered=self.dao.return_recover(self.inventory,key,item)
+            self.assertEqual(recovered['quantity'],quantity)
+            movement=cursor.execute("""SELECT goods_id,quantity FROM dbo.stock_movement
+                WHERE change_type=N'退货' AND return_item_id=?""",item).fetchall()
+            self.assertEqual([tuple(row) for row in movement],[(goods,quantity)])
+            expected_stock[goods]+=quantity
+        self.assertEqual(dict(tuple(row) for row in cursor.execute('SELECT id,stock_total FROM dbo.goods')),expected_stock)
         self.assertEqual(cursor.execute('SELECT status FROM dbo.sale WHERE id=?',sale[0]).fetchval(),'已全退')
         self.assertEqual(cursor.execute('SELECT SUM(refund_amount) FROM dbo.goods_return_item WHERE return_id=?',result['return_id']).fetchval(),sale[2])
 

@@ -142,7 +142,8 @@ Database-Project/
 | `docs/specs/spec-businesses.md` | 业务清单与**业务流程**（15 条动作链）+ R 系列规定 | ✅ 已敲定 |
 | `docs/specs/spec-data-boundary.md` | 数据边界清单：什么进库 / 什么不进库（逐条给理由） | ✅ 已敲定 |
 | `docs/specs/spec-data-dictionary.md` | 数据字典：19 张基表的字段、域、码与样例元组；Web 增量实体见 `docs/design/web-model-extension.md` | 设计口径 |
-| `docs/tasks/task-week-N.md` | 第 N 周任务说明：官方原文、本组任务说明与验收标准 | ✅ 第 1–6 周 |
+| `docs/tasks/task-week-N.md` | 第 N 周任务说明：官方原文、本组任务说明与验收标准 | 第 1—6 周、[第 10 周](docs/tasks/task-week-10.md) |
+| [第 10 周交付与验收](db/results/week-10/README.md) | 存储过程、函数、调用试验及审核复验 | 隔离副本技术验证通过 |
 | `docs/tasks/task-v0.1.md` | 第一阶段作业（可运行的数据库原型 v0.1）任务说明与验收标准 | 当前口径 |
 | `docs/reports/report-v0.1.md` | v0.1 阶段总结：场景、边界、表设计、约束权限、过程与问题修正 | ✅ 已整理 |
 | [`docs/reviews/review-week-1.md`](docs/reviews/review-week-1.md) – [`docs/reviews/review-week-4.md`](docs/reviews/review-week-4.md) | 第一至第四周组内验收记录 | ✅ 已整理 |
@@ -152,7 +153,7 @@ Database-Project/
 | `docs/design/design-notes-v1.0.md` | **ER 设计说明与验证记录**：设计思路 · 三组对照 · 实例验证 | ✅ Week 5 定稿（2026-10-11） |
 | `docs/design/issues-v0.1.md` | **v0.1 问题清单**：现象 / 业务证据 / 影响 / 方向 + 三种结论 | ✅ Week 5 定稿（2026-10-11） |
 | [`ER/er-diagram-v1.0.drawio`](ER/er-diagram-v1.0.drawio) · [`ER/er-diagram-v1.0.png`](ER/er-diagram-v1.0.png) | **ER 图**：可编辑源文件 + 清晰导出图（审查记录 `ER/review-v1.0.md`） | ✅ Week 5 定稿（2026-10-11） |
-| `docs/ai-usage-log.md` | AI 使用记录（按周留痕：AI 协助了什么、人改了什么） | ✅ 第 1–7 周 |
+| [AI 使用记录](docs/ai-usage-log.md) | 按周记录 AI 协助、人工决定及验证 | 已更新至第 10 周 |
 | [`docs/design/design-normalization-v1.0.md`](docs/design/design-normalization-v1.0.md) | 19 表依赖与范式、四表冗余取舍、迁移设计 | 2026-10-21 Agent 复核修订 |
 | [`docs/reviews/review-week-6.md`](docs/reviews/review-week-6.md) | Week 6 逐项验收与原始证据入口 | 允许AI自检；本轮45步与规则补测通过，ER人工验收已于2026-10-22由梁宇聪确认通过 |
 | [`docs/reports/report-week-6.md`](docs/reports/report-week-6.md) | 第六周报告素材：思路、过程、结论与限制 | 已同步本轮验收 |

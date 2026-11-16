@@ -521,7 +521,16 @@ class SaleDatabaseTests(unittest.TestCase):
         payload = self.payload(member='13900000003',points=100)
         preview = self.service.preview(self.actor,payload)
         first = self.service.create(self.actor,preview['quote_token'])
+        historical_sql = '''SELECT s.discount_rate,s.subtotal_amount,
+            s.subtotal_amount-ROUND(s.subtotal_amount*s.discount_rate,2) AS discount_amount,
+            s.point_deduction_amount,s.paid_amount,i.unit_price,i.quantity
+            FROM dbo.sale s JOIN dbo.sale_item i ON i.sale_id=s.id WHERE s.id=? ORDER BY i.id'''
+        historical = self.sql(historical_sql,(first['id'],))
+        self.assertEqual(historical,[(Decimal('0.95'),Decimal('19.00'),Decimal('0.95'),
+                                      Decimal('1.00'),Decimal('17.05'),Decimal('19.00'),1)])
         self.sql('UPDATE dbo.goods SET price=20 WHERE id=3')
+        self.sql('UPDATE dbo.card_type SET discount_rate=discount_rate-0.10')
+        self.assertEqual(self.sql(historical_sql,(first['id'],)),historical)
         before = self.snapshot()
         self.assertEqual(self.service.create(self.actor,preview['quote_token']),first)
         self.assertEqual(self.snapshot(),before)
@@ -529,6 +538,75 @@ class SaleDatabaseTests(unittest.TestCase):
         with self.assertRaises(AppError) as error:
             self.service.create(self.actor,changed['quote_token'])
         self.assertEqual(error.exception.code,'request_conflict')
+
+    def test_week10_direct_sql_sale_and_pickup_completion(self):
+        def call(statement, parameters):
+            with self.dao.connection('cashier') as connection:
+                cursor = connection.cursor()
+                try:
+                    cursor.execute(statement, parameters)
+                    return tuple(cursor.fetchone())
+                finally:
+                    cursor.close()
+
+        def caught_error(statement, parameters):
+            return call(f'''BEGIN TRY
+                {statement};
+                SELECT 0,@@TRANCOUNT,XACT_STATE();
+            END TRY
+            BEGIN CATCH
+                SELECT ERROR_NUMBER(),@@TRANCOUNT,XACT_STATE();
+            END CATCH;''', parameters)
+
+        def assert_movement(sale_id, expected_quantity):
+            self.assertEqual(self.sql('''SELECT m.goods_id,m.quantity,i.quantity
+                FROM dbo.stock_movement m JOIN dbo.sale_item i ON i.sale_id=m.sale_id AND i.goods_id=m.goods_id
+                WHERE m.sale_id=? AND m.change_type=N'卖出' ''',(sale_id,)),
+                [(3,-expected_quantity,expected_quantity)])
+            self.assertEqual(self.sql('''SELECT COUNT(*) FROM api.sale_request WHERE sale_id=?''',(sale_id,)),[(1,)])
+
+        actor = (self.actor['phone'],self.actor['session_version'])
+        items = '[{"goods_id":3,"quantity":1}]'
+        quote, = call('EXEC api.usp_sale_quote ?,?,?,?,?', (*actor,items,None,0))
+        sale_sql = 'EXEC api.usp_sale_create ?,?,?,?,?,?,?'
+        sale_input = (*actor,str(uuid4()),items,None,0,quote)
+        sale, = call(sale_sql, sale_input)
+        self.assertEqual(call(sale_sql,sale_input),(sale,))
+        sale_id = json.loads(sale)['id']
+        assert_movement(sale_id,1)
+        self.assertEqual(self.sql('SELECT stock_total,reserved_qty FROM dbo.goods WHERE id=3'),[(9,0)])
+
+        reservation = self.dao.reservation_create(str(uuid4()), '13912345678', 'WEEKCOURSEPICKUPCASE', [
+            dict(goods_id=3, quantity=2),
+        ])
+        pickup_identity = (*actor,reservation['phone'],reservation['code'],None,0)
+        pickup_quote,reservation_id,_ = call('EXEC api.usp_pickup_quote ?,?,?,?,?,?',pickup_identity)
+        pickup_sql = 'EXEC api.usp_pickup_create ?,?,?,?,?,?,?,?'
+        pickup_input = (*actor,str(uuid4()),*pickup_identity[2:],pickup_quote)
+        pickup, = call(pickup_sql,pickup_input)
+        self.assertEqual(call(pickup_sql,pickup_input),(pickup,))
+        pickup_id = json.loads(pickup)['id']
+        assert_movement(pickup_id,2)
+        self.assertEqual(self.sql('SELECT reservation_id FROM dbo.sale WHERE id=?',(pickup_id,)),[(reservation_id,)])
+        self.assertEqual(self.sql('SELECT status FROM dbo.reservation WHERE id=?',(reservation_id,)),[('已取',)])
+        self.assertEqual(self.sql('SELECT stock_total,reserved_qty FROM dbo.goods WHERE id=3'),[(7,0)])
+        self.assertEqual(self.sql("SELECT amount FROM dbo.fund_flow WHERE sale_id IN (?,?) ORDER BY sale_id",
+                                  (sale_id,pickup_id)),[(Decimal('19.00'),),(Decimal('38.00'),)])
+
+        before_failure = self.snapshot()
+        self.assertEqual(caught_error(pickup_sql, (*actor,str(uuid4()),*pickup_identity[2:],pickup_quote)),
+                         (52502,0,0))
+        self.assertEqual(self.snapshot(),before_failure)
+        self.assertEqual(self.sql('SELECT status FROM dbo.reservation WHERE id=?',(reservation_id,)),[('已取',)])
+
+        fresh_quote, = call('EXEC api.usp_sale_quote ?,?,?,?,?',(*actor,items,None,0))
+        self.sql("CREATE TRIGGER dbo.sale_test_fail_fund ON dbo.fund_flow AFTER INSERT AS THROW 52999,'injected fund failure',1;")
+        self.assertEqual(caught_error(sale_sql,(*actor,str(uuid4()),items,None,0,fresh_quote)),(52999,0,0))
+        self.assertEqual(self.snapshot(),before_failure)
+        print('W10-O01 sale: stock=9, reserved=0, movement=-1, paid=19.00, replay=identical')
+        print('W10-O02 pickup: stock=7, reserved=0, movement=-2, paid=38.00, replay=identical')
+        print('W10-O03 pickup repeat with new key: error=52502, tran_count=0, xact_state=0, state=unchanged')
+        print('W10-O04 sale fund failure after writes: error=52999, tran_count=0, xact_state=0, state=unchanged')
 
     def test_failure_after_stock_and_points_updates_rolls_back_everything(self):
         preview = self.service.preview(self.actor,self.payload(member='13900000003',points=100))
@@ -687,6 +765,37 @@ class SaleDatabaseTests(unittest.TestCase):
             server.shutdown()
             server.server_close()
             thread.join(timeout=5)
+
+    def test_pickup_form_preview_confirms_and_replays_member_sale(self):
+        receipt = self.dao.reservation_create(str(uuid4()), '13912345678', 'WEEKCOURSEPICKUPCASE', [
+            dict(goods_id=3, quantity=2),
+        ])
+        client = self.app.test_client()
+        client.get('/auth/login')
+        with client.session_transaction() as session:
+            csrf = session['csrf_token']
+        self.assertEqual(client.post('/auth/login', data=dict(
+            phone=self.actor['phone'], password=self.password, csrf_token=csrf)).status_code, 302)
+        page = client.get('/pickups')
+        self.assertEqual(page.status_code, 200)
+        request_key = re.search(r'name="request_key" value="([^"]+)"', page.text).group(1)
+        with client.session_transaction() as session:
+            csrf = session['csrf_token']
+        preview = client.post('/pickups/preview', data=dict(
+            phone=receipt['phone'], code=receipt['code'], member_phone='13900000003',
+            used_points='100', request_key=request_key, csrf_token=csrf))
+        self.assertEqual(preview.status_code, 200)
+        quote_token = re.search(r'name="quote_token" value="([^"]+)"', preview.text).group(1)
+        confirmation = dict(quote_token=quote_token, csrf_token=csrf)
+        first = client.post('/pickups', data=confirmation)
+        replay = client.post('/pickups', data=confirmation)
+        self.assertEqual(first.status_code, 303)
+        self.assertEqual(replay.status_code, 303)
+        self.assertEqual(first.location, replay.location)
+        self.assertEqual(client.get(first.location).status_code, 200)
+        self.assertEqual(self.sql("SELECT stock_total,reserved_qty FROM dbo.goods WHERE id=3"), [(8, 0)])
+        self.assertEqual(self.sql("SELECT COUNT(*),MIN(paid_amount) FROM dbo.sale WHERE no LIKE 'W7S%'"),
+                         [(1, Decimal('35.10'))])
 
 
 if __name__=='__main__':

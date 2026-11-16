@@ -21,6 +21,22 @@ def actor():
     return value
 
 
+@bp.get('/management/sales-statistics')
+def sales_statistics():
+    current = actor()
+    start = request.args.get('from_date')
+    end = request.args.get('to_date')
+    statistics = None
+    if start is not None or end is not None:
+        try:
+            from_date = date.fromisoformat(start) if start else None
+            to_date = date.fromisoformat(end) if end else None
+        except ValueError:
+            raise AppError('invalid_date', '日期应为 YYYY-MM-DD。', 400) from None
+        statistics = current_app.extensions['employees'].dao.sales_statistics(current, from_date, to_date)
+    return render_template('sales_statistics.html', statistics=statistics)
+
+
 @bp.get('/management/<kind>')
 def page(kind):
     if kind not in {'employees','cards','reports','sales','returns','reservations'}:

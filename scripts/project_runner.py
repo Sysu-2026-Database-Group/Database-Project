@@ -131,7 +131,7 @@ class Report:
                              + list((ROOT / 'app/static').rglob('*.css')) + list((ROOT / 'app/static').rglob('*.js'))
                              + list((ROOT / 'db').glob('*.sql'))
                              + list((ROOT / 'db/checks').glob('application-*.sql'))
-                             + [ROOT / 'db/tests/application-baseline.sql']))
+                             + [ROOT / 'db/tests/application-baseline.sql', ROOT / 'db/tests/week-10-objects.sql']))
         manifest = {str(path.relative_to(ROOT)): hashlib.sha256(path.read_bytes()).hexdigest() for path in sources}
         (self.directory / 'source-hashes.json').write_text(json.dumps(manifest, indent=2) + '\n', encoding='utf-8')
         print(f'{status}: {self.directory / "summary.json"}', flush=True)
@@ -268,6 +268,8 @@ def prepare_target(report, config, source, target, label):
     report.resource(label + '_database', target)
     sql_script(report, config, label + '-copy', 'prepare-entry-copy.sql', target, SourceDatabaseName=source)
     sql_script(report, config, label + '-auth-schema', 'entry-foundation.sql', target)
+    sql_script(report, config, label + '-functions', 'function.sql', target)
+    sql_script(report, config, label + '-procedures', 'procedure.sql', target)
     sql_script(report, config, label + '-sales-schema', 'sale-entry.sql', target)
     sql_script(report, config, label + '-workspace-schema', 'workspace-entry.sql', target)
     sql_script(report, config, label + '-operations-schema', 'operations-entry.sql', target)
@@ -412,6 +414,7 @@ def full_test(report, config):
     prepare_target(report, config, source, auth_database, 'auth-test')
     prepare_target(report, config, source, sale_database, 'sale-test')
     baseline = report.action('business-baseline', lambda: business_fingerprints(config, auth_database))
+    sql_script(report, config, 'week10-sql-cases', 'tests/week-10-objects.sql', auth_database)
     env = clean_test_environment()
     env.update(BOOKSTORE_TEST_ADMIN_CONNECTION=connection_string(config['server'], auth_database, config['driver']),
                BOOKSTORE_SALE_TEST_ADMIN_CONNECTION=connection_string(config['server'], sale_database, config['driver']),

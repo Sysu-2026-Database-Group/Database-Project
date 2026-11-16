@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block title %}销售统计{% endblock %}
+{% block content %}
+<h1>销售统计</h1>
+<form method="get">
+  <label>起始日期<input type="date" name="from_date" value="{{ request.args.get('from_date','') }}" required></label>
+  <label>结束日期<input type="date" name="to_date" value="{{ request.args.get('to_date','') }}" required></label>
+  <button>查询销售</button>
+</form>
+{% if statistics is not none %}
+<section class="panel">
+  <p>订单 {{ statistics.order_count }} 笔，销售 {{ statistics.sold_quantity }} 件。</p>
+  <p>成交原价合计 ¥{{ statistics.gross_sales_amount|money }}，成交实收合计 ¥{{ statistics.paid_amount|money }}。</p>
+  <p>日期包含起止当天，按原成交统计，退款另计。</p>
+  <div class="table-scroll"><table>
+    <thead><tr><th>商品</th><th>销量</th><th>原价金额</th><th>订单数</th></tr></thead>
+    <tbody>{% for row in statistics.records %}
+      <tr><td>#{{ row.goods_id }} {{ row.goods_name }}</td><td>{{ row.sold_quantity }}</td><td>¥{{ row.gross_sales_amount|money }}</td><td>{{ row.order_count }}</td></tr>
+    {% else %}<tr><td colspan="4">该日期范围内没有销售。</td></tr>{% endfor %}</tbody>
+  </table></div>
+</section>
+{% endif %}
+<a href="/management/reports">返回经营报表</a>
+{% endblock %}
