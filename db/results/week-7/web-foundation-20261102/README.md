@@ -14,4 +14,4 @@
 | 只读 `sqlcmd -S localhost -E -C -l 5 -b -Q ...` | FAIL：Encryption not supported / SSL Provider凭据错误，未建立SQL连接 |
 | `.venv/Scripts/python.exe scripts/project_runner.py test --unit` | FAIL：依赖检查报告缺少flask、pyodbc，测试尚未开始 |
 
-Python语法及仓库空白检查原始输出见同目录 `static-checks.txt`。语法通过不代表模板渲染、HTTP、SQL规则、权限、事务、并发及浏览器视觉通过。未使用mock结果替代真实库验收，未对既有运行库做写入。
+续作时重新执行了 Python 语法、仓库空白及第六周归档审计，原始输出见 [followup-checks.txt](followup-checks.txt)。该记录用于解释早期环境阻塞及恢复经过。Web 完整验收见[阶段取证](../stage-report-20261107/README.md)。

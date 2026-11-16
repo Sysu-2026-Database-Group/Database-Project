@@ -26,6 +26,8 @@ Copy-Item run.example.json run.local.json   # 至少改 database / login_prefix�
 
 队友接手请先阅读 **[项目交接单](docs/team-handoff.md)**：包含换电脑运行、账号配置、119项完整验收证据、演示顺序及剩余交付事项。
 
+查询当前表结构见[Web v1.0 数据字典](docs/specs/spec-data-dictionary-web-v1.0.md)与 [ER 图](ER/er-diagram-web-v1.0.drawio)。历周提交及验收见[课程成果归档](docs/archive/README.md)。
+
 当前应用已提供顾客预订/取消/会员自助、收银销售/取货/会员/退款、库管商品/采购/收货/报损/退货回收及店长经营管理。准备、启动和验收统一使用根目录 [`run.ps1`](run.ps1)：`setup` → `doctor` → `test` → `start -Detach` → `verify -Http`，结束时 `stop`。日常操作见[全角色手册](docs/design/web-operation-manual.md)。
 
 第 7—9 周 Web 的设计、实现、测试与截图见[Web 实验报告](docs/reports/report-web-v1.0.md)，正文截图在 `docs/reports/assets/web-v1.0/`，运行证据在[本轮复验记录](db/results/week-7/stage-report-20261107/README.md)；第 5—6 周设计与迁移见[第六周报告](docs/reports/report-week-6.md)与[设计说明](docs/design/design-notes-v1.0.md)。跨机复现已有用户确认，执行信息和原始输出待补。个人签收见[分工表](docs/reports/team-division-v1.0.md)。

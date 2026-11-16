@@ -1,4 +1,4 @@
-已将数据库上下文更改为 "ShiguangBookstoreWeek7AuthTests20261116084710b683a3"。
+已将数据库上下文更改为 "ShiguangBookstoreWeek7AuthTests20261116104931f89629"。
 test_case inputs orders units gross_amount paid_amount
 W10-S01 2098-06-01..2098-06-02; repeated; TVF comparison 2 4 45.00 42.25
 test_case goods_id sold_quantity gross_sales_amount order_count

@@ -2,12 +2,19 @@
 
 按任务所属周次归档，不按执行日期另建一套平行目录。第五周 ER 图及设计记录在仓库 `ER/` 和 `docs/`，无需空建结果目录。
 
+同一审查范围以最新完整验证为入口。独立复跑、不同覆盖范围的专项结果，以及仍受审计脚本或哈希清单核验的材料随原周次保存。
+
 | 目录 | 内容 | 入口 |
 |---|---|---|
 | `week-3/` | 第三周建库、样例、CRUD 和结构校验输出 | [执行记录](week-3/week-3.md) |
 | `week-4/` | 第四周查询、视图、权限、空库复现及 SSMS 截图 | [执行记录](week-4/week-4.md) |
 | `week-6/records/` | 第六周逐项执行反馈和专项结果摘要，保留当时执行者及范围 | 由正式设计和报告按需引用；不是另一份审核结论 |
-| `week-6/acceptance/` | 作者侧审核证据：final-check为本轮主代理45步，原子代理输出保留历史归属 | [证据说明](week-6/acceptance/README.md) |
-| `week-6/acceptance-b-20261022/` | 第二复核人（Reviewer B）在独立副本上的 39 步复现：原始输出、`steps.json`、`manifest.json` 与来源清单 | [复现说明](week-6/acceptance-b-20261022/README.md) |
+| `week-6/acceptance-b-20261022/` | 第六周最新完整独立复跑，40 步主流程加 6 项补测 | [复现说明](week-6/acceptance-b-20261022/README.md) |
+| `week-6/acceptance/` | 正式报告及只读审计引用的作者侧输出、日期变异与 ER 人工确认 | [证据说明](week-6/acceptance/README.md) |
+| `week-7/stage-report-20261107/` | 第 7—9 周最新阶段取证，含全量测试、16 个浏览器节点和业务对账 | [阶段取证](week-7/stage-report-20261107/README.md) |
+| `week-7/web-delivery-20261102/` | 52 页双视口检查及 11 个流程节点的专项覆盖 | [浏览器与流程证据](week-7/web-delivery-20261102/README.md) |
+| `week-7/web-fix-20261105/` | Web 修复专项的迁移截面、权限矩阵、删除及生命周期验证 | [修复专项验收](week-7/web-fix-20261105/README.md) |
+| `week-7/p2-concurrency-20261102/` | P2 采购及资金专项的最后一次完整运行，93 项通过 | [P2 专项复验](week-7/p2-concurrency-20261102/README.md) |
+| `week-10/` | 第 10 周的 SQL 用例、调用约定和最新全量回归 | [交付与验收](week-10/README.md) |
 
 第六周正式审核结论仅保留 [docs/reviews/review-week-6.md](../../docs/reviews/review-week-6.md) 当前版本，复核人登记“梁宇聪”，ER图人工验收已于2026-10-22由梁宇聪确认通过。目录整理的历史操作不代表本轮执行；本轮按用户授权在新副本重跑，当前结论允许AI自检，本周声明范围内验收已完成。

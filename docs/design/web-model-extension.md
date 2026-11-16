@@ -4,6 +4,8 @@
 
 当前全图：[可编辑 drawio](../../ER/er-diagram-web-v1.0.drawio)、[PNG](../../ER/er-diagram-web-v1.0.png)、[本地导出源](../../ER/er-diagram-web-v1.0.html)。新图为独立增量版本，旧19实体图不修改；新增关系在drawio中可编辑，PNG保留旧图并在下方列出新增实体/技术映射和基数。
 
+Web v1.0 完整的实体、表、字段和约束见[当前数据字典](../specs/spec-data-dictionary-web-v1.0.md)。
+
 ## 新增经营信息与字段
 
 | 实体 | 主键、关系 | 保存内容与理由 |
