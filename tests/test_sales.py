@@ -239,7 +239,7 @@ class SaleDatabaseTests(unittest.TestCase):
         self.assertEqual(result['cashier_by'], self.actor['phone'])
         self.assertIsNone(result['card_level'])
         self.assertEqual(self.sql('SELECT stock_total,reserved_qty FROM dbo.goods WHERE id=3'), [(9,0)])
-        self.assertEqual(self.sql('SELECT quantity,changed_by FROM dbo.stock_movement WHERE sale_id=?',(result['id'],)),[(-1,self.actor['phone'])])
+        self.assertEqual(self.sql('SELECT stock_before,stock_after,quantity,changed_by FROM dbo.stock_movement WHERE sale_id=?',(result['id'],)),[(10,9,-1,self.actor['phone'])])
         self.assertEqual(self.sql('SELECT fund_before,fund_after,amount,recorded_by FROM dbo.fund_flow WHERE sale_id=?',(result['id'],)),[(Decimal('555.30'),Decimal('574.30'),19,self.actor['phone'])])
         self.assertEqual(self.sql('SELECT COUNT(*) FROM dbo.point_movement WHERE sale_id=?',(result['id'],)),[(0,)])
 
@@ -318,7 +318,7 @@ class SaleDatabaseTests(unittest.TestCase):
         self.assertEqual(sum(isinstance(result, dict) for result in receipts), 1)
         self.assertEqual([result.code for result in receipts if isinstance(result, AppError)], ['operation_conflict'])
         self.assertEqual(self.sql('SELECT stock_total FROM dbo.goods WHERE id=?', (goods,)), [(stock+3,)])
-        self.assertEqual(self.sql('SELECT SUM(quantity),COUNT(*) FROM dbo.stock_movement WHERE request_id=?', (purchase,)), [(3,1)])
+        self.assertEqual(self.sql('SELECT stock_before,stock_after,quantity,COUNT(*) FROM dbo.stock_movement WHERE request_id=? GROUP BY stock_before,stock_after,quantity', (purchase,)), [(stock,stock+3,3,1)])
         self.assertEqual(self.sql('SELECT COUNT(*) FROM dbo.fund_flow WHERE request_id=?', (purchase,)), [(1,)])
 
     def test_concurrent_approval_and_cancel_produce_one_terminal_decision(self):
@@ -462,6 +462,11 @@ class SaleDatabaseTests(unittest.TestCase):
         self.assertEqual(self.sql("SELECT points_balance FROM dbo.member WHERE phone='13900000003'"),[(39,)])
         self.assertEqual(self.sql('SELECT points FROM dbo.point_movement WHERE sale_id=? ORDER BY points',(result['id'],)),[(-100,),(17,)])
         self.assertEqual(self.sql('SELECT g.id FROM dbo.goods g LEFT JOIN dbo.stock_movement m ON m.goods_id=g.id GROUP BY g.id,g.stock_total HAVING g.stock_total<>ISNULL(SUM(m.quantity),0)'),[])
+        self.assertEqual(self.sql('''WITH x AS (
+            SELECT goods_id,stock_before,stock_after,
+                   LAG(stock_after) OVER (PARTITION BY goods_id ORDER BY changed_at,id) AS previous_after
+            FROM dbo.stock_movement)
+            SELECT goods_id FROM x WHERE previous_after IS NOT NULL AND stock_before<>previous_after'''),[])
         self.assertEqual(self.sql('SELECT m.phone FROM dbo.member m LEFT JOIN dbo.point_movement p ON p.member_phone=m.phone GROUP BY m.phone,m.points_balance HAVING m.points_balance<>ISNULL(SUM(p.points),0)'),[])
 
     def test_round_to_zero_creates_sale_without_zero_amount_ledgers(self):

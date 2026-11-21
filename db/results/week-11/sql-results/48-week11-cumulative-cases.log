@@ -1,0 +1,4 @@
+已将数据库上下文更改为 "ShiguangBookstoreWeek7AuthTests202611211640041b615c"。
+test_case   scope         date_rows   product_rows
+----------- ------------- ----------- ------------
+W11-C01～C03 日期累计/商品累计/空区间           9            7

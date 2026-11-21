@@ -45,8 +45,8 @@ BEGIN
     IF @new_reserved<0 OR @new_stock<@new_reserved THROW 52302,N'可售量不足。',1;
     IF @new_stock>2147483647 THROW 52301,N'调整后库存超出支持范围。',1;
     UPDATE dbo.goods SET stock_total=@new_stock,reserved_qty=@new_reserved WHERE id=@goods_id;
-    INSERT dbo.stock_movement(goods_id,change_type,quantity,note,changed_by,changed_at,request_id,sale_id,return_item_id)
-    VALUES(@goods_id,@change_type,@delta,@reason,@employee_phone,COALESCE(@changed_at,SYSDATETIME()),
+    INSERT dbo.stock_movement(goods_id,change_type,stock_before,stock_after,quantity,note,changed_by,changed_at,request_id,sale_id,return_item_id)
+    VALUES(@goods_id,@change_type,@stock,@new_stock,@delta,@reason,@employee_phone,COALESCE(@changed_at,SYSDATETIME()),
            CASE WHEN @change_type=N'购入' THEN @source_id END,
            CASE WHEN @change_type=N'卖出' THEN @source_id END,
            CASE WHEN @change_type=N'退货' THEN @source_id END);

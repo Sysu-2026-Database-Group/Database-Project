@@ -237,28 +237,28 @@ BEGIN TRY
          OR EXISTS (SELECT [id], [return_id], [sale_item_id], [quantity], [refund_amount] FROM @seed_goods_return_item EXCEPT SELECT [id], [return_id], [sale_item_id], [quantity], [refund_amount] FROM dbo.[goods_return_item])
         THROW 51001, N'goods_return_item 与样例基线不同，停止装载，不覆盖现有数据。', 1;
 
-    DECLARE @seed_stock_movement TABLE ([id] BIGINT NOT NULL, [goods_id] BIGINT NOT NULL, [change_type] NVARCHAR(10) NOT NULL, [quantity] INT NOT NULL, [note] NVARCHAR(200) NULL, [changed_by] VARCHAR(11) NOT NULL, [changed_at] DATETIME2 NOT NULL, [request_id] BIGINT NULL, [sale_id] BIGINT NULL, [return_item_id] BIGINT NULL);
-    INSERT INTO @seed_stock_movement ([id], [goods_id], [change_type], [quantity], [note], [changed_by], [changed_at], [request_id], [sale_id], [return_item_id]) VALUES
-        (1, 1, N'购入', 5, NULL, N'13800000002', N'2026-09-07T10:30:00', 1, NULL, NULL),
-        (2, 2, N'购入', 3, NULL, N'13800000002', N'2026-09-07T10:35:00', 1, NULL, NULL),
-        (3, 1, N'卖出', -3, NULL, N'13800000003', N'2026-09-08T11:00:00', NULL, 1, NULL),
-        (4, 1, N'购入', 3, NULL, N'13800000002', N'2026-09-10T10:00:00', 2, NULL, NULL),
-        (5, 3, N'购入', 10, NULL, N'13800000002', N'2026-09-11T10:00:00', 3, NULL, NULL),
-        (6, 4, N'购入', 20, NULL, N'13800000002', N'2026-09-11T10:05:00', 3, NULL, NULL),
-        (7, 2, N'卖出', -3, NULL, N'13800000003', N'2026-09-13T14:30:00', NULL, 3, NULL),
-        (8, 1, N'卖出', -2, NULL, N'13800000003', N'2026-09-14T15:20:00', NULL, 2, NULL),
-        (9, 3, N'卖出', -1, NULL, N'13800000003', N'2026-09-14T15:20:00', NULL, 2, NULL),
-        (10, 3, N'退货', 1, NULL, N'13800000002', N'2026-09-15T11:05:00', NULL, NULL, 1),
-        (11, 1, N'退货', 3, NULL, N'13800000002', N'2026-09-16T11:05:00', NULL, NULL, 2),
-        (12, 4, N'损坏', -1, N'运输中受挤压变形', N'13800000002', N'2026-09-17T16:00:00', NULL, NULL, NULL);
+    DECLARE @seed_stock_movement TABLE ([id] BIGINT NOT NULL, [goods_id] BIGINT NOT NULL, [change_type] NVARCHAR(10) NOT NULL, [stock_before] INT NOT NULL, [stock_after] INT NOT NULL, [quantity] INT NOT NULL, [note] NVARCHAR(200) NULL, [changed_by] VARCHAR(11) NOT NULL, [changed_at] DATETIME2 NOT NULL, [request_id] BIGINT NULL, [sale_id] BIGINT NULL, [return_item_id] BIGINT NULL);
+    INSERT INTO @seed_stock_movement ([id], [goods_id], [change_type], [stock_before], [stock_after], [quantity], [note], [changed_by], [changed_at], [request_id], [sale_id], [return_item_id]) VALUES
+        (1, 1, N'购入', 0, 5, 5, NULL, N'13800000002', N'2026-09-07T10:30:00', 1, NULL, NULL),
+        (2, 2, N'购入', 0, 3, 3, NULL, N'13800000002', N'2026-09-07T10:35:00', 1, NULL, NULL),
+        (3, 1, N'卖出', 5, 2, -3, NULL, N'13800000003', N'2026-09-08T11:00:00', NULL, 1, NULL),
+        (4, 1, N'购入', 2, 5, 3, NULL, N'13800000002', N'2026-09-10T10:00:00', 2, NULL, NULL),
+        (5, 3, N'购入', 0, 10, 10, NULL, N'13800000002', N'2026-09-11T10:00:00', 3, NULL, NULL),
+        (6, 4, N'购入', 0, 20, 20, NULL, N'13800000002', N'2026-09-11T10:05:00', 3, NULL, NULL),
+        (7, 2, N'卖出', 3, 0, -3, NULL, N'13800000003', N'2026-09-13T14:30:00', NULL, 3, NULL),
+        (8, 1, N'卖出', 5, 3, -2, NULL, N'13800000003', N'2026-09-14T15:20:00', NULL, 2, NULL),
+        (9, 3, N'卖出', 10, 9, -1, NULL, N'13800000003', N'2026-09-14T15:20:00', NULL, 2, NULL),
+        (10, 3, N'退货', 9, 10, 1, NULL, N'13800000002', N'2026-09-15T11:05:00', NULL, NULL, 1),
+        (11, 1, N'退货', 3, 6, 3, NULL, N'13800000002', N'2026-09-16T11:05:00', NULL, NULL, 2),
+        (12, 4, N'损坏', 20, 19, -1, N'运输中受挤压变形', N'13800000002', N'2026-09-17T16:00:00', NULL, NULL, NULL);
     IF NOT EXISTS (SELECT 1 FROM dbo.[stock_movement])
     BEGIN
         SET IDENTITY_INSERT dbo.[stock_movement] ON;
-        INSERT INTO dbo.[stock_movement] ([id], [goods_id], [change_type], [quantity], [note], [changed_by], [changed_at], [request_id], [sale_id], [return_item_id]) SELECT [id], [goods_id], [change_type], [quantity], [note], [changed_by], [changed_at], [request_id], [sale_id], [return_item_id] FROM @seed_stock_movement;
+        INSERT INTO dbo.[stock_movement] ([id], [goods_id], [change_type], [stock_before], [stock_after], [quantity], [note], [changed_by], [changed_at], [request_id], [sale_id], [return_item_id]) SELECT [id], [goods_id], [change_type], [stock_before], [stock_after], [quantity], [note], [changed_by], [changed_at], [request_id], [sale_id], [return_item_id] FROM @seed_stock_movement;
         SET IDENTITY_INSERT dbo.[stock_movement] OFF;
     END
-    ELSE IF EXISTS (SELECT [id], [goods_id], [change_type], [quantity], [note], [changed_by], [changed_at], [request_id], [sale_id], [return_item_id] FROM dbo.[stock_movement] EXCEPT SELECT [id], [goods_id], [change_type], [quantity], [note], [changed_by], [changed_at], [request_id], [sale_id], [return_item_id] FROM @seed_stock_movement)
-         OR EXISTS (SELECT [id], [goods_id], [change_type], [quantity], [note], [changed_by], [changed_at], [request_id], [sale_id], [return_item_id] FROM @seed_stock_movement EXCEPT SELECT [id], [goods_id], [change_type], [quantity], [note], [changed_by], [changed_at], [request_id], [sale_id], [return_item_id] FROM dbo.[stock_movement])
+    ELSE IF EXISTS (SELECT [id], [goods_id], [change_type], [stock_before], [stock_after], [quantity], [note], [changed_by], [changed_at], [request_id], [sale_id], [return_item_id] FROM dbo.[stock_movement] EXCEPT SELECT [id], [goods_id], [change_type], [stock_before], [stock_after], [quantity], [note], [changed_by], [changed_at], [request_id], [sale_id], [return_item_id] FROM @seed_stock_movement)
+         OR EXISTS (SELECT [id], [goods_id], [change_type], [stock_before], [stock_after], [quantity], [note], [changed_by], [changed_at], [request_id], [sale_id], [return_item_id] FROM @seed_stock_movement EXCEPT SELECT [id], [goods_id], [change_type], [stock_before], [stock_after], [quantity], [note], [changed_by], [changed_at], [request_id], [sale_id], [return_item_id] FROM dbo.[stock_movement])
         THROW 51001, N'stock_movement 与样例基线不同，停止装载，不覆盖现有数据。', 1;
 
     DECLARE @seed_point_movement TABLE ([id] BIGINT NOT NULL, [member_phone] VARCHAR(11) NOT NULL, [change_type] NVARCHAR(10) NOT NULL, [points] INT NOT NULL, [sale_id] BIGINT NULL, [return_id] BIGINT NULL, [changed_by] VARCHAR(11) NOT NULL, [changed_at] DATETIME2 NOT NULL);

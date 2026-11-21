@@ -159,7 +159,9 @@
 | `id` | `bigint` | 否 | `IDENTITY(1,1)` |
 | `goods_id` | `bigint` | 否 | — |
 | `change_type` | `nvarchar(10)` | 否 | — |
-| `quantity` | `int` | 否 | — |
+| `stock_before` | `int` | 否 | 调整前物理库存 `goods.stock_total` |
+| `stock_after` | `int` | 否 | 调整后物理库存 `goods.stock_total` |
+| `quantity` | `int` | 否 | 变化量，`stock_after - stock_before` |
 | `note` | `nvarchar(200)` | 是 | — |
 | `changed_by` | `varchar(11)` | 否 | — |
 | `changed_at` | `datetime2(7)` | 否 | `(sysdatetime())` |
@@ -176,7 +178,9 @@
 - 外键 `sale_id` → `dbo.sale(id)`。
 - CHECK `CK_stock_movement_changed_by_phone` `([changed_by] IS NULL OR len([changed_by])=(11) AND NOT ([changed_by]) collate Latin1_General_100_BIN2 like '%[^0-9]%')`。
 - CHECK `CK_stock_movement_changed_by_text` `(len(ltrim(rtrim([changed_by])))>(0))`。
-- CHECK `CK_stock_movement_source` `([change_type]=N'购入' AND [quantity]>(0) AND [request_id] IS NOT NULL AND [sale_id] IS NULL AND [return_item_id] IS NULL OR [change_type]=N'卖出' AND [quantity]<(0) AND [sale_id] IS NOT NULL AND [request_id] IS NULL AND [return_item_id] IS NULL OR [change_type]=N'退货' AND [quantity]>(0) AND [return_item_id] IS NOT NULL AND [request_id] IS NULL AND [sale_id] IS NULL OR [change_type]=N'损坏' AND [quantity]<(0) AND [request_id] IS NULL AND [sale_id] IS NULL AND [return_item_id] IS NULL AND [note] IS NOT NULL AND len(ltrim(rtrim([note])))>(0))`。
+- CHECK `CK_stock_movement_bounds` `([stock_before]>=(0) AND [stock_after]>=(0))`。
+- CHECK `CK_stock_movement_delta` `([quantity]=[stock_after]-[stock_before])`。
+- CHECK `CK_stock_movement_source` `([change_type]=N'购入' AND [stock_after]>[stock_before] AND [request_id] IS NOT NULL AND [sale_id] IS NULL AND [return_item_id] IS NULL OR [change_type]=N'卖出' AND [stock_after]<[stock_before] AND [sale_id] IS NOT NULL AND [request_id] IS NULL AND [return_item_id] IS NULL OR [change_type]=N'退货' AND [stock_after]>[stock_before] AND [return_item_id] IS NOT NULL AND [request_id] IS NULL AND [sale_id] IS NULL OR [change_type]=N'损坏' AND [stock_after]<[stock_before] AND [stock_before]-[stock_after] BETWEEN (1) AND (1000) AND [request_id] IS NULL AND [sale_id] IS NULL AND [return_item_id] IS NULL AND [note] IS NOT NULL AND len(ltrim(rtrim([note])))>(0))`。
 
 ### dbo-purchase_request
 

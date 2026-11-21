@@ -392,29 +392,29 @@ BEGIN TRY
     SELECT @rti05_g07 = id FROM dbo.goods_return_item WHERE return_id=@rt05 AND sale_item_id=@si_s09_g07;
     SELECT @rti05_g08 = id FROM dbo.goods_return_item WHERE return_id=@rt05 AND sale_item_id=@si_s09_g08;
 
-    /* 库存流水：5 条购入、9 条卖出、5 条退货；数量按 R-21 保存正负号。 */
+    /* 库存流水：5 条购入、9 条卖出、5 条退货；quantity 为前后差值。 */
     INSERT dbo.stock_movement
-        (goods_id, change_type, quantity, note, changed_by, changed_at, request_id, sale_id, return_item_id)
+        (goods_id, change_type, stock_before, stock_after, quantity, note, changed_by, changed_at, request_id, sale_id, return_item_id)
     VALUES
-        (@g07, N'购入', 10, NULL, @warehouse, '2026-09-21T10:40:00', @pr08, NULL, NULL),
-        (@g08, N'购入', 7, NULL, @warehouse, '2026-09-21T10:41:00', @pr08, NULL, NULL),
-        (@g09, N'购入', 6, NULL, @warehouse, '2026-09-21T10:42:00', @pr09, NULL, NULL),
-        (@g10, N'购入', 21, NULL, @warehouse, '2026-09-21T10:43:00', @pr09, NULL, NULL),
-        (@g07, N'购入', 4, NULL, @warehouse, '2026-09-21T10:44:00', @pr10, NULL, NULL),
-        (@g07, N'卖出', -1, NULL, @cashier, '2026-09-22T11:00:00', NULL, @s04, NULL),
-        (@g10, N'卖出', -1, NULL, @cashier, '2026-09-23T11:00:00', NULL, @s05, NULL),
-        (@g07, N'卖出', -2, NULL, @cashier, '2026-09-24T14:00:00', NULL, @s06, NULL),
-        (@g08, N'卖出', -2, NULL, @cashier, '2026-09-24T14:01:00', NULL, @s06, NULL),
-        (@g07, N'卖出', -1, NULL, @cashier, '2026-09-25T14:00:00', NULL, @s07, NULL),
-        (@g09, N'卖出', -2, NULL, @cashier, '2026-09-26T14:00:00', NULL, @s08, NULL),
-        (@g10, N'卖出', -3, NULL, @cashier, '2026-09-26T14:01:00', NULL, @s08, NULL),
-        (@g07, N'卖出', -2, NULL, @cashier, '2026-09-27T14:00:00', NULL, @s09, NULL),
-        (@g08, N'卖出', -2, NULL, @cashier, '2026-09-27T14:01:00', NULL, @s09, NULL),
-        (@g09, N'退货', 1, NULL, @warehouse, '2026-09-28T10:05:00', NULL, NULL, @rti03_g09),
-        (@g10, N'退货', 1, NULL, @warehouse, '2026-09-28T10:06:00', NULL, NULL, @rti03_g10),
-        (@g07, N'退货', 1, NULL, @warehouse, '2026-09-28T11:05:00', NULL, NULL, @rti04_g07),
-        (@g07, N'退货', 1, NULL, @warehouse, '2026-09-29T10:05:00', NULL, NULL, @rti05_g07),
-        (@g08, N'退货', 2, NULL, @warehouse, '2026-09-29T10:06:00', NULL, NULL, @rti05_g08);
+        (@g07, N'购入', 0, 10, 10, NULL, @warehouse, '2026-09-21T10:40:00', @pr08, NULL, NULL),
+        (@g08, N'购入', 0, 7, 7, NULL, @warehouse, '2026-09-21T10:41:00', @pr08, NULL, NULL),
+        (@g09, N'购入', 0, 6, 6, NULL, @warehouse, '2026-09-21T10:42:00', @pr09, NULL, NULL),
+        (@g10, N'购入', 0, 21, 21, NULL, @warehouse, '2026-09-21T10:43:00', @pr09, NULL, NULL),
+        (@g07, N'购入', 10, 14, 4, NULL, @warehouse, '2026-09-21T10:44:00', @pr10, NULL, NULL),
+        (@g07, N'卖出', 14, 13, -1, NULL, @cashier, '2026-09-22T11:00:00', NULL, @s04, NULL),
+        (@g10, N'卖出', 21, 20, -1, NULL, @cashier, '2026-09-23T11:00:00', NULL, @s05, NULL),
+        (@g07, N'卖出', 13, 11, -2, NULL, @cashier, '2026-09-24T14:00:00', NULL, @s06, NULL),
+        (@g08, N'卖出', 7, 5, -2, NULL, @cashier, '2026-09-24T14:01:00', NULL, @s06, NULL),
+        (@g07, N'卖出', 11, 10, -1, NULL, @cashier, '2026-09-25T14:00:00', NULL, @s07, NULL),
+        (@g09, N'卖出', 6, 4, -2, NULL, @cashier, '2026-09-26T14:00:00', NULL, @s08, NULL),
+        (@g10, N'卖出', 20, 17, -3, NULL, @cashier, '2026-09-26T14:01:00', NULL, @s08, NULL),
+        (@g07, N'卖出', 10, 8, -2, NULL, @cashier, '2026-09-27T14:00:00', NULL, @s09, NULL),
+        (@g08, N'卖出', 5, 3, -2, NULL, @cashier, '2026-09-27T14:01:00', NULL, @s09, NULL),
+        (@g09, N'退货', 4, 5, 1, NULL, @warehouse, '2026-09-28T10:05:00', NULL, NULL, @rti03_g09),
+        (@g10, N'退货', 17, 18, 1, NULL, @warehouse, '2026-09-28T10:06:00', NULL, NULL, @rti03_g10),
+        (@g07, N'退货', 8, 9, 1, NULL, @warehouse, '2026-09-28T11:05:00', NULL, NULL, @rti04_g07),
+        (@g07, N'退货', 9, 10, 1, NULL, @warehouse, '2026-09-29T10:05:00', NULL, NULL, @rti05_g07),
+        (@g08, N'退货', 3, 5, 2, NULL, @warehouse, '2026-09-29T10:06:00', NULL, NULL, @rti05_g08);
 
     /* 积分流水：S09 的抵扣保留，后续退货只回滚原获得积分，不返还已抵扣积分。 */
     INSERT dbo.point_movement

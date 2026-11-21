@@ -2,6 +2,13 @@
 -- SQLCMD 模式；演示记录从不提交，不能用这些 DELETE 去删除真实历史单据。
 USE [$(DatabaseName)];
 GO
+SET ANSI_NULLS ON;
+SET QUOTED_IDENTIFIER ON;
+SET ANSI_PADDING ON;
+SET ANSI_WARNINGS ON;
+SET CONCAT_NULL_YIELDS_NULL ON;
+SET ARITHABORT ON;
+SET NUMERIC_ROUNDABORT OFF;
 SET NOCOUNT ON;
 SET XACT_ABORT ON;
 IF @@TRANCOUNT<>0 THROW 51009, N'请在无外层事务的新查询窗口执行本脚本。', 1;
@@ -36,17 +43,19 @@ BEGIN TRY
     SELECT TOP (1) @before=fund_after FROM dbo.fund_flow ORDER BY recorded_at DESC,id DESC;
     INSERT dbo.fund_flow (amount,direction,reason_type,request_id,fund_before,fund_after,recorded_by)
         VALUES (10,N'付',N'采购付款',@request_id,@before,@before-10,'13800000001');
-    INSERT dbo.stock_movement (goods_id,change_type,quantity,changed_by,request_id)
-        VALUES (@goods_id,N'购入',5,'13800000002',@request_id);
+    DECLARE @stock_before int,@stock_after int;
+    SELECT @stock_before=stock_total FROM dbo.goods WHERE id=@goods_id;
+    SET @stock_after=@stock_before+5;
+    SELECT N'库存计数同步前' AS step,id,stock_total FROM dbo.goods WHERE id=@goods_id;
+    UPDATE dbo.goods SET stock_total=@stock_after WHERE id=@goods_id;
+    SELECT N'库存计数同步后' AS step,id,stock_total FROM dbo.goods WHERE id=@goods_id;
+    INSERT dbo.stock_movement (goods_id,change_type,stock_before,stock_after,quantity,changed_by,request_id)
+        VALUES (@goods_id,N'购入',@stock_before,@stock_after,5,'13800000002',@request_id);
     DECLARE @movement_id bigint = SCOPE_IDENTITY();
     SELECT N'stock_movement INSERT / UPDATE 前' AS step,* FROM dbo.stock_movement WHERE id=@movement_id;
     -- 只补充本事务尚未提交记录的文字说明，不修改历史流水或已确认数量。
     UPDATE dbo.stock_movement SET note=N'演示采购正常足量入库' WHERE id=@movement_id;
     SELECT N'stock_movement UPDATE 后' AS step,* FROM dbo.stock_movement WHERE id=@movement_id;
-    SELECT N'库存计数同步前' AS step,id,stock_total FROM dbo.goods WHERE id=@goods_id;
-    UPDATE dbo.goods SET stock_total=(SELECT SUM(quantity) FROM dbo.stock_movement WHERE goods_id=@goods_id)
-        WHERE id=@goods_id;
-    SELECT N'库存计数同步后' AS step,id,stock_total FROM dbo.goods WHERE id=@goods_id;
     SELECT N'采购完成 UPDATE 前' AS step,* FROM dbo.purchase_request WHERE id=@request_id;
     UPDATE dbo.purchase_request SET status=N'已收货' WHERE id=@request_id;
 
@@ -56,11 +65,13 @@ BEGIN TRY
     DECLARE @sale_id bigint = SCOPE_IDENTITY();
     INSERT dbo.sale_item (sale_id,goods_id,quantity,unit_price) VALUES (@sale_id,@goods_id,1,10);
     DECLARE @sale_item_id bigint = SCOPE_IDENTITY();
-    INSERT dbo.stock_movement (goods_id,change_type,quantity,changed_by,sale_id)
-        VALUES (@goods_id,N'卖出',-1,'13800000003',@sale_id);
+    SELECT @stock_before=stock_total FROM dbo.goods WHERE id=@goods_id;
+    SET @stock_after=@stock_before-1;
     SELECT N'销售出库计数 UPDATE 前' AS step,id,stock_total FROM dbo.goods WHERE id=@goods_id AND stock_total-reserved_qty>=1;
-    UPDATE dbo.goods SET stock_total=stock_total-1 WHERE id=@goods_id AND stock_total-reserved_qty>=1;
+    UPDATE dbo.goods SET stock_total=@stock_after WHERE id=@goods_id AND stock_total-reserved_qty>=1;
     IF @@ROWCOUNT<>1 THROW 51101, N'可售库存不足，取消整个演示事务。', 1;
+    INSERT dbo.stock_movement (goods_id,change_type,stock_before,stock_after,quantity,changed_by,sale_id)
+        VALUES (@goods_id,N'卖出',@stock_before,@stock_after,-1,'13800000003',@sale_id);
     INSERT dbo.fund_flow (amount,direction,reason_type,sale_id,fund_before,fund_after,recorded_by)
         VALUES (10,N'收',N'销售收款',@sale_id,@before-10,@before,'13800000003');
     SELECT N'sale INSERT / 退货前' AS step,* FROM dbo.sale WHERE id=@sale_id;
@@ -71,10 +82,12 @@ BEGIN TRY
     INSERT dbo.goods_return_item (return_id,sale_item_id,quantity,refund_amount)
         VALUES (@return_id,@sale_item_id,1,10);
     DECLARE @return_item_id bigint = SCOPE_IDENTITY();
-    INSERT dbo.stock_movement (goods_id,change_type,quantity,changed_by,return_item_id)
-        VALUES (@goods_id,N'退货',1,'13800000002',@return_item_id);
+    SELECT @stock_before=stock_total FROM dbo.goods WHERE id=@goods_id;
+    SET @stock_after=@stock_before+1;
     SELECT N'退货入库计数 UPDATE 前' AS step,id,stock_total FROM dbo.goods WHERE id=@goods_id;
-    UPDATE dbo.goods SET stock_total=stock_total+1 WHERE id=@goods_id;
+    UPDATE dbo.goods SET stock_total=@stock_after WHERE id=@goods_id;
+    INSERT dbo.stock_movement (goods_id,change_type,stock_before,stock_after,quantity,changed_by,return_item_id)
+        VALUES (@goods_id,N'退货',@stock_before,@stock_after,1,'13800000002',@return_item_id);
     INSERT dbo.fund_flow (amount,direction,reason_type,sale_id,return_id,fund_before,fund_after,recorded_by)
         VALUES (10,N'付',N'退货退款',@sale_id,@return_id,@before,@before-10,'13800000004');
     SELECT N'sale UPDATE 前' AS step,* FROM dbo.sale WHERE id=@sale_id;

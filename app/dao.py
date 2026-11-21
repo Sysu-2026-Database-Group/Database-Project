@@ -195,6 +195,63 @@ class EmployeeDAO:
                         (actor['phone'], actor['session_version'], action, key, payload, quote))
         return json.loads(row['result_json'])
 
+    def product_sales_rank(self, connection, from_date, to_date, metric):
+        with self.connection(connection) as conn:
+            cursor = conn.cursor()
+            try:
+                cursor.execute(
+                    'SELECT goods_id,goods_name,net_quantity,gross_sales_amount,net_revenue,'
+                    'total_orders,returned_orders,metric_rank,display_order '
+                    'FROM report.fn_product_sales_rank(?,?,?) ORDER BY metric_rank,display_order',
+                    (from_date, to_date, metric))
+                columns = [column[0] for column in cursor.description]
+                return [dict(zip(columns, row)) for row in cursor.fetchall()]
+            finally:
+                cursor.close()
+
+    def cumulative_sales_by_date(self, from_date, to_date):
+        with self.connection('manager') as conn:
+            cursor = conn.cursor()
+            try:
+                cursor.execute(
+                    'SELECT sold_date,daily_net_quantity,daily_net_revenue,'
+                    'cumulative_net_quantity,cumulative_net_revenue '
+                    'FROM report.fn_cumulative_sales_by_date(?,?) ORDER BY sold_date',
+                    (from_date, to_date))
+                columns = [column[0] for column in cursor.description]
+                return [dict(zip(columns, row)) for row in cursor.fetchall()]
+            finally:
+                cursor.close()
+
+    def cumulative_sales_by_product(self, from_date, to_date):
+        with self.connection('manager') as conn:
+            cursor = conn.cursor()
+            try:
+                cursor.execute(
+                    'SELECT goods_id,goods_name,net_quantity,net_revenue,'
+                    'cumulative_net_quantity,cumulative_net_revenue '
+                    'FROM report.fn_cumulative_sales_by_product(?,?) '
+                    'ORDER BY net_revenue DESC,goods_id',
+                    (from_date, to_date))
+                columns = [column[0] for column in cursor.description]
+                return [dict(zip(columns, row)) for row in cursor.fetchall()]
+            finally:
+                cursor.close()
+
+    def moving_average_sales(self, as_of_date):
+        with self.connection('manager') as conn:
+            cursor = conn.cursor()
+            try:
+                cursor.execute(
+                    'SELECT sale_date,daily_net_quantity,daily_net_revenue,'
+                    'moving_avg_3d_quantity,moving_avg_3d_revenue '
+                    'FROM report.fn_moving_average_sales(?) ORDER BY sale_date',
+                    (as_of_date,))
+                columns = [column[0] for column in cursor.description]
+                return [dict(zip(columns, row)) for row in cursor.fetchall()]
+            finally:
+                cursor.close()
+
     def shop_catalog(self, id=None, search='', category=None, page=1, page_size=20):
         row = self._one('guest', 'EXEC api.usp_shop_catalog ?,?,?,?,?', (id, search, category, page, page_size))
         return json.loads(row['result_json'])

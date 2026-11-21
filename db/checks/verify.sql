@@ -63,6 +63,8 @@ INSERT @expected_columns VALUES
 (N'stock_movement',N'id',N'bigint',8,19,0,0,1,0),
 (N'stock_movement',N'goods_id',N'bigint',8,19,0,0,0,0),
 (N'stock_movement',N'change_type',N'nvarchar',20,0,0,0,0,0),
+(N'stock_movement',N'stock_before',N'int',4,10,0,0,0,0),
+(N'stock_movement',N'stock_after',N'int',4,10,0,0,0,0),
 (N'stock_movement',N'quantity',N'int',4,10,0,0,0,0),
 (N'stock_movement',N'note',N'nvarchar',400,0,0,1,0,0),
 (N'stock_movement',N'changed_by',N'varchar',11,0,0,0,0,0),
@@ -265,6 +267,20 @@ IF EXISTS (SELECT 1 FROM dbo.goods g OUTER APPLY
         JOIN dbo.reservation r ON r.id=i.reservation_id WHERE i.goods_id=g.id AND r.status=N'有效') r
     WHERE g.stock_total<>COALESCE(m.n,0) OR g.reserved_qty<>COALESCE(r.n,0))
     THROW 51210, N'库存或已订量与明细不一致。', 1;
+IF EXISTS (
+    SELECT 1 FROM dbo.stock_movement
+    WHERE stock_before < 0 OR stock_after < 0 OR quantity <> stock_after - stock_before
+)
+    THROW 51210, N'库存流水前后数量或差值不合法。', 1;
+IF EXISTS (
+    SELECT 1 FROM (
+        SELECT goods_id,stock_before,stock_after,
+               LAG(stock_after) OVER (PARTITION BY goods_id ORDER BY changed_at,id) AS previous_after
+        FROM dbo.stock_movement
+    ) x
+    WHERE previous_after IS NOT NULL AND stock_before <> previous_after
+)
+    THROW 51210, N'库存流水前后数量未首尾衔接。', 1;
 IF EXISTS (SELECT 1 FROM dbo.member m OUTER APPLY
     (SELECT SUM(CONVERT(bigint,points)) n FROM dbo.point_movement WHERE member_phone=m.phone) p
     WHERE m.points_balance<>COALESCE(p.n,0))

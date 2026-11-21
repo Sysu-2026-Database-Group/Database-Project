@@ -1,0 +1,122 @@
+[
+  {
+    "name": "01-ranking-guest-quantity",
+    "path": "/reports/product-ranking?from_date=2026-09-01&to_date=2026-09-30",
+    "url": "http://localhost:5102/reports/product-ranking?from_date=2026-09-01&to_date=2026-09-30",
+    "status": 200,
+    "expected_status": 200,
+    "title": "商品排名 · 拾光书店",
+    "h1": "商品排名",
+    "caption": "游客：商品排名，仅净销量",
+    "screenshot": ".runner\\playwright\\20261121T164514Z-week11\\shots\\01-ranking-guest-quantity.png",
+    "ok": true
+  },
+  {
+    "name": "02-guest-cumulative-403",
+    "path": "/reports/cumulative-sales?mode=date&from_date=2026-09-01&to_date=2026-09-30",
+    "url": "http://localhost:5102/reports/cumulative-sales?mode=date&from_date=2026-09-01&to_date=2026-09-30",
+    "status": 403,
+    "expected_status": 403,
+    "title": "操作提示 · 拾光书店",
+    "h1": "没有该操作权限",
+    "caption": "游客访问累计销售页被拒绝",
+    "screenshot": ".runner\\playwright\\20261121T164514Z-week11\\shots\\02-guest-cumulative-403.png",
+    "ok": true
+  },
+  {
+    "name": "03-ranking-manager-revenue",
+    "path": "/reports/product-ranking?from_date=2026-09-01&to_date=2026-09-30&metric=revenue",
+    "url": "http://localhost:5102/reports/product-ranking?from_date=2026-09-01&to_date=2026-09-30&metric=revenue",
+    "status": 200,
+    "expected_status": 200,
+    "title": "商品排名 · 拾光书店",
+    "h1": "商品排名",
+    "caption": "店长：商品排名，净收入",
+    "screenshot": ".runner\\playwright\\20261121T164514Z-week11\\shots\\03-ranking-manager-revenue.png",
+    "ok": true
+  },
+  {
+    "name": "04-ranking-manager-orders",
+    "path": "/reports/product-ranking?from_date=2026-09-01&to_date=2026-09-30&metric=orders",
+    "url": "http://localhost:5102/reports/product-ranking?from_date=2026-09-01&to_date=2026-09-30&metric=orders",
+    "status": 200,
+    "expected_status": 200,
+    "title": "商品排名 · 拾光书店",
+    "h1": "商品排名",
+    "caption": "店长：商品排名，净订单数",
+    "screenshot": ".runner\\playwright\\20261121T164514Z-week11\\shots\\04-ranking-manager-orders.png",
+    "ok": true
+  },
+  {
+    "name": "05-cumulative-date",
+    "path": "/reports/cumulative-sales?mode=date&from_date=2026-09-01&to_date=2026-09-30",
+    "url": "http://localhost:5102/reports/cumulative-sales?mode=date&from_date=2026-09-01&to_date=2026-09-30",
+    "status": 200,
+    "expected_status": 200,
+    "title": "累计销售 · 拾光书店",
+    "h1": "累计销售",
+    "caption": "店长：累计销售，按日期",
+    "screenshot": ".runner\\playwright\\20261121T164514Z-week11\\shots\\05-cumulative-date.png",
+    "ok": true
+  },
+  {
+    "name": "06-cumulative-product",
+    "path": "/reports/cumulative-sales?mode=product&from_date=2026-09-01&to_date=2026-09-30",
+    "url": "http://localhost:5102/reports/cumulative-sales?mode=product&from_date=2026-09-01&to_date=2026-09-30",
+    "status": 200,
+    "expected_status": 200,
+    "title": "累计销售 · 拾光书店",
+    "h1": "累计销售",
+    "caption": "店长：累计销售，按商品净收入降序",
+    "screenshot": ".runner\\playwright\\20261121T164514Z-week11\\shots\\06-cumulative-product.png",
+    "ok": true
+  },
+  {
+    "name": "07-moving-average",
+    "path": "/reports/moving-average?as_of_date=2026-09-27",
+    "url": "http://localhost:5102/reports/moving-average?as_of_date=2026-09-27",
+    "status": 200,
+    "expected_status": 200,
+    "title": "移动平均 · 拾光书店",
+    "h1": "移动平均",
+    "caption": "店长：移动平均，2026-09-27 的 3 天窗口",
+    "screenshot": ".runner\\playwright\\20261121T164514Z-week11\\shots\\07-moving-average.png",
+    "ok": true
+  },
+  {
+    "name": "08-moving-average-empty",
+    "path": "/reports/moving-average?as_of_date=2026-11-20",
+    "url": "http://localhost:5102/reports/moving-average?as_of_date=2026-11-20",
+    "status": 200,
+    "expected_status": 200,
+    "title": "移动平均 · 拾光书店",
+    "h1": "移动平均",
+    "caption": "店长：移动平均，无销售窗口显示 0",
+    "screenshot": ".runner\\playwright\\20261121T164514Z-week11\\shots\\08-moving-average-empty.png",
+    "ok": true
+  },
+  {
+    "name": "09-inventory-ledger",
+    "path": "/inventory?page=1&page_size=20",
+    "url": "http://localhost:5102/inventory?page=1&page_size=20",
+    "status": 200,
+    "expected_status": 200,
+    "title": "库存变动 · 拾光书店",
+    "h1": "库存变动",
+    "caption": "店长：库存流水，显示 before → after",
+    "screenshot": ".runner\\playwright\\20261121T164514Z-week11\\shots\\09-inventory-ledger.png",
+    "ok": true
+  },
+  {
+    "name": "10-sale-list",
+    "path": "/sales?page=1&page_size=20",
+    "url": "http://localhost:5102/sales?page=1&page_size=20",
+    "status": 200,
+    "expected_status": 200,
+    "title": "本人销售单 · 拾光书店",
+    "h1": "本人销售单",
+    "caption": "收银员：销售单列表与订单状态",
+    "screenshot": ".runner\\playwright\\20261121T164514Z-week11\\shots\\10-sale-list.png",
+    "ok": true
+  }
+]

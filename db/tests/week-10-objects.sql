@@ -139,8 +139,9 @@ INSERT @results EXEC api.usp_operation_write @inventory,1,'damage',@key,@payload
 REVERT;
 IF NOT EXISTS(SELECT 1 FROM dbo.goods WHERE id=3 AND stock_total=11 AND reserved_qty=4)
    OR (SELECT COUNT(*) FROM dbo.stock_movement WHERE goods_id=3 AND change_type=N'损坏'
-       AND quantity=-1 AND note=N'W10 SQL test' AND changed_by=@inventory)<>1
-    THROW 53014,N'报损调减、预订保护或同键重试错误。',1;
+       AND stock_before=12 AND stock_after=11 AND quantity=-1
+       AND note=N'W10 SQL test' AND changed_by=@inventory)<>1
+    THROW 53014,N'报损调减、前后数量、预订保护或同键重试错误。',1;
 SELECT N'W10-I01' test_case,12 stock_before,stock_total stock_after,reserved_qty,
        (SELECT COUNT_BIG(*) FROM dbo.stock_movement)-@movement_before AS movements_added
 FROM dbo.goods WHERE id=3;
@@ -152,8 +153,9 @@ EXEC api.usp_adjust_stock 3,-2,N'损坏',@inventory,1,@reason=N'W10 direct stock
 REVERT;
 IF NOT EXISTS(SELECT 1 FROM dbo.goods WHERE id=3 AND stock_total=9 AND reserved_qty=4)
    OR (SELECT COUNT(*) FROM dbo.stock_movement WHERE goods_id=3 AND change_type=N'损坏'
-       AND quantity=-2 AND note=N'W10 direct stock' AND changed_by=@inventory)<>1
-    THROW 53014,N'库存内部过程直调结果错误。',1;
+       AND stock_before=11 AND stock_after=9 AND quantity=-2
+       AND note=N'W10 direct stock' AND changed_by=@inventory)<>1
+    THROW 53014,N'库存内部过程直调结果或前后数量错误。',1;
 SELECT N'W10-I03' test_case,11 stock_before,stock_total stock_after,reserved_qty,1 movements_added
 FROM dbo.goods WHERE id=3;
 

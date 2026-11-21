@@ -20,6 +20,7 @@
           <a href="{{ url_for('reservations.form') }}">预订商品</a>
           <a href="{{ url_for('reservations.lookup_form') }}">查询或取消预订</a>
           <a href="/shop/member">会员自助查询</a>
+          <a href="{{ url_for('reports.product_ranking') }}" {% if request.endpoint == 'reports.product_ranking' %}aria-current="page"{% endif %}>商品排名</a>
           {% if session.get('actor') %}
           <a href="{{ url_for('workspace.workspace') }}" {% if request.endpoint in ['workspace.home', 'workspace.workspace'] %}aria-current="page"{% endif %}>员工工作台</a>
           {% if session.actor.role == '收银员' %}
@@ -38,7 +39,7 @@
           {% if session.actor.role == '库管' %}<a href="/return-recovery">退货回收</a>{% endif %}
           {% endif %}
           {% if session.actor.role == '店长' %}<a href="/management/finance">资金与注资</a>{% endif %}
-          {% if session.actor.role == '店长' %}<a href="/management/cards">会员卡参数</a><a href="/management/employees">员工账号</a><a href="/management/reports">经营报表</a><a href="/management/sales">全店单据</a>{% endif %}
+          {% if session.actor.role == '店长' %}<a href="/management/cards">会员卡参数</a><a href="/management/employees">员工账号</a><a href="/management/reports">经营报表</a><a href="/management/sales">全店单据</a><a href="{{ url_for('reports.cumulative_sales') }}">累计销售</a><a href="{{ url_for('reports.moving_average') }}">移动平均</a>{% endif %}
           {% else %}<a href="{{ url_for('auth.login_form') }}">员工登录</a>{% endif %}
         </nav>
       </details>

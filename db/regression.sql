@@ -158,6 +158,20 @@ IF EXISTS (
 )
     THROW 51540, N'库存或有效预订数量对账失败。', 1;
 IF EXISTS (
+    SELECT 1 FROM dbo.stock_movement
+    WHERE stock_before < 0 OR stock_after < 0 OR quantity <> stock_after - stock_before
+)
+    THROW 51540, N'库存流水前后数量或差值不合法。', 1;
+IF EXISTS (
+    SELECT 1 FROM (
+        SELECT goods_id,stock_before,stock_after,
+               LAG(stock_after) OVER (PARTITION BY goods_id ORDER BY changed_at,id) AS previous_after
+        FROM dbo.stock_movement
+    ) x
+    WHERE previous_after IS NOT NULL AND stock_before <> previous_after
+)
+    THROW 51540, N'库存流水前后数量未首尾衔接。', 1;
+IF EXISTS (
     SELECT 1 FROM dbo.member m
     OUTER APPLY (SELECT SUM(CONVERT(bigint,points)) AS n FROM dbo.point_movement p WHERE p.member_phone=m.phone) pm
     WHERE m.points_balance<>COALESCE(pm.n,0)

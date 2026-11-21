@@ -92,9 +92,13 @@ def verify(root: Path) -> dict:
     schema = (root / "db/schema.sql").read_text(encoding="utf-8-sig")
     tables = list(re.finditer(r"CREATE TABLE dbo\.\[(\w+)\] \(", schema))
     field_results = []
+    # Week11 的库存审计扩展列不属于 Week6 v1.4 ER 的历史字段；审计仍按
+    # Week6 的 19 表/137 字段基线核对，当前 Web ER 另行维护。
+    week11_extension_columns = {"stock_before", "stock_after"}
     for i, match in enumerate(tables):
         body = schema[match.end():tables[i + 1].start() if i + 1 < len(tables) else schema.index("COMMIT", match.end())]
         columns = re.findall(r"^\s{8}\[(\w+)\]\s+\w+", body, re.M)
+        columns = [column for column in columns if column not in week11_extension_columns]
         if match[1] == "supplier":
             columns += ["updated_by", "updated_at"]
         value = html.unescape(re.sub(r"<[^>]+>", " ", cells[match[1]].get("value", "")))

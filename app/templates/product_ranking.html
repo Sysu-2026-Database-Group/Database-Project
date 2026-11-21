@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% block title %}商品排名{% endblock %}
+{% block content %}
+<h1>商品排名</h1>
+<p>按销售日期统计，包含起止当天；退货按原销售冲减，与退货日期无关。</p>
+
+<form method="get">
+  <label>起始日期<input type="date" name="from_date" value="{{ from_date }}" required></label>
+  <label>结束日期<input type="date" name="to_date" value="{{ to_date }}" required></label>
+  {% if is_manager %}
+  <label>排名指标
+    <select name="metric">
+      <option value="quantity" {% if metric == 'quantity' %}selected{% endif %}>净销量</option>
+      <option value="revenue" {% if metric == 'revenue' %}selected{% endif %}>净收入</option>
+      <option value="orders" {% if metric == 'orders' %}selected{% endif %}>净订单数</option>
+    </select>
+  </label>
+  {% else %}
+  <input type="hidden" name="metric" value="quantity">
+  {% endif %}
+  <button>查询排名</button>
+</form>
+
+{% if downgraded %}
+<p class="notice">当前角色仅支持净销量排名，已按净销量显示。</p>
+{% endif %}
+
+<section class="panel">
+  {% if metric == 'quantity' %}
+  <p>排名依据：净销量（销售数量减退货数量）。</p>
+  {% elif metric == 'revenue' %}
+  <p>排名依据：净收入（实收分摊减退款金额）。</p>
+  {% else %}
+  <p>排名依据：净订单数（总订单数减全部退完的订单数）。</p>
+  {% endif %}
+
+  <div class="table-scroll"><table>
+    <thead><tr>
+      <th>排名</th><th>商品</th><th>净销量</th>
+      {% if is_manager %}<th>净收入</th><th>总订单数</th><th>退货订单数</th>{% endif %}
+    </tr></thead>
+    <tbody>
+    {% for row in rows %}
+      <tr>
+        <td>{{ row.metric_rank }}</td>
+        <td>#{{ row.goods_id }} {{ row.goods_name }}</td>
+        <td>{{ row.net_quantity }}</td>
+        {% if is_manager %}
+        <td>¥{{ row.net_revenue|money }}</td>
+        <td>{{ row.total_orders }}</td>
+        <td>{{ row.returned_orders }}</td>
+        {% endif %}
+      </tr>
+    {% else %}
+      <tr><td colspan="{{ 6 if is_manager else 3 }}">该日期范围内没有销售数据。</td></tr>
+    {% endfor %}
+    </tbody>
+  </table></div>
+</section>
+
+<a href="{{ url_for('shop.index') }}">返回书店首页</a>
+{% endblock %}

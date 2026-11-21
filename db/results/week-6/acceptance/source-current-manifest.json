@@ -73,7 +73,7 @@
   },
   {
     "file": "db/regression.sql",
-    "sha256": "57538998c6e2162c3af01c54ccc6d30a6d9e605e9c64367097980b09292afa3f",
+    "sha256": "e1795c3ec067bc3ef2c593bb3a25600b85456b9948df62a1ad5fc0346d0cbecf",
     "previous_layout_sha256": "78ffd17798af138af5ead6573ce823e6adf5c3e68754eeb4adfc8d4dcc74ea36",
     "scope": "current code; SQL changes validated by final-check 45-step run"
   },
@@ -97,13 +97,13 @@
   },
   {
     "file": "db/sample-data-week-6.sql",
-    "sha256": "cb06c78ffd4d43b9c53e615a15715f26236f094ce37e7557a3b793cde6a6bad2",
+    "sha256": "60cc8c691536369d21615aa1be77e588cf067f44259054f368de1e06507894a5",
     "previous_layout_sha256": "967de7f86e2ea74be0a4b89708a3a13c69cd7f3aecc844a4b1d1b4e679744fd6",
     "scope": "current code; SQL changes validated by final-check 45-step run"
   },
   {
     "file": "db/schema.sql",
-    "sha256": "48f8c5b2ee69081d7fd261971a9b008a11c209310aea8856f0b76a5e9fe5c658",
+    "sha256": "d604f4d38d412f279c00ca9889f9fd23403638f0de66d380f32e0a6b03f43d7f",
     "previous_layout_sha256": "48f8c5b2ee69081d7fd261971a9b008a11c209310aea8856f0b76a5e9fe5c658",
     "scope": "current code; SQL changes validated by final-check 45-step run"
   },
@@ -133,7 +133,7 @@
   },
   {
     "file": "db/checks/verify.sql",
-    "sha256": "765b03875f40b2e84f3821ccd5ed3863559bb06c5c6dfad50c41cdd7e9efe119",
+    "sha256": "c0f18229a1fe398eac31d274f686260586d03efb04928075264348442e7cb306",
     "previous_layout_sha256": "765b03875f40b2e84f3821ccd5ed3863559bb06c5c6dfad50c41cdd7e9efe119",
     "scope": "current code; SQL changes validated by final-check 45-step run"
   },
@@ -167,7 +167,7 @@
   },
   {
     "file": "db/checks/audit-week-6-artifacts.py",
-    "sha256": "3ac33d1d6b75f9397e8de4c2913d1a03229156dc30de268b649bb7569c2dd3e1",
+    "sha256": "9274bc9e8b83e9be9f8bcb3d3eea72ef5ec7b94fa69f30586acc300e42bc2ada",
     "scope": "current artifact/verification source",
     "acceptance_update": {
       "date": "2026-10-22",

@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block title %}移动平均{% endblock %}
+{% block content %}
+<h1>移动平均</h1>
+<p>窗口为指定日期及其前 2 个日历日；无销售日期按 0 计入。</p>
+
+<form method="get">
+  <label>指定日期<input type="date" name="as_of_date" value="{{ as_of_date }}" max="{{ today }}" required></label>
+  <button>查询移动平均</button>
+</form>
+
+<p>窗口：{{ window_start }} 至 {{ window_end }}</p>
+
+{% if not has_sales %}
+<p class="notice">该窗口内没有销售数据，以下平均值为 0。</p>
+{% endif %}
+
+{% if summary %}
+<section class="panel">
+  <h2>指定日期 {{ as_of_date }}</h2>
+  <p>最近 3 天平均净销量：<strong>{{ summary.moving_avg_3d_quantity }}</strong></p>
+  <p>最近 3 天平均净收入：<strong>¥{{ summary.moving_avg_3d_revenue|money }}</strong></p>
+</section>
+{% endif %}
+
+<section class="panel">
+  <h2>3 天窗口明细</h2>
+  <div class="table-scroll"><table>
+    <thead><tr><th>日期</th><th>当日净销量</th><th>当日净收入</th></tr></thead>
+    <tbody>
+    {% for row in rows %}
+      <tr>
+        <td>{{ row.sale_date }}</td>
+        <td>{{ row.daily_net_quantity }}</td>
+        <td>¥{{ row.daily_net_revenue|money }}</td>
+      </tr>
+    {% else %}
+      <tr><td colspan="3">该日期范围没有可展示的数据。</td></tr>
+    {% endfor %}
+    </tbody>
+  </table></div>
+</section>
+{% endblock %}

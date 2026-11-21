@@ -174,6 +174,7 @@ def check_instance(config):
 
 
 BASELINE_TRIGGER = 'tr_card_type_cross_row'
+RUNTIME_TRIGGER = 'tr_stock_movement_guard'
 BASELINE_VIEWS = ('v_sale_detail', 'v_goods_sales_summary', 'v_inventory_status')
 BASELINE_FILTERED_INDEXES = (
     'UX_goods_book_isbn',
@@ -198,10 +199,11 @@ def check_objects(config, database, require_runtime=False):
     try:
         cursor = connection.cursor()
         try:
-            trigger, views = cursor.execute(
+            trigger, runtime_trigger, views = cursor.execute(
                 "SELECT (SELECT COUNT(*) FROM sys.triggers WHERE name=? AND is_disabled=0),"
+                "       (SELECT COUNT(*) FROM sys.triggers WHERE name=? AND is_disabled=0),"
                 "       (SELECT COUNT(*) FROM sys.views WHERE schema_id=SCHEMA_ID('dbo') AND name IN (?,?,?))",
-                BASELINE_TRIGGER, *BASELINE_VIEWS).fetchone()
+                BASELINE_TRIGGER, RUNTIME_TRIGGER, *BASELINE_VIEWS).fetchone()
             actual = {
                 row[0]
                 for row in cursor.execute(
@@ -214,6 +216,8 @@ def check_objects(config, database, require_runtime=False):
             problems = []
             if trigger != 1:
                 problems.append('跨行约束触发器 tr_card_type_cross_row 缺失或被禁用')
+            if require_runtime and runtime_trigger != 1:
+                problems.append('库存审计触发器 tr_stock_movement_guard 缺失或被禁用')
             if views != len(BASELINE_VIEWS):
                 problems.append(f'Week4 视图缺失（{views}/{len(BASELINE_VIEWS)}）')
             missing = [name for name in required if name not in actual]
@@ -228,7 +232,7 @@ def check_objects(config, database, require_runtime=False):
                 raise RuntimeError('对象校验失败：' + '；'.join(problems))
             for view in BASELINE_VIEWS:
                 cursor.execute('SELECT TOP (0) * FROM dbo.[' + view + ']').fetchall()
-            print(f'基础对象 PASS：触发器 1、视图 3、筛选唯一索引 {len(required)}（库={database}）')
+            print(f'基础对象 PASS：触发器 {2 if require_runtime else 1}、视图 3、筛选唯一索引 {len(required)}（库={database}）')
         finally:
             cursor.close()
     finally:
@@ -257,7 +261,10 @@ def prepare_source(report, config):
                ('application-baseline', 'application-baseline.sql'),
                ('application-baseline-check', 'checks/application-baseline-check.sql'),
                ('application-rule-tests', 'tests/application-baseline.sql'),
-               ('expanded-seed', 'sample-data-week-6.sql'), ('regression', 'regression.sql')]
+               ('expanded-seed', 'sample-data-week-6.sql'),
+               ('stock-before-after-migration', 'migration-stock-before-after.sql'),
+               ('stock-trigger', 'trigger.sql'),
+               ('regression', 'regression.sql')]
     for name, script in scripts:
         sql_script(report, config, name, script, source)
     report.action('objects-baseline', lambda: check_objects(config, source))
@@ -415,6 +422,10 @@ def full_test(report, config):
     prepare_target(report, config, source, sale_database, 'sale-test')
     baseline = report.action('business-baseline', lambda: business_fingerprints(config, auth_database))
     sql_script(report, config, 'week10-sql-cases', 'tests/week-10-objects.sql', auth_database)
+    sql_script(report, config, 'week11-ranking-cases', 'tests/week-11-ranking.sql', auth_database)
+    sql_script(report, config, 'week11-cumulative-cases', 'tests/week-11-cumulative.sql', auth_database)
+    sql_script(report, config, 'week11-moving-average-cases', 'tests/week-11-moving-average.sql', auth_database)
+    sql_script(report, config, 'week11-trigger-cases', 'tests/week-11-trigger.sql', auth_database)
     env = clean_test_environment()
     env.update(BOOKSTORE_TEST_ADMIN_CONNECTION=connection_string(config['server'], auth_database, config['driver']),
                BOOKSTORE_SALE_TEST_ADMIN_CONNECTION=connection_string(config['server'], sale_database, config['driver']),

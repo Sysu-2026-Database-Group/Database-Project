@@ -9,6 +9,11 @@ IF DB_NAME() NOT LIKE N'ShiguangBookstoreWeek7%' OR OBJECT_ID('api.usp_operation
 BEGIN TRANSACTION;
 IF DATABASE_PRINCIPAL_ID('bookstore_app_guest') IS NULL CREATE ROLE bookstore_app_guest;
 DENY SELECT,INSERT,UPDATE,DELETE ON SCHEMA::dbo TO bookstore_app_guest;
+GRANT SELECT ON OBJECT::report.fn_product_sales_rank TO bookstore_app_guest,bookstore_app_cashier,bookstore_app_inventory,bookstore_app_manager;
+GRANT SELECT ON OBJECT::report.fn_sales_net_lines TO bookstore_app_manager;
+GRANT SELECT ON OBJECT::report.fn_cumulative_sales_by_date TO bookstore_app_manager;
+GRANT SELECT ON OBJECT::report.fn_cumulative_sales_by_product TO bookstore_app_manager;
+GRANT SELECT ON OBJECT::report.fn_moving_average_sales TO bookstore_app_manager;
 DENY SELECT,INSERT,UPDATE,DELETE ON SCHEMA::auth TO bookstore_app_guest;
 DENY SELECT,INSERT,UPDATE,DELETE ON SCHEMA::api TO bookstore_app_guest;
 -- An employee connection must not also inherit the public service identity.

@@ -54,6 +54,17 @@ IF EXISTS (SELECT 1 FROM sys.database_permissions p
            OR r.name='public') AND p.state IN('G','W')
     AND NOT (r.name='public' AND p.class=0 AND p.permission_name IN ('CONNECT','VIEW ANY COLUMN MASTER KEY DEFINITION','VIEW ANY COLUMN ENCRYPTION KEY DEFINITION'))
     AND NOT (r.name='public' AND p.class=1 AND OBJECT_SCHEMA_NAME(p.major_id) IN ('sys','INFORMATION_SCHEMA'))
+    AND NOT (r.name IN ('bookstore_app_guest','bookstore_app_cashier','bookstore_app_inventory','bookstore_app_manager')
+        AND p.class=1 AND p.minor_id=0
+        AND p.major_id=OBJECT_ID(N'report.fn_product_sales_rank',N'IF')
+        AND p.permission_name=N'SELECT' AND p.state='G')
+    AND NOT (r.name='bookstore_app_manager'
+        AND p.class=1 AND p.minor_id=0
+        AND p.major_id IN (OBJECT_ID(N'report.fn_sales_net_lines',N'IF'),
+                           OBJECT_ID(N'report.fn_cumulative_sales_by_date',N'IF'),
+                           OBJECT_ID(N'report.fn_cumulative_sales_by_product',N'IF'),
+                           OBJECT_ID(N'report.fn_moving_average_sales',N'IF'))
+        AND p.permission_name=N'SELECT' AND p.state='G')
     AND NOT EXISTS(SELECT 1 FROM @expected e WHERE e.role_name=r.name
         AND p.class=1 AND p.minor_id=0 AND p.major_id=OBJECT_ID(N'api.'+e.procedure_name,N'P')
         AND p.permission_name=N'EXECUTE' AND p.state='G'))
@@ -87,6 +98,11 @@ IF OBJECT_ID(N'auth.employee_credential',N'U') IS NULL OR OBJECT_ID(N'api.sale_r
     OR OBJECT_ID(N'dbo.fn_sales_by_goods',N'IF') IS NULL
     OR OBJECT_ID(N'dbo.fn_member_discount_rate',N'FN') IS NULL
     OR OBJECT_ID(N'dbo.fn_sale_discount',N'IF') IS NULL
+    OR OBJECT_ID(N'report.fn_product_sales_rank',N'IF') IS NULL
+    OR OBJECT_ID(N'report.fn_sales_net_lines',N'IF') IS NULL
+    OR OBJECT_ID(N'report.fn_cumulative_sales_by_date',N'IF') IS NULL
+    OR OBJECT_ID(N'report.fn_cumulative_sales_by_product',N'IF') IS NULL
+    OR OBJECT_ID(N'report.fn_moving_average_sales',N'IF') IS NULL
     OR OBJECT_ID(N'api.reservation_request',N'U') IS NULL
     OR OBJECT_ID(N'api.reservation_cancellation',N'U') IS NULL
     OR OBJECT_ID(N'api.usp_reservation_release',N'P') IS NULL

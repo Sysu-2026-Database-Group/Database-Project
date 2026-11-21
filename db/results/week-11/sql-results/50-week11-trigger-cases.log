@@ -1,0 +1,8 @@
+已将数据库上下文更改为 "ShiguangBookstoreWeek7AuthTests202611211640041b615c"。
+W11-T01 single insert PASS
+W11-T02 single update PASS
+W11-T03 multiple insert PASS
+W11-T04 trigger rejection PASS: 52403
+test_case   scope               
+----------- --------------------
+W11-T01～T04 单条插入/单条修改/多条插入/触发器拒绝

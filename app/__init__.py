@@ -90,6 +90,7 @@ def create_app(config=None, *, dao=None):
     from .management import bp as management
     from .members import bp as members
     from .returns import bp as returns
-    for blueprint in (auth, sales_routes, workspace, operations, shop, reservations, management, members, returns):
+    from .reports import bp as reports
+    for blueprint in (auth, sales_routes, workspace, operations, shop, reservations, management, members, returns, reports):
         app.register_blueprint(blueprint)
     return app

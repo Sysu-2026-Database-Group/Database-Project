@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% block title %}累计销售{% endblock %}
+{% block content %}
+<h1>累计销售</h1>
+<p>净口径：销售数量减退货数量；销售金额为实收分摊减退款金额。</p>
+
+<form method="get">
+  <label>模式
+    <select name="mode">
+      <option value="date" {% if mode == 'date' %}selected{% endif %}>按日期</option>
+      <option value="product" {% if mode == 'product' %}selected{% endif %}>按商品</option>
+    </select>
+  </label>
+  <label>起始日期<input type="date" name="from_date" value="{{ from_date }}" required></label>
+  <label>结束日期<input type="date" name="to_date" value="{{ to_date }}" required></label>
+  <button>查询累计</button>
+</form>
+
+<section class="panel">
+  {% if mode == 'date' %}
+  <p>排序：按销售日期升序；累计值从区间第一天开始逐日累加。</p>
+  <div class="table-scroll"><table>
+    <thead><tr>
+      <th>日期</th><th>当日净销量</th><th>当日净收入</th>
+      <th>累计净销量</th><th>累计净收入</th>
+    </tr></thead>
+    <tbody>
+    {% for row in rows %}
+      <tr>
+        <td>{{ row.sold_date }}</td>
+        <td>{{ row.daily_net_quantity }}</td>
+        <td>¥{{ row.daily_net_revenue|money }}</td>
+        <td>{{ row.cumulative_net_quantity }}</td>
+        <td>¥{{ row.cumulative_net_revenue|money }}</td>
+      </tr>
+    {% else %}
+      <tr><td colspan="5">该日期范围内没有销售数据。</td></tr>
+    {% endfor %}
+    </tbody>
+  </table></div>
+  {% else %}
+  <p>排序：按净收入降序，净收入相同按商品编号；累计值沿该商品顺序累加。</p>
+  <div class="table-scroll"><table>
+    <thead><tr>
+      <th>商品</th><th>净销量</th><th>净收入</th>
+      <th>累计净销量</th><th>累计净收入</th>
+    </tr></thead>
+    <tbody>
+    {% for row in rows %}
+      <tr>
+        <td>#{{ row.goods_id }} {{ row.goods_name }}</td>
+        <td>{{ row.net_quantity }}</td>
+        <td>¥{{ row.net_revenue|money }}</td>
+        <td>{{ row.cumulative_net_quantity }}</td>
+        <td>¥{{ row.cumulative_net_revenue|money }}</td>
+      </tr>
+    {% else %}
+      <tr><td colspan="5">该日期范围内没有销售数据。</td></tr>
+    {% endfor %}
+    </tbody>
+  </table></div>
+  {% endif %}
+</section>
+{% endblock %}

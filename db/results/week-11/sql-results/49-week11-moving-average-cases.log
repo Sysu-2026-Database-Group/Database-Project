@@ -1,0 +1,4 @@
+已将数据库上下文更改为 "ShiguangBookstoreWeek7AuthTests202611211640041b615c"。
+test_case   scope             row_count   window_start     window_end      
+----------- ----------------- ----------- ---------------- ----------------
+W11-M01～M05 3日窗口/均值/补0/跨月/空日期           3       2026-09-28       2026-09-30

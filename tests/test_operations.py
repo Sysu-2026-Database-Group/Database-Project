@@ -107,6 +107,9 @@ class OperationsDatabaseTests(unittest.TestCase):
         self.assertEqual(self.write('receive', dict(id=purchase), key=key), received)
         self.assertEqual(self.scalar('SELECT stock_total FROM dbo.goods WHERE id=?', goods), 3)
         self.assertEqual(self.scalar('SELECT SUM(quantity) FROM dbo.stock_movement WHERE request_id=?', purchase), 3)
+        self.assertEqual(tuple(self.connection.cursor().execute(
+            'SELECT stock_before,stock_after,quantity FROM dbo.stock_movement WHERE request_id=?',
+            purchase).fetchone()), (0, 3, 3))
         self.assertEqual(self.scalar('SELECT COUNT(*) FROM dbo.fund_flow WHERE request_id=?', purchase), 1)
         self.assertEqual(self.scalar('SELECT status FROM dbo.purchase_request WHERE id=?', purchase), '已收货')
         self.assertEqual(self.scalar("SELECT SUM(CASE direction WHEN N'收' THEN amount ELSE -amount END) FROM dbo.fund_flow WHERE reason_type NOT IN (N'注资',N'提现')"), Decimal('-30'))
@@ -205,7 +208,9 @@ class OperationsDatabaseTests(unittest.TestCase):
         self.write('damage', dict(id=3, quantity=1, note='包装破损'))
         after = self.connection.cursor().execute('SELECT stock_total,reserved_qty FROM dbo.goods WHERE id=3').fetchone()
         self.assertEqual(tuple(after), (before[0]-1, before[1]))
-        self.assertEqual(self.scalar("SELECT quantity FROM dbo.stock_movement WHERE goods_id=3 AND note=N'包装破损'"), -1)
+        movement = self.connection.cursor().execute(
+            "SELECT stock_before,stock_after,quantity FROM dbo.stock_movement WHERE goods_id=3 AND note=N'包装破损'").fetchone()
+        self.assertEqual(tuple(movement), (before[0], after[0], -1))
         self.connection.cursor().execute('UPDATE dbo.goods SET reserved_qty=stock_total WHERE id=3')
         with self.assertRaises(AppError) as caught:
             self.write('damage', dict(id=3, quantity=1, note='不可损坏预订商品'))

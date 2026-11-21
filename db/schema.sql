@@ -296,6 +296,8 @@ BEGIN TRY
         [id] BIGINT IDENTITY(1,1) NOT NULL,
         [goods_id] BIGINT NOT NULL,
         [change_type] NVARCHAR(10) NOT NULL,
+        [stock_before] INT NOT NULL,
+        [stock_after] INT NOT NULL,
         [quantity] INT NOT NULL,
         [note] NVARCHAR(200) NULL,
         [changed_by] VARCHAR(11) NOT NULL,
@@ -304,7 +306,14 @@ BEGIN TRY
         [sale_id] BIGINT NULL,
         [return_item_id] BIGINT NULL,
         CONSTRAINT [PK_stock_movement] PRIMARY KEY ([id]),
-        CONSTRAINT [CK_stock_movement_source] CHECK ((change_type=N'购入' AND quantity>0 AND request_id IS NOT NULL AND sale_id IS NULL AND return_item_id IS NULL) OR (change_type=N'卖出' AND quantity<0 AND sale_id IS NOT NULL AND request_id IS NULL AND return_item_id IS NULL) OR (change_type=N'退货' AND quantity>0 AND return_item_id IS NOT NULL AND request_id IS NULL AND sale_id IS NULL) OR (change_type=N'损坏' AND quantity<0 AND request_id IS NULL AND sale_id IS NULL AND return_item_id IS NULL AND note IS NOT NULL AND LEN(LTRIM(RTRIM(note)))>0)),
+        CONSTRAINT [CK_stock_movement_bounds] CHECK ([stock_before]>=0 AND [stock_after]>=0),
+        CONSTRAINT [CK_stock_movement_delta] CHECK ([quantity]=[stock_after]-[stock_before]),
+        CONSTRAINT [CK_stock_movement_source] CHECK (
+            (change_type=N'购入' AND stock_after>stock_before AND request_id IS NOT NULL AND sale_id IS NULL AND return_item_id IS NULL)
+            OR (change_type=N'卖出' AND stock_after<stock_before AND sale_id IS NOT NULL AND request_id IS NULL AND return_item_id IS NULL)
+            OR (change_type=N'退货' AND stock_after>stock_before AND return_item_id IS NOT NULL AND request_id IS NULL AND sale_id IS NULL)
+            OR (change_type=N'损坏' AND stock_after<stock_before AND stock_before-stock_after BETWEEN 1 AND 1000 AND request_id IS NULL AND sale_id IS NULL AND return_item_id IS NULL AND note IS NOT NULL AND LEN(LTRIM(RTRIM(note)))>0)
+        ),
         CONSTRAINT [CK_stock_movement_changed_by_text] CHECK (LEN(LTRIM(RTRIM([changed_by]))) > 0),
         CONSTRAINT [CK_stock_movement_changed_by_phone] CHECK ([changed_by] IS NULL OR (LEN([changed_by])=11 AND [changed_by] COLLATE Latin1_General_100_BIN2 NOT LIKE '%[^0-9]%'))
     );
@@ -506,7 +515,9 @@ BEGIN TRY
     EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'变动标识', @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE', @level1name=N'stock_movement', @level2type=N'COLUMN', @level2name=N'id';
     EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'变动的是哪件商品', @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE', @level1name=N'stock_movement', @level2type=N'COLUMN', @level2name=N'goods_id';
     EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'这次变动属于哪一类', @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE', @level1name=N'stock_movement', @level2type=N'COLUMN', @level2name=N'change_type';
-    EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'变了多少', @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE', @level1name=N'stock_movement', @level2type=N'COLUMN', @level2name=N'quantity';
+    EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'调整前物理库存（goods.stock_total）', @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE', @level1name=N'stock_movement', @level2type=N'COLUMN', @level2name=N'stock_before';
+    EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'调整后物理库存（goods.stock_total）', @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE', @level1name=N'stock_movement', @level2type=N'COLUMN', @level2name=N'stock_after';
+    EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'变化量，等于 stock_after - stock_before', @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE', @level1name=N'stock_movement', @level2type=N'COLUMN', @level2name=N'quantity';
     EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'为什么变（R-3 报损必填文字原因）', @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE', @level1name=N'stock_movement', @level2type=N'COLUMN', @level2name=N'note';
     EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'操作人 —— 做这次变动的那个人（收货 / 报损 / 卖出 / 退货回收 的经办人）（R-22）', @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE', @level1name=N'stock_movement', @level2type=N'COLUMN', @level2name=N'changed_by';
     EXEC sys.sp_addextendedproperty @name=N'MS_Description', @value=N'变动时刻', @level0type=N'SCHEMA', @level0name=N'dbo', @level1type=N'TABLE', @level1name=N'stock_movement', @level2type=N'COLUMN', @level2name=N'changed_at';

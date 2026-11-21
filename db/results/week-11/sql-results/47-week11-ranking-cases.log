@@ -1,0 +1,7 @@
+已将数据库上下文更改为 "ShiguangBookstoreWeek7AuthTests202611211640041b615c"。
+警告: 聚合或其他 SET 操作消除了 Null 值。
+警告: 聚合或其他 SET 操作消除了 Null 值。
+警告: 聚合或其他 SET 操作消除了 Null 值。
+test_case   scope           row_count  
+----------- --------------- -----------
+W11-W01～W04 净销量/净收入/净订单/空区间           7

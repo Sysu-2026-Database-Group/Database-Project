@@ -49,9 +49,9 @@ class ReturnDatabaseTests(unittest.TestCase):
                 self.assertEqual(self.client.post('/return-recovery',data=form).status_code,303)
             recovered=self.dao.return_recover(self.inventory,key,item)
             self.assertEqual(recovered['quantity'],quantity)
-            movement=cursor.execute("""SELECT goods_id,quantity FROM dbo.stock_movement
+            movement=cursor.execute("""SELECT goods_id,stock_before,stock_after,quantity FROM dbo.stock_movement
                 WHERE change_type=N'退货' AND return_item_id=?""",item).fetchall()
-            self.assertEqual([tuple(row) for row in movement],[(goods,quantity)])
+            self.assertEqual([tuple(row) for row in movement],[(goods,expected_stock[goods],expected_stock[goods]+quantity,quantity)])
             expected_stock[goods]+=quantity
         self.assertEqual(dict(tuple(row) for row in cursor.execute('SELECT id,stock_total FROM dbo.goods')),expected_stock)
         self.assertEqual(cursor.execute('SELECT status FROM dbo.sale WHERE id=?',sale[0]).fetchval(),'已全退')
